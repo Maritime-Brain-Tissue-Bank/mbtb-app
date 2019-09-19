@@ -1,0 +1,8 @@
+*/__pycache__/
+*.pyc
+*/migrations/*.py
+*/migrations/*.pyc
+**/migrations/
+.idea/
+**/venv/
+*.cnf
