@@ -99,6 +99,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'register.permissions.IsPostOrIsAuthenticated',
+    )
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
