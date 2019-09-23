@@ -1,4 +1,4 @@
-## Committing guidelines
+## Committing Guidelines
 
 Please follow these guidelines when committing code to the repo.
 
@@ -12,7 +12,7 @@ Please follow these guidelines when committing code to the repo.
   * Bad: "Fixes Unicode bug in RSS API."
   * Bad: "Fixing Unicode bug in RSS API."
   
-## Reverting commits
+## Reverting Commits
 
 When a mistaken commit is discovered, please follow these guidelines:
 

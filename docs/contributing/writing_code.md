@@ -1,7 +1,7 @@
-## Coding style
+## Coding Style
 Please follow these coding standards while writing code for this project.
 
-### Python style
+### Python Style
 * Follow [pep:8](https://www.python.org/dev/peps/pep-0008/) guide unless it is specified.
 * The python files use 4 spaecs for indentation and HTML files use 2 spaces.
 * Use underscores, not camelcase for variable, function and method names. For example: ```person.get_address()``` instead of ```person.getAddress()```.
@@ -19,7 +19,7 @@ Please follow these coding standards while writing code for this project.
   ```python
   from module.views.generic.base import View
   ```
-### Django guidelines
+### Django Guidelines
 Please follow these guidelines while using django framework.
 
 #### Template Style
