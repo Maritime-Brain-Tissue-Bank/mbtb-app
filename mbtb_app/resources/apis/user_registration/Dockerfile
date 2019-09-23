@@ -7,7 +7,6 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-
 # Install any needed packages specified in requirements.txt
 RUN apt-get install default-libmysqlclient-dev &&\
     pip install -r requirements.txt
