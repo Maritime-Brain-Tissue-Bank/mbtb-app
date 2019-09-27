@@ -1,0 +1,23 @@
+create table `users`(
+    id int unsigned not null auto_increment,
+    email varchar(255) NOT NULL default '',
+    password_hash varchar(255) default NULL,
+    title varchar(10) default null,
+    first_name varchar(255) default null,
+    middle_name varchar(255) default null,
+    last_name varchar(255) default null,
+    institution varchar(255) default NULL,
+    department_name varchar(255) default NULL,
+    position_title varchar(255) default NULL,
+    address_line_1 varchar(255) default NULL,
+    address_line_2 varchar(255) default NULL,
+    city varchar(255) default NULL,
+    province varchar(255) default NULL,
+    country varchar(255) default NULL,
+    postal_code varchar(255) default NULL,
+    comments varchar(255) default NULL,
+    active_since date default null,
+    pending_approval enum('Y','N') default 'Y',
+    primary key (id),
+    unique key email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
