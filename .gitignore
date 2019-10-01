@@ -5,5 +5,5 @@
 **/migrations/
 .idea/
 **/venv/
-**/config/*.cnf
+**/config/secret_key.cnf
 .DS_Store
