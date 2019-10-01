@@ -1,0 +1,13 @@
+sudo: required
+
+language: python
+
+python:
+  - "3.7"
+
+services: docker
+
+before_install:
+  - cd mbtb_app/resources/apis/user_registration
+  - docker build -t user_register .
+  - docker run -it --rm -p 8000:8000 user_register
