@@ -6,5 +6,6 @@ router = routers.DefaultRouter()
 router.register('new_user', views.NewUsersViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('admin_auth', views.AdminAccountView.as_view())
 ]
