@@ -8,12 +8,11 @@ python:
 services: docker
 
 before_install:
+  - sudo apt-get install libmysqlclient-dev
   - cd mbtb_app/resources/apis/user_registration
-  - docker build -t user_register .
-  - docker run -it --rm -p 8000:8000 user_register
+  - pip install -r requirements.txt
 
 script:
-  - docker exec -t -i $(docker ps | awk 'NR > 1 {print $1; exit}') bash
   - python3 manage.py test
 
 skip_cleanup: true
