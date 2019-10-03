@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from rest_framework import views, viewsets, response
 from .models import AdminAccount, Users
 from .serializers import UsersSerializer
-from .permissions import IsPostOrIsAuthenticated
+from .permissions import IsAuthenticated, IsPostAllowed
 import jwt
 
 
@@ -34,7 +34,14 @@ class AdminAccountView(views.APIView):
             )
 
 
-class UsersViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsPostOrIsAuthenticated]
+class NewUsersListViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
+
+
+class NewUsersViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsPostAllowed]
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
+

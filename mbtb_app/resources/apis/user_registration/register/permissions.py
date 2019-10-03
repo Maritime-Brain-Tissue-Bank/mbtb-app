@@ -5,14 +5,10 @@ from .models import AdminAccount
 import jwt
 
 
-class IsPostOrIsAuthenticated(permissions.BasePermission):
+class IsAuthenticated(permissions.BasePermission):
 
     def has_permission(self, request, view):
-        # allow all POST requests
-        if request.method == 'POST':
-            return True
-
-        # only allow admin's request via authorized token
+        # only allow admin's GET request via authorized token
         if request.method == 'GET':
             admin = self.authenticate(request)
             return admin
@@ -56,3 +52,13 @@ class IsPostOrIsAuthenticated(permissions.BasePermission):
 
     def authenticate_header(self, request):
         return 'Token'
+
+
+class IsPostAllowed(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        # allow all POST requests, no authentication
+        if request.method == 'POST':
+            return True
+
+        return False
