@@ -25,6 +25,8 @@ class Users(models.Model):
     country = models.CharField(max_length=20)
     postal_code = models.CharField(max_length=10, blank=True)
     comments = models.TextField(blank=True)
+    pending_approval = models.CharField(max_length=1, default='Y')
+    active_since = models.CharField(max_length=30, blank=True)
 
     class Meta:
         db_table = 'users'
