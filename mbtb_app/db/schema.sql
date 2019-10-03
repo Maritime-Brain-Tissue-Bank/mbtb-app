@@ -23,6 +23,21 @@ CREATE TABLE users(
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
+CREATE TABLE admins(
+    id int unsigned NOT NULL AUTO_INCREMENT,
+    email varchar(255) NOT NULL DEFAULT '',
+    password_hash varchar(255) DEFAULT NULL,
+    first_name varchar(255) DEFAULT NULL,
+    last_name varchar(255) DEFAULT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+
+INSERT INTO admins(email, password_hash, first_name) VALUE
+    ('admin@mbtb.ca', 'asdfghjkl123', 'admin')
+
+
 CREATE TABLE neurodegenerative_diseases(
     neuro_diseases_id int unsigned NOT NULL AUTO_INCREMENT,
     disease_name varchar(255) NOT NULL,
