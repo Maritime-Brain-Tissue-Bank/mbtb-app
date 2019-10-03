@@ -105,7 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'register.permissions.IsPostOrIsAuthenticated',
+        'register.permissions.IsAuthenticated',
+        'register.permissions.IsPostAllowed',
     )
 }
 
