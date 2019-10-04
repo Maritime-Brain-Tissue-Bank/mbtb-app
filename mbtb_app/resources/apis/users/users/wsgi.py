@@ -1,5 +1,5 @@
 """
-WSGI config for user_registration project.
+WSGI config for users project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'user_registration.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'users.settings')
 
 application = get_wsgi_application()
