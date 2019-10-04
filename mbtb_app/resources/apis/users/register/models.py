@@ -1,14 +1,6 @@
 from django.db import models
 
 
-class AdminAccount(models.Model):
-    email = models.CharField(max_length=50)
-    password_hash = models.CharField(max_length=50)
-
-    class Meta:
-        db_table = 'admins'
-
-
 class Users(models.Model):
     email = models.EmailField(unique=True)
     title = models.CharField(max_length=10, blank=True)
@@ -26,7 +18,7 @@ class Users(models.Model):
     postal_code = models.CharField(max_length=10, blank=True)
     comments = models.TextField(blank=True)
     pending_approval = models.CharField(max_length=1, default='Y')
-    active_since = models.CharField(max_length=30, blank=True)
+    active_since = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'users'

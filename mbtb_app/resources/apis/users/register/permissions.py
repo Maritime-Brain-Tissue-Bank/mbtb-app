@@ -1,7 +1,7 @@
 from rest_framework import exceptions, permissions
 from rest_framework.authentication import get_authorization_header
 from django.http import HttpResponse
-from .models import AdminAccount
+from admin_signin.models import AdminAccount
 import jwt
 
 
