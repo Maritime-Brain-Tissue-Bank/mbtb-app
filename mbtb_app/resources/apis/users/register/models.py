@@ -3,6 +3,7 @@ from django.db import models
 
 class Users(models.Model):
     email = models.EmailField(unique=True)
+    password_hash = models.CharField(max_length=50, blank=True)
     title = models.CharField(max_length=10, blank=True)
     first_name = models.CharField(max_length=30)
     middle_name = models.CharField(max_length=30, blank=True)
