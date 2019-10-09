@@ -14,7 +14,8 @@ class IsAuthenticated(permissions.BasePermission):
             return admin
 
         if request.method == 'PATCH':
-            return True
+            admin = self.authenticate(request)
+            return admin
 
         return False
 
