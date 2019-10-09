@@ -1,12 +1,13 @@
 from django.http import HttpResponse
-from rest_framework import views, response
-from rest_framework.permissions import AllowAny
-from .models import AdminAccount
+from rest_framework import views, viewsets, response
+from .models import AdminAccount, Users
+from .serializers import UsersSerializer
+from .permissions import IsAuthenticated, IsPostAllowed
 import jwt
+import datetime
 
 
 class AdminAccountView(views.APIView):
-    permission_classes = [AllowAny, ]
 
     def post(self, request):
         if not request.data:
@@ -32,3 +33,15 @@ class AdminAccountView(views.APIView):
                 status=200,
                 content_type="application/json"
             )
+
+
+class NewUsersListViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Users.objects.filter(pending_approval='Y')
+    serializer_class = UsersSerializer
+
+
+class NewUsersViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsPostAllowed]
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
