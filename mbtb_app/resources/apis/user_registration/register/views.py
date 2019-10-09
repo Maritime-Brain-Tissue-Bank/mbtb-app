@@ -1,9 +1,13 @@
 from django.http import HttpResponse
 from rest_framework import views, viewsets, response
-from .models import AdminAccount, Users
-from .serializers import UsersSerializer
-from .permissions import IsPostOrIsAuthenticated
+from .models import NewUsers, AdminAccount
+from .serializers import NewUsersSerializer
 import jwt
+
+
+class NewUsersViewSet(viewsets.ModelViewSet):
+    queryset = NewUsers.objects.all()
+    serializer_class = NewUsersSerializer
 
 
 class AdminAccountView(views.APIView):
@@ -32,9 +36,3 @@ class AdminAccountView(views.APIView):
                 status=200,
                 content_type="application/json"
             )
-
-
-class UsersViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsPostOrIsAuthenticated]
-    queryset = Users.objects.all()
-    serializer_class = UsersSerializer
