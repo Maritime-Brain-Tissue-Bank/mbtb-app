@@ -1,0 +1,7 @@
+[client]
+database = EWAmkTbZq4
+host = remotemysql.com
+user = EWAmkTbZq4
+password = tiRTtta7cf
+port = 3306
+default-character-set = utf8

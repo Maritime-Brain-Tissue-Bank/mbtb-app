@@ -1,0 +1,21 @@
+sudo: required
+
+language: python
+
+python:
+  - "3.6"
+
+services:
+  - mysql
+
+before_install:
+  - mysql -u root -e "CREATE USER 'test'@'localhost' IDENTIFIED BY 'test@123';"
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON * . * TO 'test'@'localhost';"
+  - sudo apt-get install libmysqlclient-dev
+  - cd mbtb_app/resources/apis/users
+  - pip install -r requirements.txt
+
+script:
+  - python3 manage.py test
+
+skip_cleanup: true

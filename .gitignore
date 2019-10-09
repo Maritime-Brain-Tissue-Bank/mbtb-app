@@ -5,5 +5,4 @@
 **/migrations/
 .idea/
 **/venv/
-*.cnf
 .DS_Store
