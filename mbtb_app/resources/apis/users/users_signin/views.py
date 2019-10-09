@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from rest_framework import views, response
 from rest_framework.permissions import AllowAny
-from .models import UsersAccount
+from register.models import Users
 import jwt
 
 
@@ -16,8 +16,8 @@ class UsersAccountView(views.APIView):
         password_hash = request.data['password']
 
         try:
-            user = UsersAccount.objects.get(email=email, password_hash=password_hash)
-        except UsersAccount.DoesNotExist:
+            user = Users.objects.get(email=email, password_hash=password_hash)
+        except Users.DoesNotExist:
             return response.Response({'Error': "Invalid username/password"}, status="400")
 
         if user:
