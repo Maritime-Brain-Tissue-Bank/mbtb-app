@@ -135,8 +135,7 @@ if any([arg in sys.argv for arg in ['test']]):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'temp',
-            'USER': 'temp',
-            'PASSWORD': 'temp@123',
+            'USER': 'test',
+            'PASSWORD': 'test@123',
         }
     }
