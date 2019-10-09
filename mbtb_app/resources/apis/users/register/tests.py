@@ -46,11 +46,13 @@ class NewUserRequestTest(APITestCase):
             "postal_code": "postalcode",
             "comments": "this is comment box"
         }
+        # force authentication for api testing
         self.username = 'john_doe'
         self.password = 'foobar'
         self.user = User.objects.create(username=self.username, password=self.password)
         self.client.force_authenticate(user=self.user)
 
+    # post request with valid data
     def test_valid_new_request(self):
         response = self.client.post(
             '/add_new_users/',
@@ -59,6 +61,7 @@ class NewUserRequestTest(APITestCase):
         )
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
+    # post request with invalid data
     def test_valid_bad_new_request(self):
         response = self.client.post(
             '/add_new_users/',
@@ -74,9 +77,6 @@ class NewUsersGetRequest(APITestCase):
     def setUp(self):
         self.test_1 = Users.objects.create(
             email='temp_1@gmail.com', first_name='temp', last_name='temp', institution='temp', department_name='temp',
-            position_title='temp', city='temp', province='temp', country='temp')
-        self.test_2 = Users.objects.create(
-            email='temp_2@gmail.com', first_name='temp', last_name='temp', institution='temp', department_name='temp',
             position_title='temp', city='temp', province='temp', country='temp')
         self.valid_payload = {
             'pending_approval': 'N',
@@ -94,9 +94,10 @@ class NewUsersGetRequest(APITestCase):
             'id': admin.id,
             'email': admin.email,
         }
-        self.token = jwt.encode(payload, "SECRET_KEY", algorithm='HS256')
-        self.client = APIClient(enforce_csrf_checks=True)
+        self.token = jwt.encode(payload, "SECRET_KEY", algorithm='HS256')  # generating jwt token
+        self.client = APIClient(enforce_csrf_checks=True)  # enforcing csrf checks
 
+    # get request with valid token
     def test_get_all_new_users_request(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get('/list_new_users/')
@@ -106,10 +107,12 @@ class NewUsersGetRequest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
 
+    # get request without token
     def test_get_invalid_request(self):
         response = self.client.get('/list_new_users/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    # get request for single user with valid token and payload data
     def test_get_single_request(self):
         url = '/list_new_users/' + str(self.test_1.pk) + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -120,6 +123,7 @@ class NewUsersGetRequest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
 
+    # get request for single user with valid token and invalid payload data
     def test_get_invalid_single_request(self):
         url = '/list_new_users/' + '25' + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -127,6 +131,7 @@ class NewUsersGetRequest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.client.credentials()
 
+    # patch request with valid token and data
     def test_patch_single_request(self):
         url = '/list_new_users/' + str(self.test_1.pk) + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -134,14 +139,16 @@ class NewUsersGetRequest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
 
+    # patch request with valid token but invalid payload data
     def test_patch_invalid_payload_request(self):
-        url = '/list_new_users/' + str(self.test_2.pk) + '/'
+        url = '/list_new_users/' + str(self.test_1.pk) + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.patch(url, data=self.invalid_payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.client.credentials()
 
+    # patch request without token
     def test_patch_invalid_request(self):
-        url = '/list_new_users/' + str(self.test_2.pk) + '/'
+        url = '/list_new_users/' + str(self.test_1.pk) + '/'
         response = self.client.patch(url, data=self.valid_payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
