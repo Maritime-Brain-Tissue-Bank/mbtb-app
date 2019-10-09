@@ -2,5 +2,4 @@ django==2.2.5
 djangorestframework==3.10.3
 django-filter==2.2.0
 mysqlclient
-PyJWT==1.7.1
 
