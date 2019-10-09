@@ -4,7 +4,6 @@ from .models import AdminAccount, Users
 from .serializers import UsersSerializer
 from .permissions import IsAuthenticated, IsPostAllowed
 import jwt
-import datetime
 
 
 class AdminAccountView(views.APIView):
@@ -37,7 +36,7 @@ class AdminAccountView(views.APIView):
 
 class NewUsersListViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = Users.objects.filter(pending_approval='Y')
+    queryset = Users.objects.all()
     serializer_class = UsersSerializer
 
 
@@ -45,3 +44,4 @@ class NewUsersViewSet(viewsets.ModelViewSet):
     permission_classes = [IsPostAllowed]
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
+

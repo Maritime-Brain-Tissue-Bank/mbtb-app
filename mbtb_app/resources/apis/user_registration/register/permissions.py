@@ -13,9 +13,6 @@ class IsAuthenticated(permissions.BasePermission):
             admin = self.authenticate(request)
             return admin
 
-        if request.method == 'PATCH':
-            return True
-
         return False
 
     def authenticate(self, request):
