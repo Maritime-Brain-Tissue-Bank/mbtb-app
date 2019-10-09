@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import NewUsers, NewUsersInfo, AdminAccount
+from .models import NewUsers, NewUsersInfo
 
 
 class NewUserInfoSerializer(serializers.ModelSerializer):
@@ -24,10 +24,3 @@ class NewUsersSerializer(serializers.ModelSerializer):
         for each_info in new_users_info_data:
             NewUsersInfo.objects.create(new_users=new_users, **each_info)
         return new_users
-
-
-class AdminAuthenticationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AdminAccount
-        fields = '__all__'
