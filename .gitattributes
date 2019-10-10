@@ -1,2 +1,4 @@
 **/Dockerfile linguist-vendored
 *.sql linguist-detectable=true
+*.html linguist-detectable=false
+*.ejs linguist-detectable=false
