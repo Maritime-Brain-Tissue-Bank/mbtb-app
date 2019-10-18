@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Request</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>
+    <link rel="stylesheet" href="menu.css">
+    <script src="request.js"></script>
+</head>
+<body>
+<!--header-->
+<div class="jumbotron text-center">
+    <h1>Maritime Brain Tissue Bank Dataset</h1>
+</div>
+<!--nav-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">MBTB</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="homepage.html">Homepage</a></li>
+            <li><a href="#">Dataset</a></li>
+            <li><a href="#">Analysis</a></li>
+            <li><a href="#">FAQ</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out </a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="col-md-12">
+        <form id="form">
+            <table id="table" class="table table-bordered" data-url="#">
+                <thead>
+                <tr>
+                    <th data-checkbox="checkbox"></th>
+                    <th data-field="DateTimeRequest" data-sortable="true" data-sort-name="dataTime">DateTime Request
+                    </th>
+                    <th data-field="First Name">First Name</th>
+                    <th data-field="Middle Name">Middle Name</th>
+                    <th data-field="Last Name">Last Name</th>
+                    <th data-field="Email">Email</th>
+                    <th data-field="Institution">Institution</th>
+                    <th data-field="Department">Department</th>
+                    <th data-field="Position">Position</th>
+                    <th data-field="Address 1">Address 1</th>
+                    <th data-field="Address 2">Address 2</th>
+                    <th data-field="Country">Country</th>
+                    <th data-field="Province">Province</th>
+                    <th data-field="Zip code">Zip code</th>
+                </tr>
+                </thead>
+            </table>
+        </form>
+        <div class="text-right">
+            <button class="btn btn-success">Accept</button>
+            <button class="btn btn-danger"> Deny</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
