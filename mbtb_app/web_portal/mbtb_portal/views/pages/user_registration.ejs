@@ -1,0 +1,188 @@
+<title>New Account Request - MBTB</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-auto">
+            <h2><span class="glyphicon glyphicon-user"></span> New Account Request</h2>
+        </div>
+    </div>
+    <br>
+    <div ng-app="registration_app" ng-cloak="">
+        <form class="form-horizontal" name="registration_form" novalidate>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Title</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="title" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.first_name.$invalid && !registration_form.first_name.$pristine }">
+                <label class="col-sm-4 control-label">First Name</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="first_name" type="text" ng-model="first_name" required="">
+                </div>
+                <div ng-show="registration_form.first_name.$dirty && registration_form.first_name.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Middle Name</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="middle_name" type="text" required>
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.last_name.$invalid && !registration_form.last_name.$pristine }">
+                <label class="col-sm-4 control-label">Last Name</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="last_name" type="text" ng-model="last_name" required="">
+                </div>
+                <div ng-show="registration_form.last_name.$dirty && registration_form.last_name.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.email.$invalid && !registration_form.email.$pristine }">
+                <label class="col-sm-4 control-label">Email</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="email" type="email" ng-model="email" required="" ng-pattern = "/^.+@.+\..+$/">
+                    <div class="md-caption">
+                        Please supply an address from your research institution. Requests made with non-institutional addresses will be ignored.
+                    </div>
+                </div>
+                <div class="error_msg help-block"
+                     ng-show="registration_form.email.$dirty && registration_form.email.$invalid">
+                    <div ng-message-exp="['required', 'pattern']">
+                        Your email must be between 10 and 100 characters long and look like an e-mail address.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.institution.$invalid && !registration_form.institution.$pristine }">
+                <label class="col-sm-4 control-label">Institution</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="institution" type="text" ng-model="institution" required="">
+                </div>
+                <div ng-show="registration_form.institution.$dirty && registration_form.institution.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.department_name.$invalid && !registration_form.department_name.$pristine }">
+                <label class="col-sm-4 control-label">Department</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="department_name" type="text" ng-model="department_name" required="">
+                </div>
+                <div ng-show="registration_form.department_name.$dirty && registration_form.department_name.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.current_position.$invalid && !registration_form.current_position.$pristine }">
+                <label class="col-sm-4 control-label">Position</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="current_position" type="text" ng-model="current_position" required="">
+                </div>
+                <div ng-show="registration_form.current_position.$dirty && registration_form.current_position.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Street Address (line 1)</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="st_address_line_1" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Street Address (line 2)</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="st_address_line_2" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.city.$invalid && !registration_form.city.$pristine }">
+                <label class="col-sm-4 control-label">City</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="city" type="text" ng-model="city" required="">
+                </div>
+                <div ng-show="registration_form.city.$dirty && registration_form.city.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.province.$invalid && !registration_form.province.$pristine }">
+                <label class="col-sm-4 control-label">Province</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="province" type="text" ng-model="province" required="">
+                </div>
+                <div ng-show="registration_form.province.$dirty && registration_form.province.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : registration_form.country.$invalid && !registration_form.country.$pristine }">
+                <label class="col-sm-4 control-label">Country</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="country" type="text" ng-model="country" required="true">
+                </div>
+                <div ng-show="registration_form.country.$dirty && registration_form.country.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Postal/Zip Code</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="postal_code" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Comments</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="comments" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4"></div>
+                <small class="col-sm-5">
+                    <b>Privacy Note:</b> The information you supply in this form is only used in order to review
+                    your application and, when approved, to automatically generate your user account. This
+                    information will not be used in any other way or passed on to any other entities or
+                    persons.
+                    <br><br>
+                    <input class="form-check-input" type="checkbox" id="invalidCheck" required="true">
+                    By <em>requesting new account</em> you agree to our <a href="#">Terms of Use</a> and <a href="#">Data
+                            Policy</a>
+                </small>
+
+            </div>
+
+            <div class="form-group row button_holder">
+                <div class="col">
+                    <br>
+                    <button type="submit" class="btn btn-primary" id="submit_btn"> Request Account</button>
+                </div>
+                <div class="col" id="cancel_btn">
+                    <br>
+                    <a href="/">Cancel</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
