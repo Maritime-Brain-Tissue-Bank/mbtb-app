@@ -19,7 +19,8 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'pages/homepage' },
+  'GET /register':  { view: 'pages/user_registration' },
+  'GET /':  { view: 'pages/homepage' },
 
 
   /***************************************************************************

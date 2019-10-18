@@ -68,6 +68,11 @@ var jsFilesToInject = [
   // (e.g. Lodash, Vue.js, jQuery, Bootstrap, Ember, Angular, etc.)
   // > Be sure to list dependencies that depend on each other in the right order!
   'dependencies/**/*.js',
+  'dependencies/angular.min.js',
+  'dependencies/angular-messages.min.js',
+  'dependencies/angular-animate.min.js',
+  'dependencies/angular-aria.min.js',
+  'dependencies/angular-material.min.js',
 
   // All of the rest of your custom client-side js files will be injected here,
   // in no particular order.  To customize the ordering, add additional items

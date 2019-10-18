@@ -1,16 +1,14 @@
-.log-container{
-    max-width: 800px;
-    margin: 60px auto 0;
-    font-size: medium;
-
-
-}
-
-.error{
-    color:red;
-}
-
-h1 {
+h2 {
     text-align: center;
-    color: cornflowerblue;
+    color: #034F53;
 }
+
+.md-caption{
+  color: #034F53;
+  font-size: 10px;
+}
+
+.project{
+  color: #034F53;
+}
+
