@@ -22,6 +22,9 @@ module.exports.routes = {
   'GET /':  { view: 'pages/homepage' },
   'GET /register':  { view: 'pages/user_registration' },
   'GET /login':  { view: 'pages/user_login' },
+  'GET /policy': {view: 'pages/data_policy'},
+  'GET /terms': {view: 'pages/terms'},
+  'GET /faq': {view: 'pages/faq'},
 
   // admin views
   'GET /admin': {
