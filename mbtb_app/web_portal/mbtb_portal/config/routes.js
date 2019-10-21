@@ -38,6 +38,12 @@ module.exports.routes = {
     locals: {
       layout: 'layouts/admin_layout'
     }
+  },
+  'GET /view_new_requests': {
+    view: 'pages/admin_register_requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
   }
 
 
