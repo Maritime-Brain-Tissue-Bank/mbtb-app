@@ -7,7 +7,7 @@
 
     <%/* If you want to discourage search engines from indexing this site, uncomment the following line: */%>
     <%/* <meta name="robots" content="noindex"> */%>
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -32,8 +32,14 @@
                 </div>
 
                 <ul class="nav navbar-nav">
-                    <li><a href="/admin/">Home</a></li>
-                    <li><a href="#">Dataset</a></li>
+                    <li><a href="/admin">Home</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dataset<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/add_new_data">Add New Data</a></li>
+                            <li><a href="#">View Data</a></li>
+                        </ul>
+                    </li>
                     <li><a href="/view_new_requests">User Requests</a></li>
                     <li><a href="/faq">FAQ</a></li>
                 </ul>

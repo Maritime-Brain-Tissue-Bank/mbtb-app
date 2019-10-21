@@ -1,39 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Upload</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="menu.css">
-</head>
-<body>
-<div class="jumbotron text-center">
-    <h1>Maritime Brain Tissue Bank Dataset</h1>
-</div>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand">MBTB</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="homepage.html">Homepage</a></li>
-            <li><a href="#">Dataset</a></li>
-            <li><a href="#">Analysis</a></li>
-            <li><a href="#">FAQ</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out </a></li>
-        </ul>
-    </div>
-</nav>
 
-<h1 class="jumbotron text-center">Upload data to MBTB database</h1>
-<div class="container">
+<title>Add New Data</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-
+<div class="container-fluid add_new_data_container">
+    <h2 class="heading_title">Add New Data</h2>
+    <br>
     <form>
         <div class="row">
             <div class="col-md-6">
@@ -200,14 +174,11 @@
                     <input type="file" class="form-control-file" id="sampleimage1">
                 </div>
             </div>
-
         </div>
-        <div class="form-group">
-            <button class="btn btn-primary">Submit</button>
-            <button>Cancel</button>
+        <br>
+        <div class="form-group button_holder">
+            <button class="btn btn-primary" id="submit_btn">Submit</button>
+            <button id="cancel_btn">Cancel</button>
         </div>
-
     </form>
 </div>
-</body>
-</html>
