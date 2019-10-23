@@ -41,6 +41,14 @@ module.exports.routes = {
       layout: 'layouts/admin_layout'
     }
   },
+
+  'POST /admin_login': {
+    action: 'admin/login',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
   'GET /view_new_requests': {
     view: 'pages/admin_register_requests',
     locals: {
