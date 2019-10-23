@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" charset="UTF-8">
+
+    <%/* If you want to discourage search engines from indexing this site, uncomment the following line: */%>
+    <%/* <meta name="robots" content="noindex"> */%>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/importer.css">
+    <!--STYLES END-->
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header_nav_wrapper ">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h1>Maritime Brain Tissue Bank Dataset</h1> <!-- heading -->
+                </div>
+
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="http://braintissuebank.dal.ca/">MBTB</a>
+                </div>
+
+                <ul class="nav navbar-nav">
+                    <li><a href="/admin">Home</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dataset<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/add_new_data">Add New Data</a></li>
+                            <li><a href="#">View Data</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/view_new_requests">User Requests</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/admin_login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+
+            </div>
+        </nav>
+    </div>
+
+    <%- body %>
+
+    <!-- Footer -->
+    <footer class="page-footer font-small blue pt-4">
+        <div class="footer-copyright text-center py-3">GPL-3.0 ©2019
+            <div>
+                Developed by <a href="http://braintissuebank.dal.ca/">MBTB</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+<!--TEMPLATES-->
+<!--TEMPLATES END-->
+
+<!--SCRIPTS-->
+<script src="/js/requests_data.js"></script>
+<script src="/js/user_login.js"></script>
+<script src="/js/user_registration.js"></script>
+<script src="/js/view_data_table.js"></script>
+<!--SCRIPTS END-->
+</body>
+</html>

@@ -18,10 +18,40 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
+  // users views
   'GET /':  { view: 'pages/homepage' },
   'GET /register':  { view: 'pages/user_registration' },
   'GET /login':  { view: 'pages/user_login' },
+  'GET /policy': {view: 'pages/data_policy'},
+  'GET /terms': {view: 'pages/terms'},
+  'GET /faq': {view: 'pages/faq'},
+  'GET /view_data_table': {view: 'pages/view_data_table'},
+
+  // admin views
+  'GET /admin': {
+    view: 'pages/admin_homepage',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+  'GET /admin_login': {
+    view: 'pages/admin_login',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+  'GET /view_new_requests': {
+    view: 'pages/admin_register_requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+  'GET /add_new_data': {
+    view: 'pages/admin_add_new_data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  }
 
 
 

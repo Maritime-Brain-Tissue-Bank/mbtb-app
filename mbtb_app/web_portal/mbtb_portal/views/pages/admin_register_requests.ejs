@@ -1,0 +1,37 @@
+<title>User Requests</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>
+
+<div class="container-fluid requests_container">
+    <div class="col-md-12">
+        <h2 class="heading_title">New User Requets</h2>
+        <br>
+        <form id="user_requests_form">
+            <table id="user_requests_table" class="table table-bordered" data-url="#">
+                <thead>
+                <tr>
+                    <th data-checkbox="checkbox"></th>
+                    <th data-field="DateTimeRequest" data-sortable="true" data-sort-name="dataTime">No</th>
+                    <th data-field="First Name">First Name</th>
+                    <th data-field="Middle Name">Middle Name</th>
+                    <th data-field="Last Name">Last Name</th>
+                    <th data-field="Email">Email</th>
+                    <th data-field="Institution">Institution</th>
+                    <th data-field="Department">Department</th>
+                    <th data-field="Position">Position</th>
+                    <th data-field="Address 1">Address 1</th>
+                    <th data-field="Address 2">Address 2</th>
+                    <th data-field="Country">Country</th>
+                    <th data-field="Province">Province</th>
+                    <th data-field="Zip code">Zip code</th>
+                </tr>
+                </thead>
+            </table>
+        </form>
+        <div class="text-right">
+            <button class="btn btn-danger"> Deny</button>
+            <button class="btn btn-success">Accept</button>
+        </div>
+    </div>
+</div>
+<br>
