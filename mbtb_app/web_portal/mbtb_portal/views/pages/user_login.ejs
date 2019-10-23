@@ -8,7 +8,7 @@
 </div>
 <br>
 <div ng-app="login_app" ng-controller="login_controller" ng-cloak="">
-    <form class="form-horizontal" name="login_form" novalidate>
+    <form class="form-horizontal" name="login_form" action="/login" method="post" novalidate>
 
         <div class="form-group row"
              ng-class="{ 'has-error' : login_form.user_email.$invalid && !login_form.user_email.$pristine }">
