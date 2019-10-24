@@ -21,12 +21,13 @@ module.exports.routes = {
   // users views
   'GET /':  { view: 'pages/homepage' },
   'GET /register':  { view: 'pages/user_registration' },
+  'POST /register': { action: 'user/signup' },
   'GET /login':  { view: 'pages/user_login' },
-  'POST /login': {action: 'user/login'},
-  'GET /policy': {view: 'pages/data_policy'},
-  'GET /terms': {view: 'pages/terms'},
-  'GET /faq': {view: 'pages/faq'},
-  'GET /view_data_table': {view: 'pages/view_data_table'},
+  'POST /login': { action: 'user/login' },
+  'GET /policy': { view: 'pages/data_policy' },
+  'GET /terms': { view: 'pages/terms' },
+  'GET /faq': { view: 'pages/faq' },
+  'GET /view_data_table': { view: 'pages/view_data_table' },
 
   // admin views
   'GET /admin': {
