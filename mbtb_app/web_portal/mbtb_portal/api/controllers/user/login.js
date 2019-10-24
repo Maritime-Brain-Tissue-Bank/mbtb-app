@@ -7,13 +7,13 @@ module.exports = {
   description: 'Look up the specified admin and welcome them',
 
   inputs: {
-    admin_email: {
+    user_email: {
       description: 'The email to try in this attempt, e.g. "irl@example.com".',
       type: 'string',
       required: true
     },
 
-    admin_password: {
+    user_password: {
       description: 'The unencrypted password to try in this attempt, e.g. "passwordlol".',
       type: 'string',
       required: true
@@ -27,11 +27,11 @@ module.exports = {
   fn: function (inputs, exits) {
 
     let credentials = {
-      email: inputs.admin_email,
-      password: inputs.admin_password,
+      email: inputs.user_email,
+      password: inputs.user_password,
     };
 
-    request.post({url: 'http://127.0.0.1:8000/admin_auth', formData: credentials},
+    request.post({url: 'http://127.0.0.1:8000/user_auth', formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
           return exits.success({'Error': err});

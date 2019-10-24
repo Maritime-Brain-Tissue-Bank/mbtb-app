@@ -22,7 +22,7 @@ module.exports.routes = {
   'GET /':  { view: 'pages/homepage' },
   'GET /register':  { view: 'pages/user_registration' },
   'GET /login':  { view: 'pages/user_login' },
-  'POST /login': 'UserController.login',
+  'POST /login': {action: 'user/login'},
   'GET /policy': {view: 'pages/data_policy'},
   'GET /terms': {view: 'pages/terms'},
   'GET /faq': {view: 'pages/faq'},
