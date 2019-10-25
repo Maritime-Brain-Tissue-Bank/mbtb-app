@@ -20,7 +20,14 @@ module.exports = {
     }
   },
   exits: {
+    success: {
+      responseType: 'authorized',
+    },
 
+    bad_combo: {
+      responseType: 'view',
+      viewTemplatePath: 'pages/admin_login'
+    }
   },
 
 
@@ -40,12 +47,13 @@ module.exports = {
           try {
             const response = JSON.parse(body);
             if(typeof (response) == "object"){
-              return exits.success(response)
-
+              return exits.bad_combo({'error_msg': response.Error})
             }
           }
           catch (e) {
-            return exits.success({'Token': body});
+            sails.config.token.name = 'admin';
+            sails.config.token.update_token_value = body;
+            return exits.success();
           }
         }
       });

@@ -51,7 +51,6 @@ module.exports = {
             }
           }
           catch (e) {
-            this.req.session = {'token': body, maxAge: 900000, httpOnly: true };
             sails.config.token.name = 'user';
             sails.config.token.update_token_value = body;
             return exits.success();
