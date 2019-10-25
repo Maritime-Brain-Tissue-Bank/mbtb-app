@@ -8,7 +8,7 @@
 </div>
 <br>
 <div ng-app="login_app" ng-controller="login_controller" ng-cloak="">
-    <form class="form-horizontal" name="login_form" novalidate>
+    <form class="form-horizontal" name="login_form" action="/login" method="post" novalidate>
 
         <div class="form-group row"
              ng-class="{ 'has-error' : login_form.user_email.$invalid && !login_form.user_email.$pristine }">
@@ -49,15 +49,19 @@
             </div>
         </div>
 
+        <% if (typeof error_msg != 'undefined' && error_msg.length > 0) { %>
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-md-5">
+                    <div class="alert alert-danger">
+                        <%= error_msg %>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
         <div class="form-group row button_holder">
             <button class="btn btn-primary" id="submit_btn">Login</button>
-        </div>
-
-        <div class="row">
-            <div class="col-md-5">
-                <div ng-show="showError" class="alert alert-danger">Incorrect password</div>
-                <div ng-show="showSuccess" class="alert alert-successful">Success</div>
-            </div>
         </div>
 
     </form>
