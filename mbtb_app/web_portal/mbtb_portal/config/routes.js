@@ -28,6 +28,7 @@ module.exports.routes = {
   'GET /terms': { view: 'pages/terms' },
   'GET /faq': { view: 'pages/faq' },
   'GET /view_data_table': { view: 'pages/view_data_table' },
+  'GET /logout': { action: 'common/logout'},
 
   // admin views
   'GET /admin': {

@@ -20,7 +20,14 @@ module.exports = {
     }
   },
   exits: {
+    success: {
+      viewTemplatePath: 'pages/homepage',
+    },
 
+    bad_combo: {
+      responseType: 'view',
+      viewTemplatePath: 'pages/user_login'
+    }
   },
 
 
@@ -40,12 +47,14 @@ module.exports = {
           try {
             const response = JSON.parse(body);
             if(typeof (response) == "object"){
-              return exits.success(response)
-
+              return exits.bad_combo({'error_msg': response.Error})
             }
           }
           catch (e) {
-            return exits.success({'Token': body});
+            this.req.session = {'token': body, maxAge: 900000, httpOnly: true };
+            sails.config.token.name = 'user';
+            sails.config.token.update_token_value = body;
+            return exits.success();
           }
         }
       });
