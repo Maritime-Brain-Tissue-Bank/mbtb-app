@@ -1,39 +1,50 @@
-angular.module('view_data_table_app', ['dataGrid', 'pagination'])
-  .controller('view_data_table_controller', ['$scope', 'myAppFactory', '$filter', function ($scope, myAppFactory, $filter) {
+var myApp = angular.module('view_data_table_app', ['dataGrid', 'pagination']);
 
-    $scope.gridOptions = {
-      data: [],
-      urlSync: true
-    };
+myApp.controller('view_data_table_controller', ['$scope', '$filter', function ($scope, $filter) {
 
-    $scope.gridActions1 = {};
+  // sample data
+  var messages = JSON.stringify([{
+    "total": {
+      "currencyIso": "USD",
+      "priceType": "BUY",
+      "value": 6100.00,
+      "formattedValue": "$6,100.00"
+    },
+    "statusDisplay": "Valid",
+    "code": "3747453",
+    "placed": 1417402800000},
+    {
+      "total": {
+        "currencyIso": "USD",
+        "priceType": "BUY",
+        "value": 1100.00,
+        "formattedValue": "$1,100.00"
+      },
+      "statusDisplay": "Hold",
+      "code": "3747092",
+      "placed": 1398049200000
+    }]);
 
-    myAppFactory.getData().then(function (responseData) {
-      $scope.gridOptions.data = responseData.data;
-    });
+  $scope.messages = JSON.parse(messages);
 
-    $scope.exportToCsv = function (currentData) {
-      var exportData = [];
-      currentData.forEach(function (item) {
-        exportData.push({
-          'Code': item.code,
-          'Date Placed': $filter('date')(item.placed, 'shortDate'),
-          'Status': item.statusDisplay,
-          'Total': item.total.formattedValue
-        });
+  $scope.gridOptions = {
+    data: []
+  };
+
+  $scope.gridActions1 = {};
+
+  $scope.gridOptions.data = $scope.messages;
+
+  $scope.exportToCsv = function (currentData) {
+    var exportData = [];
+    currentData.forEach(function (item) {
+      exportData.push({
+        'Code': item.code,
+        'Date Placed': $filter('date')(item.placed, 'shortDate'),
+        'Status': item.statusDisplay,
+        'Total': item.total.formattedValue
       });
-      JSONToCSVConvertor(exportData, 'Export', true);
-    }
-
-  }])
-  .factory('myAppFactory', function ($http) {
-    return {
-      getData: function () {
-        return $http({
-          method: 'GET',
-          url: 'https://angular-data-grid.github.io/demo/data.json'
-        });
-      }
-    }
-
-  });
+    });
+    JSONToCSVConvertor(exportData, 'Export', true);
+  }
+}]);
