@@ -62,7 +62,13 @@ module.exports.routes = {
     locals: {
       layout: 'layouts/admin_layout'
     }
-  }
+  },
+  'GET /admin_logout': {
+    action: 'admin/logout',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
 
 
 
