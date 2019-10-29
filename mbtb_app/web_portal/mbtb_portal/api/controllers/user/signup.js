@@ -84,6 +84,10 @@ module.exports = {
 
   },
   exits: {
+    success: {
+      viewTemplatePath: 'pages/message',
+    },
+
 
   },
 
@@ -91,14 +95,14 @@ module.exports = {
   fn: function (inputs, exits) {
 
     let data = {
-      position_title: inputs.title,
+      title: inputs.title,
       first_name: inputs.first_name,
       middle_name: inputs.middle_name,
       last_name: inputs.last_name,
       email: inputs.email,
       institution: inputs.institution,
       department_name: inputs.department_name,
-      current_position: inputs.current_position,
+      position_title: inputs.current_position,
       st_address_line_1: inputs.st_address_line_1,
       st_address_line_2: inputs.st_address_line_2,
       city: inputs.city,
@@ -110,14 +114,23 @@ module.exports = {
 
     request.post({url: 'http://127.0.0.1:8000/add_new_users/', formData: data},
       function optionalCallback(err, httpResponse, body) {
+        var message_title = "";
+        var message_body = "";
+
         if (err && httpResponse.statusCode !== 200) {
-          return exits.success(err);
+          message_title = "Error";
+          message_body = err;
+          return exits.success({msg_title: message_title, msg_body: message_body});
         }
         else if (httpResponse.statusCode === 400){
-          return exits.success("Invalid inputs or User with this email already exists")
+          message_title = "Error";
+          message_body = "Invalid inputs or User with this email already exists";
+          return exits.success({msg_title: message_title, msg_body: message_body});
         }
         else {
-          return exits.success("Your request is received, it will take us 5 to 7 working days to process your request. ")
+          message_title = "Confirmation";
+          message_body = "Your request is received, it will take us 5 to 7 working days to process your request. ";
+          return exits.success({msg_title: message_title, msg_body: message_body});
         }
       });
   }
