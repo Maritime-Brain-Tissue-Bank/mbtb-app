@@ -51,18 +51,25 @@ module.exports.routes = {
     }
   },
 
-  'GET /view_new_requests': {
-    view: 'pages/admin_register_requests',
+  'GET /view_new_requests':{
+    action: 'admin/register-requests',
     locals: {
       layout: 'layouts/admin_layout'
     }
   },
+
   'GET /add_new_data': {
     view: 'pages/admin_add_new_data',
     locals: {
       layout: 'layouts/admin_layout'
     }
-  }
+  },
+  'GET /admin_logout': {
+    action: 'admin/logout',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
 
 
 

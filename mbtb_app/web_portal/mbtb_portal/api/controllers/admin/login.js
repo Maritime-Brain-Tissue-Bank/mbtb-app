@@ -20,10 +20,6 @@ module.exports = {
     }
   },
   exits: {
-    success: {
-      responseType: 'authorized',
-    },
-
     bad_combo: {
       responseType: 'view',
       viewTemplatePath: 'pages/admin_login'
@@ -32,6 +28,7 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
+    var res = this.res;
 
     let credentials = {
       email: inputs.admin_email,
@@ -41,7 +38,7 @@ module.exports = {
     request.post({url: 'http://127.0.0.1:8000/admin_auth', formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
-          return exits.success({'Error': err});
+          return exits.bad_combo({'error_msg': err})
         }
         else {
           try {
@@ -53,7 +50,7 @@ module.exports = {
           catch (e) {
             sails.config.token.name = 'admin';
             sails.config.token.update_token_value = body;
-            return exits.success();
+            return res.redirect('/admin');
           }
         }
       });
