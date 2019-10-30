@@ -27,7 +27,7 @@ module.exports.routes = {
   'GET /policy': { view: 'pages/data_policy' },
   'GET /terms': { view: 'pages/terms' },
   'GET /faq': { view: 'pages/faq' },
-  'GET /view_data_table': { view: 'pages/view_data_table' },
+  'GET /view_data_table': { action: 'user/view-data-table' },
   'GET /logout': { action: 'user/logout'},
 
   // admin views
@@ -59,11 +59,12 @@ module.exports.routes = {
   },
 
   'GET /add_new_data': {
-    view: 'pages/admin_add_new_data',
+    action: 'admin/add-new-data',
     locals: {
       layout: 'layouts/admin_layout'
     }
   },
+
   'GET /admin_logout': {
     action: 'admin/logout',
     locals: {
@@ -71,18 +72,32 @@ module.exports.routes = {
     }
   },
 
+  'GET /admin_faq': {
+    view: 'pages/admin_faq',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
 
+  'GET /admin_policy': {
+    view: 'pages/data_policy',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
 
-  /***************************************************************************
-  *                                                                          *
-  * More custom routes here...                                               *
-  * (See https://sailsjs.com/config/routes for examples.)                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the routes in this file, it   *
-  * is matched against "shadow routes" (e.g. blueprint routes).  If it does  *
-  * not match any of those, it is matched against static assets.             *
-  *                                                                          *
-  ***************************************************************************/
+  'GET /admin_terms': {
+    view: 'pages/terms',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
 
+  'POST /approve_user_requests': {
+    action: 'admin/approve-user-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
 
 };

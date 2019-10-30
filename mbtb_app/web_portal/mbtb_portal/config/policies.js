@@ -17,6 +17,19 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+  // admin side
+  'admin/*': 'admin-is-logged-in',
+
+  // Bypass the `is-logged-in` policy for:
+  'admin/login': true,
+  'admin/logout': true,
+
+  // user side
+  'user/*': 'user-is-logged-in',
+
+  // Bypass the `is-logged-in` policy for:
+  'user/login': true,
+  'user/logout': true,
+  'user/signup': true,
 
 };

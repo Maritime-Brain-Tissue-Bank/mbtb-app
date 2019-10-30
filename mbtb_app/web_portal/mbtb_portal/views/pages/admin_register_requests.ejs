@@ -1,17 +1,16 @@
 <title>User Requests</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>
 
 <div class="container-fluid requests_container">
     <div class="col-md-12">
         <h2 class="heading_title">New User Requets</h2>
         <br>
-        <form id="user_requests_form">
-            <table id="user_requests_table" class="table table-bordered" data-url="#">
+        <form id="user_requests_form" >
+            <input type="hidden" id="data_length" value="<%= data.length %>">
+            <table id="user_requests_table" class="table table-bordered">
                 <thead>
                 <tr>
-                    <th data-checkbox="checkbox"></th>
-                    <th data-field="id" data-sortable="true" data-sort-name="dataTime">No</th>
+                    <th><input type="checkbox" onClick="toggle_all(this.checked)" id="select_all"></th>
                     <th data-field="title">Title</th>
                     <th data-field="first_name">First Name</th>
                     <th data-field="middle_name">Middle Name</th>
@@ -28,10 +27,10 @@
                     <th data-field="comments">Comments</th>
                 </tr>
                 </thead>
+
                 <% for(var i=0; i < data.length; i++) { %>
                     <tr>
-                        <th data-checkbox="true"></th>
-                        <th data-field="id"><%= i+1 %></th>
+                        <td><input type="checkbox" name="checkbox<%- i %>" value="<%= data[i].id %>")></td>
                         <td data-field="title"><%= data[i].title %></td>
                         <td data-field="first_name"><%= data[i].first_name %></td>
                         <td data-field="middle_name"><%= data[i].middle_name %></td>
@@ -53,8 +52,13 @@
 
         <div class="text-right">
             <button class="btn btn-danger"> Deny</button>
-            <button class="btn btn-success">Accept</button>
+            <button class="btn btn-success" id="accept_request_btn">Accept</button>
         </div>
+
+        <div id="temp_msg"></div>
+
     </div>
 </div>
 <br>
+
+
