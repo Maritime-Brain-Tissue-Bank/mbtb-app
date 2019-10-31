@@ -3,26 +3,35 @@ var myApp = angular.module('view_data_table_app', ['dataGrid', 'pagination']);
 myApp.controller('view_data_table_controller', ['$scope', '$filter', function ($scope, $filter) {
 
   // sample data
-  var messages = JSON.stringify([{
-    "total": {
-      "currencyIso": "USD",
-      "priceType": "BUY",
-      "value": 6100.00,
-      "formattedValue": "$6,100.00"
-    },
-    "statusDisplay": "Valid",
-    "code": "3747453",
-    "placed": 1417402800000},
+  var messages = JSON.stringify([
     {
-      "total": {
-        "currencyIso": "USD",
-        "priceType": "BUY",
-        "value": 1100.00,
-        "formattedValue": "$1,100.00"
-      },
-      "statusDisplay": "Hold",
-      "code": "3747092",
-      "placed": 1398049200000
+      "mbtb_code": 1234,
+      "sex": "male",
+      "age": 50,
+      "postmortem_interval": "1 day",
+      "time_in_fix": 56,
+      "neuro_diagnosis": "sadad adasfaf asdasfas sadad adasfaf asdasfas sadad adasfaf asdasfas",
+      "tissue_type": "fixed",
+      "storage_method": "frozen",
+    },{
+      "mbtb_code": 1234567,
+      "sex": "male",
+      "age": 79,
+      "postmortem_interval": "1 day",
+      "time_in_fix": 12,
+      "neuro_diagnosis": "sadad adasfaf asdasfas",
+      "tissue_type": "fixed",
+      "storage_method": "frozen",
+    },
+    {
+      "mbtb_code": 123456,
+      "sex": "male",
+      "age": 45,
+      "postmortem_interval": "1 day",
+      "time_in_fix": 24,
+      "neuro_diagnosis": "sadad adasfaf asdasfas",
+      "tissue_type": "fixed",
+      "storage_method": "frozen",
     }]);
 
   $scope.messages = JSON.parse(messages);

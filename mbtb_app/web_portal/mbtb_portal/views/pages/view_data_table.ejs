@@ -15,10 +15,10 @@
             <div class="form-group">
                 <label for="orderIdFilter">Search by order</label>
                 <input id="orderIdFilter" type="text" class="form-control"
-                       placeholder="Enter order #"
+                       placeholder="Enter mbtb code #"
                        ng-change="gridActions1.filter()"
-                       ng-model="code"
-                       filter-by="code"
+                       ng-model="mbtb_code"
+                       filter-by="mbtb_code"
                        filter-type="text">
             </div>
         </div>
@@ -57,45 +57,52 @@
                         </div>
                     </form>
                 </div>
-            </div>
 
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped data_table">
                     <thead>
                     <tr>
-                        <th sortable="code" class="sortable"> Order #
+                        <th sortable="MBTB_code" class="sortable">
+                            MBTB Code
                         </th>
-                        <th sortable="placed" class="sortable">
-                            Date Placed
+                        <th sortable="SEX" class="sortable">
+                            SEX
                         </th>
-                        <th class="st-sort-disable th-dropdown">
-                            <label for="select_status"></label>
-                            <select id="select_status" class="form-control width-15"
-                                    filter-by="statusDisplay"
-                                    filter-type="select"
-                                    ng-model="status"
-                                    ng-change="filter()">
-                                <option value="">All statuses</option>
-                                <option ng-repeat="option in statusOptions track by option.value" value="{{option.value}}">
-                                    {{option.text}}
-                                </option>
-                            </select>
+                        <th sortable="AGE" class="sortable">
+                            AGE
                         </th>
-                        <th sortable="total.value" class="sortable">Total
+                        <th sortable="postmortem_interval" class="sortable">
+                            POSTMORTEM INTERVAL
+                        </th>
+                        <th sortable="time_in_fix" class="sortable">
+                            TIME IN FIX (days)
+                        </th>
+                        <th>
+                            NEUROPATHOLOGICAL DIAGNOSIS
+                        </th>
+                        <th>
+                            TISSUE TYPE
+                        </th>
+                        <th>
+                            STORAGE METHOD
                         </th>
                     </tr>
                     </thead>
+
                     <tbody>
                     <tr grid-item>
-                        <td ng-bind="item.code"></td>
-                        <td ng-bind="item.placed | date:'MM/dd/yyyy' "></td>
-                        <td ng-bind="item.statusDisplay"></td>
-                        <td ng-bind="item.total.formattedValue"></td>
+                        <td ng-bind="item.mbtb_code"></td>
+                        <td ng-bind="item.sex"></td>
+                        <td ng-bind="item.age"></td>
+                        <td ng-bind="item.postmortem_interval"></td>
+                        <td ng-bind="item.time_in_fix"></td>
+                        <td ng_bind="item.neuro_diagnosis"></td>
+                        <td ng-bind="item.tissue_type"></td>
+                        <td ng_bind="item.storage_method"></td>
                     </tr>
                     </tbody>
                 </table>
-
-
+            </div>
 
             <div class="row container-fluid">
                 <form class="form-inline pull-right margin-bottom-basic">
