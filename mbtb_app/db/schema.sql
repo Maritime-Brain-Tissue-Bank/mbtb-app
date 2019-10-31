@@ -132,7 +132,7 @@ CREATE TABLE dataset_othr_details(
     clinical_history varchar(255) DEFAULT NULL,
     cause_of_death varchar(255) DEFAULT NULL,
     brain_weight int(5) DEFAULT NULL,
-    neoropathology_detailed text DEFAULT NULL,
+    neuoropathology_detailed text DEFAULT NULL,
     neuropathology_gross text DEFAULT NULL,
     neuropathology_micro text DEFAULT NULL,
     neouropathology_criteria varchar(255) DEFAULT NULL,
