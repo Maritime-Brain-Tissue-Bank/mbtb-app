@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Details</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="view_detail.css">
+    <script src="detail.js"></script>
+</head>
+<body ng-app="DetailsApp" ng-controller="DetailsController">
+<div class="jumbotron text-center">
+    <h1>Maritime Brain Tissue Bank Dataset</h1>
+</div>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">MBTB</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="#">Homepage</a></li>
+            <li><a href="#">Dataset</a></li>
+            <li><a href="#">Analysis</a></li>
+            <li><a href="#">FAQ</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="row">
+    <div>
+        <div class="col-md-6">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Detail</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">ID</th>
+                    <td>{{detail.id}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Race</th>
+                    <td>{{detail.race}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Diagnosis of Dementia</th>
+                    <td>{{detail.diagnosis_of_dementia}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Duration of Dementia</th>
+                    <td>{{detail.duration_of_dementia}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Clinical History</th>
+                    <td>{{detail.clinical_history}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Cause of Death</th>
+                    <td>{{detail.cause_of_death}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Brain Weight (g)</th>
+                    <td>{{detail.brain_weight}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Neuropathology Detailed</th>
+                    <td>{{detail.neuropathology_detailed}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Neuropathology Gross</th>
+                    <td>{{detail.neuropathology_gross}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Neuropathology Micro</th>
+                    <td>{{detail.neuropathology_micro}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Neuropathology Criteria</th>
+                    <td>{{detail.neuropathology_criteria}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">CERAD</th>
+                    <td>{{detail.cerad}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Braak Stage</th>
+                    <td>{{detail.braak_stage}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">KHACHATURIAN</th>
+                    <td>{{detail.KHACHATURIAN}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">ABC</th>
+                    <td>{{detail.abc}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th scope="row">Autopsy Type</th>
+                    <td>{{detail.autopsy_type}}</td>
+                </tr>
+                <tr ng-repeat="detail in details track by $index">
+                    <th>Tissue Type</th>
+                    <td>{{detail.tissue_Type}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <div>
+        <div class="col-md-4">
+            <h4>Brain Images</h4>
+            <div class="thumbnail">
+                <div class="zoom">
+                    <figure>
+                        <img src="images/sample1.jpeg" alt="sample image 1">
+                        <figcaption>File name</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <div class="zoom">
+                    <figure>
+                        <img src="images/sample2.jpg" alt="sample image 2">
+                        <figcaption>File name</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
