@@ -5,7 +5,7 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', function ($
   // sample data
   var messages = JSON.stringify([
     {
-      "mbtb_code": 1234,
+      "mbtb_code": '1234',
       "sex": "male",
       "age": 50,
       "postmortem_interval": "1 day",
@@ -14,7 +14,7 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', function ($
       "tissue_type": "fixed",
       "storage_method": "frozen",
     },{
-      "mbtb_code": 1234567,
+      "mbtb_code": '1234567',
       "sex": "male",
       "age": 79,
       "postmortem_interval": "1 day",
@@ -24,7 +24,7 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', function ($
       "storage_method": "frozen",
     },
     {
-      "mbtb_code": 123456,
+      "mbtb_code": '123456',
       "sex": "male",
       "age": 45,
       "postmortem_interval": "1 day",
@@ -48,10 +48,14 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', function ($
     var exportData = [];
     currentData.forEach(function (item) {
       exportData.push({
-        'Code': item.code,
-        'Date Placed': $filter('date')(item.placed, 'shortDate'),
-        'Status': item.statusDisplay,
-        'Total': item.total.formattedValue
+        'MBTB Code': item.mbtb_code,
+        'Sex': item.sex,
+        'Age': item.age,
+        'Postmortem Interval': item.postmortem_interval,
+        'Time in Fix': item.time_in_fix,
+        'Neuropathological Diagnosis': item.neuro_diagnosis,
+        'Tissue Type': item.tissue_type,
+        'Storage Method': item.storage_method
       });
     });
     JSONToCSVConvertor(exportData, 'Export', true);
