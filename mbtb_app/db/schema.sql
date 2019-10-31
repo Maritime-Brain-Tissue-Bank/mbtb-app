@@ -86,7 +86,8 @@ INSERT INTO tissue_type(tissue_type) VALUES
 
 
 CREATE TABLE brain_dataset(
-    id int unsigned NOT NULL AUTO_INCREMENT,
+    brain_data_id int unsigned NOT NULL AUTO_INCREMENT,
+    mbtb_code varchar(255) NOT NULL,
     sex enum('Male', 'Female') DEFAULT NULL,
     age varchar(50) DEFAULT NULL,
     postmortem_interval varchar(255) DEFAULT NULL,
@@ -96,7 +97,7 @@ CREATE TABLE brain_dataset(
     storage_method enum('Fresh', 'Not Fresh') DEFAULT NULL, -- To Do: Yet to be defined
     storage_year datetime NOT NULL,
     archive enum('Yes', 'No') DEFAULT 'No',
-    PRIMARY KEY (id),
+    PRIMARY KEY (brain_data_id),
     FOREIGN KEY (neuro_diseases_id)
         REFERENCES neurodegenerative_diseases(neuro_diseases_id)
         ON DELETE no action,
@@ -108,7 +109,7 @@ CREATE TABLE brain_dataset(
 
 CREATE TABLE image_repository(
     image_id int unsigned NOT NULL AUTO_INCREMENT,
-    id int unsigned NOT NULL,
+    brain_data_id int unsigned NOT NULL,
     file_name varchar(255) NOT NULL,
     description text DEFAULT NULL,
     file_type varchar(255) NOT NULL,
@@ -118,14 +119,15 @@ CREATE TABLE image_repository(
     date_taken date DEFAULT NULL,
     date_inserted timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (image_id),
-    FOREIGN KEY (id)
-        REFERENCES brain_dataset(id)
+    FOREIGN KEY (brain_data_id)
+        REFERENCES brain_dataset(brain_data_id)
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
 CREATE TABLE dataset_othr_details(
-    id int unsigned NOT NULL,
+    othr_details_id int unsigned NOT NULL AUTO_INCREMENT,
+    brain_data_id int unsigned NOT NULL,
     race varchar(255) DEFAULT NULL,
     diagnosis_of_dementia varchar(255) DEFAULT NULL,
     duration_of_dementia int(3) DEFAULT NULL,
@@ -142,8 +144,9 @@ CREATE TABLE dataset_othr_details(
     abc varchar(255) DEFAULT NULL,
     autopsy_type_id int unsigned NOT NULL,
     tissue_type_formalin_fixed enum('True', 'False') DEFAULT NULL,
-    FOREIGN KEY (id)
-        REFERENCES brain_dataset(id)
+    PRIMARY KEY (othr_details_id),
+    FOREIGN KEY (brain_data_id)
+        REFERENCES brain_dataset(brain_data_id)
         ON DELETE CASCADE,
     FOREIGN KEY (autopsy_type_id)
         REFERENCES autopsy_type(autopsy_type_id)

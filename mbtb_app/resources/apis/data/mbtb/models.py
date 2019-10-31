@@ -1,10 +1,3 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
 
@@ -16,9 +9,13 @@ class AutopsyType(models.Model):
         managed = False
         db_table = 'autopsy_type'
 
+    def __str__(self):
+        return self.autopsy_type
+
 
 class BrainDataset(models.Model):
-    id = models.AutoField(primary_key=True)
+    brain_data_id = models.AutoField(primary_key=True)
+    mbtb_code = models.CharField(max_length=50)
     sex = models.CharField(max_length=6, blank=True, null=True)
     age = models.CharField(max_length=50, blank=True, null=True)
     postmortem_interval = models.CharField(max_length=255, blank=True, null=True)
@@ -33,17 +30,20 @@ class BrainDataset(models.Model):
         managed = False
         db_table = 'brain_dataset'
 
+    def __str__(self):
+        return self.mbtb_code
+
 
 class DatasetOthrDetails(models.Model):
-    id = models.AutoField(primary_key=True)
-    # id = models.ForeignKey(BrainDataset, models.DO_NOTHING, db_column='id')
+    othr_details_id = models.AutoField(primary_key=True)
+    brain_data_id = models.ForeignKey(BrainDataset, models.DO_NOTHING, db_column="brain_data_id")
     race = models.CharField(max_length=255, blank=True, null=True)
     diagnosis_of_dementia = models.CharField(max_length=255, blank=True, null=True)
     duration_of_dementia = models.IntegerField(blank=True, null=True)
     clinical_history = models.CharField(max_length=255, blank=True, null=True)
     cause_of_death = models.CharField(max_length=255, blank=True, null=True)
     brain_weight = models.IntegerField(blank=True, null=True)
-    neoropathology_detailed = models.TextField(blank=True, null=True)
+    neuoropathology_detailed = models.TextField(blank=True, null=True)
     neuropathology_gross = models.TextField(blank=True, null=True)
     neuropathology_micro = models.TextField(blank=True, null=True)
     neouropathology_criteria = models.CharField(max_length=255, blank=True, null=True)
@@ -61,7 +61,7 @@ class DatasetOthrDetails(models.Model):
 
 class ImageRepository(models.Model):
     image_id = models.AutoField(primary_key=True)
-    id = models.ForeignKey(BrainDataset, models.DO_NOTHING, db_column='id')
+    brain_data_id = models.ForeignKey(BrainDataset, models.DO_NOTHING, db_column="brain_data_id")
     file_name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     file_type = models.CharField(max_length=255)
@@ -84,6 +84,9 @@ class NeurodegenerativeDiseases(models.Model):
         managed = False
         db_table = 'neurodegenerative_diseases'
 
+    def __str__(self):
+        return self.disease_name
+
 
 class TissueType(models.Model):
     tissue_type_id = models.AutoField(primary_key=True)
@@ -92,3 +95,6 @@ class TissueType(models.Model):
     class Meta:
         managed = False
         db_table = 'tissue_type'
+
+    def __str__(self):
+        return self.tissue_type
