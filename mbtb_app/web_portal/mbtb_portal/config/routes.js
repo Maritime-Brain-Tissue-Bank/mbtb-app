@@ -29,6 +29,7 @@ module.exports.routes = {
   'GET /faq': { view: 'pages/faq' },
   'GET /view_data_table': { action: 'user/view-data-table' },
   'GET /logout': { action: 'user/logout'},
+  'GET /view_single_record': {view: 'pages/view_single_record'},
 
   // admin views
   'GET /admin': {
