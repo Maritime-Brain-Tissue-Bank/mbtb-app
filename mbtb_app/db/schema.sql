@@ -144,7 +144,7 @@ CREATE TABLE dataset_othr_details(
     abc varchar(255) DEFAULT NULL,
     autopsy_type_id int unsigned NOT NULL,
     tissue_type_formalin_fixed enum('True', 'False') DEFAULT NULL,
-    PRIMARY KEY (othr_details_id),
+    PRIMARY KEY (othr_details_id),a
     FOREIGN KEY (brain_data_id)
         REFERENCES brain_dataset(brain_data_id)
         ON DELETE CASCADE,

@@ -10,18 +10,26 @@ class AutopsyTypeSerializer(serializers.ModelSerializer):
 
 
 class BrainDatasetSerializer(serializers.ModelSerializer):
+    neuro_diseases = serializers.CharField(source='neuro_diseases.disease_name', read_only=True)
+    tissue_type = serializers.CharField(source='tissue_type.tissue_type', read_only=True)
+
     class Meta:
         model = BrainDataset
         fields = "__all__"
 
 
 class DatasetOtherDetailsSerializer(serializers.ModelSerializer):
+    brain_data_id = serializers.CharField(source='brain_data_id.brain_data_id', read_only=True)
+    autopsy_type = serializers.CharField(source='autopsy_type.autopsy_type', read_only=True)
+
     class Meta:
         model = DatasetOthrDetails
         fields = "__all__"
 
 
 class ImageRepositorySerializer(serializers.ModelSerializer):
+    brain_data_id = serializers.CharField(source='brain_data_id.brain_data_id', read_only=True)
+
     class Meta:
         model = ImageRepository
         fields = "__all__"
