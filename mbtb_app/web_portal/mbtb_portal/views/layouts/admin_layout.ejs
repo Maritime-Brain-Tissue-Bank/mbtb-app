@@ -44,11 +44,15 @@
                     <li><a href="/admin_faq">FAQ</a></li>
                 </ul>
 
-                <% if (sails.config.token.token_value == null) { %>
+                <% if (sails.config.token.token_value == null || sails.config.token != 'admin') { %>
+                    <% sails.config.token.update_token_value = null %>
+                    <% sails.config.token.update_role = '' %>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/admin_login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     </ul>
-                <% } else if(sails.config.token.token_value != null && sails.config.token.token_value.length > 0){%>
+                <% } else if(sails.config.token.token_value != null &&
+                        sails.config.token.token_value.length > 0 &&
+                        sails.config.token === 'admin'){%>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/admin_logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                     </ul>
@@ -79,6 +83,7 @@
 <script src="/js/user_login.js"></script>
 <script src="/js/user_registration.js"></script>
 <script src="/js/view_data_table.js"></script>
+<script src="/js/view_single_record.js"></script>
 <!--SCRIPTS END-->
 </body>
 </html>

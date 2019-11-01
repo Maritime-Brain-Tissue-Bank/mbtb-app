@@ -10,15 +10,20 @@
     <h2 class="heading_title">View Data</h2>
     <br>
 
+    <script>
+        // binding data recieved from sails controller to JS variable to pass it to angular
+        var mbtb_data = <%- JSON.stringify(data) %>;
+    </script>
+
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="orderIdFilter">Search by order</label>
                 <input id="orderIdFilter" type="text" class="form-control"
-                       placeholder="Enter order #"
+                       placeholder="Enter mbtb code"
                        ng-change="gridActions1.filter()"
-                       ng-model="code"
-                       filter-by="code"
+                       ng-model="mbtb_code"
+                       filter-by="mbtb_code"
                        filter-type="text">
             </div>
         </div>
@@ -57,45 +62,44 @@
                         </div>
                     </form>
                 </div>
-            </div>
 
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped data_table">
                     <thead>
                     <tr>
-                        <th sortable="code" class="sortable"> Order #
-                        </th>
-                        <th sortable="placed" class="sortable">
-                            Date Placed
-                        </th>
-                        <th class="st-sort-disable th-dropdown">
-                            <label for="select_status"></label>
-                            <select id="select_status" class="form-control width-15"
-                                    filter-by="statusDisplay"
-                                    filter-type="select"
-                                    ng-model="status"
-                                    ng-change="filter()">
-                                <option value="">All statuses</option>
-                                <option ng-repeat="option in statusOptions track by option.value" value="{{option.value}}">
-                                    {{option.text}}
-                                </option>
-                            </select>
-                        </th>
-                        <th sortable="total.value" class="sortable">Total
-                        </th>
+                        <th data-field="num">No</th>
+                        <th data-field="mbtb_code" sortable="mbtb_code" class="sortable">MBTB Code</th>
+                        <th data-field="sex">Sex</th>
+                        <th data-field="age">Age</th>
+                        <th data-field="postmortem_interval">Postmortem Interval</th>
+                        <th data-field="time_in_fix">Time in Fix (Days)</th>
+                        <th data-field="storage_method">Storage Method</th>
+                        <th data-field="neuro_diseases">Neuropathological Diagnosis</th>
+                        <th data-field="tissue_type">Tissue Type</th>
+                        <th data-field="storage_year">Storage Date</th>
                     </tr>
                     </thead>
+
                     <tbody>
-                    <tr grid-item>
-                        <td ng-bind="item.code"></td>
-                        <td ng-bind="item.placed | date:'MM/dd/yyyy' "></td>
-                        <td ng-bind="item.statusDisplay"></td>
-                        <td ng-bind="item.total.formattedValue"></td>
-                    </tr>
+
+                        <tr grid-item>
+                            <td ng-init="elem_index = $index">{{elem_index+1}}</td>
+                            <td>
+                                <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.brain_data_id}}"></a>
+                            </td>
+                            <td ng-bind="item.sex"></td>
+                            <td ng-bind="item.age"></td>
+                            <td ng-bind="item.postmortem_interval"></td>
+                            <td ng-bind="item.time_in_fix"></td>
+                            <td ng_bind="item.storage_method"></td>
+                            <td ng-bind="item.neuro_diseases"></td>
+                            <td ng_bind="item.tissue_type"></td>
+                            <td ng_bind="item.storage_year"></td>
+                        </tr>
+
                     </tbody>
                 </table>
-
-
+            </div>
 
             <div class="row container-fluid">
                 <form class="form-inline pull-right margin-bottom-basic">

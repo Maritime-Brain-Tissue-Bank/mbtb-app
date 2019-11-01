@@ -1,7 +1,6 @@
 from rest_framework import exceptions, permissions
 from rest_framework.authentication import get_authorization_header
-from django.http import HttpResponse
-from admin_signin.models import AdminAccount
+from .models import AdminAccount, UserAccount
 import jwt
 
 
@@ -10,16 +9,6 @@ class IsAuthenticated(permissions.BasePermission):
     def has_permission(self, request, view):
         # only allow admin's GET request via authorized token
         if request.method == 'GET':
-            admin = self.authenticate(request)
-            return admin
-
-        # allow patch request via authorized token to update user request
-        if request.method == 'PATCH':
-            admin = self.authenticate(request)
-            return admin
-
-        # allow delete request via authorized token to deny user request
-        if request.method == 'DELETE':
             admin = self.authenticate(request)
             return admin
 
@@ -52,23 +41,23 @@ class IsAuthenticated(permissions.BasePermission):
         payload = jwt.decode(token, "SECRET_KEY")
         email = payload['email']
         userid = payload['id']
-        try:
-            admin = AdminAccount.objects.get(id=userid, email=email)
-            return True
-        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
-            return HttpResponse({'Error': "Token is invalid"}, status="403")
-        except AdminAccount.DoesNotExist:
-            return False
+        response = self.find_model(email, userid)
+        return response
 
-    def authenticate_header(self, request):
-        return 'Token'
-
-
-class IsPostAllowed(permissions.BasePermission):
-
-    def has_permission(self, request, view):
-        # allow all POST requests, no authentication
-        if request.method == 'POST':
+    # find request email from both models: admin, users
+    def find_model(self, email, userid):
+        models = [AdminAccount, UserAccount]
+        response = []
+        for Model in models:
+            try:
+                account = Model.objects.get(id=userid, email=email)
+                response.append(True)
+            except Model.DoesNotExist:
+                response.append(False)
+        if len(set(response)) == 2:
             return True
 
         return False
+
+    def authenticate_header(self, request):
+        return 'Token'
