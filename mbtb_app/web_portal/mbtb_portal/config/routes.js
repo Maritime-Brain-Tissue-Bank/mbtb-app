@@ -27,9 +27,9 @@ module.exports.routes = {
   'GET /policy': { view: 'pages/data_policy' },
   'GET /terms': { view: 'pages/terms' },
   'GET /faq': { view: 'pages/faq' },
-  'GET /view_data_table': { action: 'user/view-data-table' },
+  'GET /view_data': { action: 'user/view-data-table' },
   'GET /logout': { action: 'user/logout'},
-  'GET /view_single_record': {view: 'pages/view_single_record'},
+  'GET /view_data/:id': {action: 'user/view-single-record'},
 
   // admin views
   'GET /admin': {

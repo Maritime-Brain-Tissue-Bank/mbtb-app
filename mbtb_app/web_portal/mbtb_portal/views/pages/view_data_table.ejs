@@ -84,7 +84,9 @@
 
                         <tr grid-item>
                             <td ng-init="elem_index = $index">{{elem_index+1}}</td>
-                            <td ng-bind="item.mbtb_code"></td>
+                            <td>
+                                <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.brain_data_id}}"></a>
+                            </td>
                             <td ng-bind="item.sex"></td>
                             <td ng-bind="item.age"></td>
                             <td ng-bind="item.postmortem_interval"></td>
