@@ -1,6 +1,6 @@
 module.exports = async function (req, res, proceed) {
 
-  if (sails.config.token.token_value) {
+  if (sails.config.token.token_value && sails.config.token === 'admin') {
     return proceed();
   }
 
