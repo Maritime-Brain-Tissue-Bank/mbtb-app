@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from .permissions import IsAuthenticated
 
 from .models import AutopsyType, BrainDataset, DatasetOthrDetails, ImageRepository, NeurodegenerativeDiseases, \
     TissueType
@@ -12,11 +13,13 @@ class AutopsyTypeAPIView(viewsets.ModelViewSet):
 
 
 class BrainDatasetAPIView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = BrainDataset.objects.all()
     serializer_class = BrainDatasetSerializer
 
 
 class DatasetOthrDetailsAPIView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = DatasetOthrDetails.objects.all()
     serializer_class = DatasetOtherDetailsSerializer
 

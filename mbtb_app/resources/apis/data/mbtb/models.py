@@ -98,3 +98,21 @@ class TissueType(models.Model):
 
     def __str__(self):
         return self.tissue_type
+
+
+class AdminAccount(models.Model):
+    email = models.CharField(max_length=50)
+    password_hash = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'admins'
+
+
+class UserAccount(models.Model):
+    email = models.CharField(max_length=50)
+    password_hash = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'users'
