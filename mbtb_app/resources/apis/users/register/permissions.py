@@ -13,7 +13,13 @@ class IsAuthenticated(permissions.BasePermission):
             admin = self.authenticate(request)
             return admin
 
+        # allow patch request via authorized token to update user request
         if request.method == 'PATCH':
+            admin = self.authenticate(request)
+            return admin
+
+        # allow delete request via authorized token to deny user request
+        if request.method == 'DELETE':
             admin = self.authenticate(request)
             return admin
 
