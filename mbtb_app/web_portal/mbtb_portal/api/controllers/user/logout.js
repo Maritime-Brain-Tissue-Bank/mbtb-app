@@ -19,10 +19,11 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    sails.config.token.update_role = '';
-    sails.config.token.update_token_value = null;
+    delete this.req.session.user_type;
+    delete this.req.session.auth_token;
+
     return exits.success();
 
   }
-  
+
 };

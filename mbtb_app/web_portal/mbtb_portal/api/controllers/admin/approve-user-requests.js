@@ -40,7 +40,7 @@ module.exports = {
       request.patch({url: url, body: payload, json: true,
           'headers': {
             'content-type': 'application/json',
-            'Authorization': 'Token ' + sails.config.token.token_value,
+            'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
           }
         },
         function optionalCallback(err, httpResponse, body) {

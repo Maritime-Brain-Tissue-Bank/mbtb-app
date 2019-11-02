@@ -20,9 +20,6 @@ module.exports = {
     }
   },
   exits: {
-    success: {
-      viewTemplatePath: 'pages/homepage',
-    },
 
     bad_combo: {
       responseType: 'view',
@@ -32,6 +29,8 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
+    var req = this.req;
+    var res = this.res;
 
     let credentials = {
       email: inputs.user_email,
@@ -51,9 +50,9 @@ module.exports = {
             }
           }
           catch (e) {
-            sails.config.token.name = 'user';
-            sails.config.token.update_token_value = body;
-            return exits.success();
+            req.session.user_type = 'user';
+            req.session.auth_token = body;
+            return res.redirect('/')
           }
         }
       });

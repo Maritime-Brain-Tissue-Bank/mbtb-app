@@ -27,7 +27,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     request.get('http://127.0.0.1:8000/list_new_users/', {
       'headers': {
-        'Authorization': 'Token ' + sails.config.token.token_value,
+        'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
       }},
       function optionalCallback(err, httpResponse, body) {
         if (err) {

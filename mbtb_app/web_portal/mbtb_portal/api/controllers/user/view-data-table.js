@@ -26,7 +26,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     request.get('http://127.0.0.1:9000/brain_dataset/', {
         'headers': {
-          'Authorization': 'Token ' + sails.config.token.token_value,
+          'Authorization': 'Token ' + this.req.session.auth_token,
         }},
       function optionalCallback(err, httpResponse, body) {
         if (err) {

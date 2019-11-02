@@ -33,7 +33,7 @@ module.exports = {
     var url = 'http://127.0.0.1:9000/other_details/' + id + '/'
     request.get(url, {
         'headers': {
-          'Authorization': 'Token ' + sails.config.token.token_value,
+          'Authorization': 'Token ' + this.req.session.auth_token,
         }},
       function optionalCallback(err, httpResponse, body) {
         if (err) {

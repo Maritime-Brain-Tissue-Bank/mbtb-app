@@ -38,12 +38,12 @@
               <li><a href="/faq">FAQ</a></li>
             </ul>
 
-            <% if (sails.config.token.token_value == null) { %>
+            <% if (req.session.auth_token === undefined) { %>
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
               </ul>
-            <% } else if(sails.config.token.token_value != null && sails.config.token.token_value.length > 0){%>
+            <% } else if(req.session.auth_token !== undefined && req.session.auth_token.length > 0){%>
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
               </ul>

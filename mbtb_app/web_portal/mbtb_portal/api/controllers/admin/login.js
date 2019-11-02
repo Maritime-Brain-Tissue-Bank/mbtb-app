@@ -28,6 +28,7 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
+    var req = this.req;
     var res = this.res;
 
     let credentials = {
@@ -48,8 +49,8 @@ module.exports = {
             }
           }
           catch (e) {
-            sails.config.token.name = 'admin';
-            sails.config.token.update_token_value = body;
+            req.session.admin_user = true;
+            req.session.admin_auth_token_val = body;
             return res.redirect('/admin');
           }
         }
