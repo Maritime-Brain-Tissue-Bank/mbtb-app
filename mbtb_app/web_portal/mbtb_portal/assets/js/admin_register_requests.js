@@ -26,6 +26,34 @@ $('#accept_request_btn').click(function(e){
     ;
 });
 
+// To get id from selected checkbox and send a delete request to deny status
+$('#deny_request_btn').click(function(e){
+  var requests_ids = [];
+  var data_length = document.getElementById('data_length').value;
+
+  for ( var j = 0; j < data_length; j++) {
+    var check=$('input:checkbox[name=checkbox'+j+']').is(':checked');
+    if(check==true)
+      requests_ids.push($('input:checkbox[name=checkbox'+j+']').val());
+  }
+
+  // patch request
+  $.post( "/deny_user_requests", {requests_ids: requests_ids}, function(data, status) {
+    if (data === 'completed'){
+      alert("Your selected requested are denied.");
+      location.reload();
+    }
+    else {
+      alert("Something went wrong, Please try again.");
+    }
+
+  }).
+  fail(function(status) {
+    alert( "Please select at least one request.");
+  })
+  ;
+});
+
 // For a checkbox in header to check or uncheck all remaining checkbox
 function toggle_all(isChecked){
   if (isChecked){

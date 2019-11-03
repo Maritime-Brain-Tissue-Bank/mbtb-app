@@ -1,13 +1,12 @@
-var generator = require('generate-password');
 const request = require('request');
 
 module.exports = {
 
 
-  friendlyName: 'Approve user requests',
+  friendlyName: 'Deny user requests',
 
 
-  description: 'Approve new account requests and generate random password',
+  description: 'Deny new account requests',
 
 
   inputs: {
@@ -29,17 +28,9 @@ module.exports = {
     for (id of request_ids){
 
       var url = 'http://127.0.0.1:8000/list_new_users/' + id + '/';
-      let payload = {
-        pending_approval: "N",
-        password_hash: generator.generate({
-          length: 15,
-          numbers: true
-        })
-      };
 
-      request.patch({url: url, body: payload, json: true,
+      request.delete({url: url,
           'headers': {
-            'content-type': 'application/json',
             'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
           }
         },
@@ -48,11 +39,12 @@ module.exports = {
             return exits.success("error");
           }
           else {
-            console.log("approved");
+            console.log("New user request denied, ID: ", id);
           }
         });
     }
-    return exits.success("approved");
+    return exits.success("completed");
+
   }
 
 
