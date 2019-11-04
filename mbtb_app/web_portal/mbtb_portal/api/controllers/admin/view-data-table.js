@@ -27,7 +27,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    request.get('http://127.0.0.1:9000/brain_dataset/', {
+    request.get('https://mbtb-data.herokuapp.com/brain_dataset/', {
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
         }},

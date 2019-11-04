@@ -36,7 +36,7 @@ module.exports = {
       password: inputs.admin_password,
     };
 
-    request.post({url: 'http://127.0.0.1:8000/admin_auth', formData: credentials},
+    request.post({url: 'https://mbtb-users.herokuapp.com/admin_auth', formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
           return exits.bad_combo({'error_msg': err})

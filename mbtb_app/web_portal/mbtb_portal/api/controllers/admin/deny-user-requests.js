@@ -34,7 +34,7 @@ module.exports = {
 
     for (i=0; i<request_ids.length; i++){
 
-      var url = 'http://127.0.0.1:8000/list_new_users/' + request_ids[i] + '/';
+      var url = 'https://mbtb-users.herokuapp.com/list_new_users/' + request_ids[i] + '/';
 
       request.delete({url: url,
           'headers': {

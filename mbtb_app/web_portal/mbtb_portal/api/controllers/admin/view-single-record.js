@@ -33,7 +33,7 @@ module.exports = {
 
 
   fn: async function ({id}, exits) {
-    var url = 'http://127.0.0.1:9000/other_details/' + id + '/';
+    var url = 'https://mbtb-data.herokuapp.com/other_details/' + id + '/';
     request.get(url, {
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,

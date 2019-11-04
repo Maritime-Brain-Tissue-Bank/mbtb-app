@@ -37,7 +37,7 @@ module.exports = {
       password: inputs.user_password,
     };
 
-    request.post({url: 'http://127.0.0.1:8000/user_auth', formData: credentials},
+    request.post({url: 'https://mbtb-users.herokuapp.com/user_auth', formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
           return exits.success({'Error': err});

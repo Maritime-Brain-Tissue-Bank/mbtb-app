@@ -25,7 +25,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    request.get('http://127.0.0.1:8000/list_new_users/', {
+    request.get('https://mbtb-users.herokuapp.com/list_new_users/', {
       'headers': {
         'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
       }},

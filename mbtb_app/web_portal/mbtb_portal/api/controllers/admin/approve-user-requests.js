@@ -36,7 +36,7 @@ module.exports = {
 
     for (i=0; i<requests_ids.length; i++){
 
-      let url = 'http://127.0.0.1:8000/list_new_users/' + requests_ids[i] + '/';
+      let url = 'https://mbtb-users.herokuapp.com/list_new_users/' + requests_ids[i] + '/';
       let payload = {
         pending_approval: "N",
         password_hash: generator.generate({
