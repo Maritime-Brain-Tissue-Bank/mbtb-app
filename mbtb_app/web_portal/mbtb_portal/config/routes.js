@@ -102,4 +102,18 @@ module.exports.routes = {
     action: 'admin/deny-user-requests',
   },
 
+  'GET /admin_view_data': {
+    action: 'admin/view-data-table',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /admin_view_data/:id': {
+    action: 'admin/view-single-record',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };
