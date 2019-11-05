@@ -7,6 +7,11 @@
         <br>
         <form id="user_requests_form" >
             <input type="hidden" id="data_length" value="<%= data.length %>">
+            <script>
+                // binding data recieved from sails controller to JS variable to pass it to angular
+                var mbtb_data = <%- JSON.stringify(data) %>;
+            </script>
+
             <table id="user_requests_table" class="table table-bordered">
                 <thead>
                 <tr>
@@ -51,7 +56,7 @@
         </form>
 
         <div class="text-right">
-            <button class="btn btn-danger"> Deny</button>
+            <button class="btn btn-danger" id="deny_request_btn"> Deny</button>
             <button class="btn btn-success" id="accept_request_btn">Accept</button>
         </div>
 

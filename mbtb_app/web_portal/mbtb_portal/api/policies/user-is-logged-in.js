@@ -1,6 +1,6 @@
 module.exports = async function (req, res, proceed) {
 
-  if (sails.config.token.token_value) {
+  if (req.session.auth_token && req.session.user_type === 'user') {
     return proceed();
   }
 

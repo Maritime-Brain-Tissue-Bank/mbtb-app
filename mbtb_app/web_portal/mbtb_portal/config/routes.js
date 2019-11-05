@@ -96,6 +96,21 @@ module.exports.routes = {
 
   'POST /approve_user_requests': {
     action: 'admin/approve-user-requests',
+  },
+
+  'POST /deny_user_requests': {
+    action: 'admin/deny-user-requests',
+  },
+
+  'GET /admin_view_data': {
+    action: 'admin/view-data-table',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /admin_view_data/:id': {
+    action: 'admin/view-single-record',
     locals: {
       layout: 'layouts/admin_layout'
     }

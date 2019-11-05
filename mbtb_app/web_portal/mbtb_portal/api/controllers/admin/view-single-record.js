@@ -23,7 +23,10 @@ module.exports = {
   exits: {
 
     success: {
-      viewTemplatePath: 'pages/view_single_record'
+      viewTemplatePath: 'pages/view_single_record',
+      locals: {
+        layout: 'layouts/admin_layout'
+      }
     }
 
   },
@@ -33,7 +36,7 @@ module.exports = {
     var url = 'https://mbtb-data.herokuapp.com/other_details/' + id + '/';
     request.get(url, {
         'headers': {
-          'Authorization': 'Token ' + this.req.session.auth_token,
+          'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
         }},
       function optionalCallback(err, httpResponse, body) {
         if (err) {
@@ -48,4 +51,6 @@ module.exports = {
 
 
   }
+
+
 };

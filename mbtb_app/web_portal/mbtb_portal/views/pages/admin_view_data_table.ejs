@@ -82,20 +82,20 @@
 
                     <tbody>
 
-                        <tr grid-item>
-                            <td ng-init="elem_index = $index">{{elem_index+1}}</td>
-                            <td>
-                                <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.brain_data_id}}"></a>
-                            </td>
-                            <td ng-bind="item.sex"></td>
-                            <td ng-bind="item.age"></td>
-                            <td ng-bind="item.postmortem_interval"></td>
-                            <td ng-bind="item.time_in_fix"></td>
-                            <td ng_bind="item.storage_method"></td>
-                            <td ng-bind="item.neuro_diseases"></td>
-                            <td ng_bind="item.tissue_type"></td>
-                            <td ng_bind="item.storage_year"></td>
-                        </tr>
+                    <tr grid-item>
+                        <td ng-init="elem_index = $index">{{elem_index+1}}</td>
+                        <td>
+                            <a ng-bind="item.mbtb_code" ng-href="/admin_view_data/{{item.brain_data_id}}"></a>
+                        </td>
+                        <td ng-bind="item.sex"></td>
+                        <td ng-bind="item.age"></td>
+                        <td ng-bind="item.postmortem_interval"></td>
+                        <td ng-bind="item.time_in_fix"></td>
+                        <td ng_bind="item.storage_method"></td>
+                        <td ng-bind="item.neuro_diseases"></td>
+                        <td ng_bind="item.tissue_type"></td>
+                        <td ng_bind="item.storage_year"></td>
+                    </tr>
 
                     </tbody>
                 </table>
@@ -124,7 +124,7 @@
             </div>
 
         </div>
-        </div>
+    </div>
 
     <div class="row button_holder">
         <div class="col-md-12">

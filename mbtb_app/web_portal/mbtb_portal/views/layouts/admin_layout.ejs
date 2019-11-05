@@ -7,13 +7,16 @@
 
     <%/* If you want to discourage search engines from indexing this site, uncomment the following line: */%>
     <%/* <meta name="robots" content="noindex"> */%>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
+
     <!--STYLES-->
-    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/min/production.min.css">
     <!--STYLES END-->
 </head>
 
@@ -28,7 +31,7 @@
                 </div>
 
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="http://braintissuebank.dal.ca/">MBTB</a>
+                    <a class="navbar-brand">MBTB</a>
                 </div>
 
                 <ul class="nav navbar-nav">
@@ -37,26 +40,27 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dataset<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/add_new_data">Add New Data</a></li>
-                            <li><a href="#">View Data</a></li>
+                            <li><a href="/admin_view_data">View Data</a></li>
                         </ul>
                     </li>
                     <li><a href="/view_new_requests">User Requests</a></li>
                     <li><a href="/admin_faq">FAQ</a></li>
                 </ul>
 
-                <% if (sails.config.token.token_value == null || sails.config.token != 'admin') { %>
-                    <% sails.config.token.update_token_value = null %>
-                    <% sails.config.token.update_role = '' %>
+                <% if (req.session.admin_auth_token_val === undefined) { %>
+                    <% delete req.session.auth_token %>
+                    <% delete req.session.user_type %>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/admin_login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     </ul>
-                <% } else if(sails.config.token.token_value != null &&
-                        sails.config.token.token_value.length > 0 &&
-                        sails.config.token === 'admin'){%>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/admin_logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                    </ul>
-                <% }%>
+                <% } else if(req.session.admin_auth_token_val != undefined &&
+                        req.session.admin_auth_token_val.length > 0){%>
+                    <% if (req.session.admin_user === true){%>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/admin_logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        </ul>
+                    <% }%>
+                <%}%>
 
             </div>
         </nav>
@@ -79,11 +83,8 @@
 <!--TEMPLATES END-->
 
 <!--SCRIPTS-->
-<script src="/js/admin_register_requests.js"></script>
-<script src="/js/user_login.js"></script>
-<script src="/js/user_registration.js"></script>
-<script src="/js/view_data_table.js"></script>
-<script src="/js/view_single_record.js"></script>
+<script src="/min/production.min.js"></script>
 <!--SCRIPTS END-->
+
 </body>
 </html>

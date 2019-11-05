@@ -7,7 +7,7 @@
     </div>
 </div>
 <br>
-<div ng-app="login_app" ng-controller="login_controller" ng-cloak="">
+<div ng-app="login_app" ng-controller="login_controller" ng-cloak="" >
     <form class="form-horizontal" name="login_form" action="/login" method="post" novalidate>
 
         <div class="form-group row"
@@ -61,7 +61,7 @@
         <% } %>
 
         <div class="form-group row button_holder">
-            <button class="btn btn-primary" id="submit_btn">Login</button>
+            <button class="btn btn-primary" id="submit_btn" ng-disabled="login_form.$invalid">Login</button>
         </div>
 
     </form>

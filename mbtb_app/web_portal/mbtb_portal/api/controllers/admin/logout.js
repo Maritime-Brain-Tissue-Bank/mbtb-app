@@ -19,8 +19,8 @@ module.exports = {
   fn: async function (inputs, exits) {
     var res = this.res;
 
-    sails.config.token.update_role = '';
-    sails.config.token.update_token_value = null;
+    delete this.req.session.user_type;
+    delete this.req.session.admin_auth_token_val;
     return res.redirect('/admin');
   }
 

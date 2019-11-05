@@ -19,7 +19,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.first_name.$invalid && !registration_form.first_name.$pristine }">
-                <label class="col-sm-4 control-label">First Name</label>
+                <label class="col-sm-4 control-label">* First Name</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="first_name" type="text" ng-model="first_name" required="">
                 </div>
@@ -37,7 +37,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.last_name.$invalid && !registration_form.last_name.$pristine }">
-                <label class="col-sm-4 control-label">Last Name</label>
+                <label class="col-sm-4 control-label">* Last Name</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="last_name" type="text" ng-model="last_name" required="">
                 </div>
@@ -48,7 +48,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.email.$invalid && !registration_form.email.$pristine }">
-                <label class="col-sm-4 control-label">Email</label>
+                <label class="col-sm-4 control-label">* Email</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="email" type="email" ng-model="email" required="" ng-pattern = "/^.+@.+\..+$/">
                     <div class="md-caption">
@@ -65,7 +65,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.institution.$invalid && !registration_form.institution.$pristine }">
-                <label class="col-sm-4 control-label">Institution</label>
+                <label class="col-sm-4 control-label">* Institution</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="institution" type="text" ng-model="institution" required="">
                 </div>
@@ -76,7 +76,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.department_name.$invalid && !registration_form.department_name.$pristine }">
-                <label class="col-sm-4 control-label">Department</label>
+                <label class="col-sm-4 control-label">* Department</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="department_name" type="text" ng-model="department_name" required="">
                 </div>
@@ -87,7 +87,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.current_position.$invalid && !registration_form.current_position.$pristine }">
-                <label class="col-sm-4 control-label">Position</label>
+                <label class="col-sm-4 control-label">* Position</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="current_position" type="text" ng-model="current_position" required="">
                 </div>
@@ -112,7 +112,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.city.$invalid && !registration_form.city.$pristine }">
-                <label class="col-sm-4 control-label">City</label>
+                <label class="col-sm-4 control-label">* City</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="city" type="text" ng-model="city" required="">
                 </div>
@@ -123,7 +123,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.province.$invalid && !registration_form.province.$pristine }">
-                <label class="col-sm-4 control-label">Province</label>
+                <label class="col-sm-4 control-label">* Province</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="province" type="text" ng-model="province" required="">
                 </div>
@@ -134,7 +134,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error' : registration_form.country.$invalid && !registration_form.country.$pristine }">
-                <label class="col-sm-4 control-label">Country</label>
+                <label class="col-sm-4 control-label">* Country</label>
                 <div class="col-sm-5">
                     <input class="form-control" name="country" type="text" ng-model="country" required="true">
                 </div>
@@ -153,7 +153,11 @@
             <div class="form-group row">
                 <label class="col-sm-4 control-label">Comments</label>
                 <div class="col-sm-5">
-                    <input class="form-control" name="comments" type="text">
+                    <textarea class="form-control" name="comments" rows="3"></textarea>
+                    <div class="md-caption">
+                        Please tell us the name of the laboratory you work for, the name of its Principal Investigator (if not you), and if possible anyone
+                        else you know in your lab who are already MBTB users. We'll use this information to create or add you to a Site within MBTB.
+                    </div>
                 </div>
             </div>
 
@@ -165,17 +169,23 @@
                     information will not be used in any other way or passed on to any other entities or
                     persons.
                     <br><br>
-                    <input class="form-check-input" type="checkbox" id="invalidCheck" required="true">
-                    By <em>requesting new account</em> you agree to our <a href="#">Terms of Use</a> and <a href="#">Data
-                            Policy</a>
                 </small>
+            </div>
 
+            <div class="form-group row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-5">
+                    <input class="form-check-input" type="checkbox" id="agree_terms_checkbox" name="agree_terms_checkbox" ng-model="agree_terms_checkbox" required="true" >
+                    By <em>requesting new account</em> you agree to our <a href="/terms">Terms of Use</a> and <a href="/policy">Data
+                        Policy</a>
+                    <div ng-show="registration_form.agree_terms_checkbox.$error.required"></div>
+                </div>
             </div>
 
             <div class="form-group row button_holder">
                 <div class="col">
                     <br>
-                    <button type="submit" class="btn btn-primary" id="submit_btn"> Request Account</button>
+                    <button type="submit" class="btn btn-primary" id="submit_btn" ng-disabled="registration_form.$invalid"> Request Account</button>
                 </div>
                 <div class="col" id="cancel_btn">
                     <br>

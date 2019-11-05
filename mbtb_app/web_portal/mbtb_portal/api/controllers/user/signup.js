@@ -112,7 +112,7 @@ module.exports = {
       comments: inputs.comments,
     };
 
-    request.post({url: 'http://127.0.0.1:8000/add_new_users/', formData: data},
+    request.post({url: 'https://mbtb-users.herokuapp.com/add_new_users/', formData: data},
       function optionalCallback(err, httpResponse, body) {
         var message_title = "";
         var message_body = "";

@@ -131,7 +131,7 @@ CREATE TABLE dataset_othr_details(
     race varchar(255) DEFAULT NULL,
     diagnosis_of_dementia varchar(255) DEFAULT NULL,
     duration_of_dementia int(3) DEFAULT NULL,
-    clinical_history varchar(255) DEFAULT NULL,
+    clinical_history text DEFAULT NULL,
     cause_of_death varchar(255) DEFAULT NULL,
     brain_weight int(5) DEFAULT NULL,
     neuoropathology_detailed text DEFAULT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE dataset_othr_details(
     abc varchar(255) DEFAULT NULL,
     autopsy_type_id int unsigned NOT NULL,
     tissue_type_formalin_fixed enum('True', 'False') DEFAULT NULL,
-    PRIMARY KEY (othr_details_id),a
+    PRIMARY KEY (othr_details_id),
     FOREIGN KEY (brain_data_id)
         REFERENCES brain_dataset(brain_data_id)
         ON DELETE CASCADE,
