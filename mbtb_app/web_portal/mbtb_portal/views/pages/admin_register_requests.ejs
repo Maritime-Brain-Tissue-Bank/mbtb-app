@@ -1,0 +1,69 @@
+<title>User Requests</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<div class="container-fluid requests_container">
+    <div class="col-md-12">
+        <h2 class="heading_title">New User Requets</h2>
+        <br>
+        <form id="user_requests_form" >
+            <input type="hidden" id="data_length" value="<%= data.length %>">
+            <script>
+                // binding data recieved from sails controller to JS variable to pass it to angular
+                var mbtb_data = <%- JSON.stringify(data) %>;
+            </script>
+
+            <table id="user_requests_table" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" onClick="toggle_all(this.checked)" id="select_all"></th>
+                    <th data-field="title">Title</th>
+                    <th data-field="first_name">First Name</th>
+                    <th data-field="middle_name">Middle Name</th>
+                    <th data-field="last_name">Last Name</th>
+                    <th data-field="email">Email</th>
+                    <th data-field="institution">Institution</th>
+                    <th data-field="department_name">Department</th>
+                    <th data-field="position_title">Position</th>
+                    <th data-field="address_line_1">Address 1</th>
+                    <th data-field="address_line_2">Address 2</th>
+                    <th data-field="city">City</th>
+                    <th data-field="province">Province</th>
+                    <th data-field="country">Country</th>
+                    <th data-field="comments">Comments</th>
+                </tr>
+                </thead>
+
+                <% for(var i=0; i < data.length; i++) { %>
+                    <tr>
+                        <td><input type="checkbox" name="checkbox<%- i %>" value="<%= data[i].id %>")></td>
+                        <td data-field="title"><%= data[i].title %></td>
+                        <td data-field="first_name"><%= data[i].first_name %></td>
+                        <td data-field="middle_name"><%= data[i].middle_name %></td>
+                        <td data-field="last_name"><%= data[i].last_name %></td>
+                        <td data-field="email"><%= data[i].email %></td>
+                        <td data-field="institution"><%= data[i].institution %></td>
+                        <td data-field="department_name"><%= data[i].department_name %></td>
+                        <td data-field="position_title"><%= data[i].position_title %></td>
+                        <td data-field="address_line_1"><%= data[i].address_line_1 %></td>
+                        <td data-field="address_line_2"><%= data[i].address_line_2 %></td>
+                        <td data-field="city"><%= data[i].city %></td>
+                        <td data-field="province"><%= data[i].province %></td>
+                        <td data-field="country"><%= data[i].country %></td>
+                        <td data-field="comments"><%= data[i].comments %></td>
+                    </tr>
+                <% } %>
+            </table>
+        </form>
+
+        <div class="text-right">
+            <button class="btn btn-danger" id="deny_request_btn"> Deny</button>
+            <button class="btn btn-success" id="accept_request_btn">Accept</button>
+        </div>
+
+        <div id="temp_msg"></div>
+
+    </div>
+</div>
+<br>
+
+

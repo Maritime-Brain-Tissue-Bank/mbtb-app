@@ -1,0 +1,59 @@
+<title>User Log In</title>
+
+<div class="container login_container">
+    <div class="row">
+        <div class="col-md-auto">
+            <h2><span class="glyphicon glyphicon-user"></span> Login to MBTB Dataset</h2>
+        </div>
+    </div>
+    <br>
+    <div ng-app="login_app" ng-controller="login_controller" ng-cloak="">
+        <form class="form-horizontal" name="login_form" action="/admin_login" method="post" novalidate>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : login_form.admin_email.$invalid && !login_form.admin_email.$pristine }">
+                <label class="col-sm-4 control-label">Email</label>
+                <div class="col-sm-5">
+                    <input type="email" name="admin_email" ng-model="admin_email" required=""
+                           class="form-control" ng-pattern = "/^.+@.+\..+$/">
+                </div>
+                <div ng-message-exp="['required', 'pattern']">
+                    <div ng-show="login_form.admin_email.$error.email" class="error_msg">
+                        Enter valid email
+                    </div>
+                </div>
+                <div ng-show="login_form.admin_email.$error.required && login_form.admin_email.$touched" class="error_msg">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : login_form.admin_password.$invalid && !login_form.admin_password.$pristine }">
+                <label class="col-sm-4 control-label">Password</label>
+                <div class="col-sm-5">
+                    <input id="password" type="password" name="admin_password" ng-model="admin_password" required
+                           class="form-control">
+                </div>
+                <div ng-show="login_form.admin_password.$error.required && login_form.admin_password.$touched" class="error_msg">
+                    This field is required
+                </div>
+            </div>
+
+            <% if (typeof error_msg != 'undefined' && error_msg.length > 0) { %>
+                <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-md-5">
+                        <div class="alert alert-danger">
+                            <%= error_msg %>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <div class="form-group row button_holder">
+                <button class="btn btn-primary" id="submit_btn" ng-disabled="login_form.$invalid">Login</button>
+            </div>
+
+        </form>
+    </div>
+</div>
