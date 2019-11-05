@@ -7,19 +7,10 @@
 
     <%/* If you want to discourage search engines from indexing this site, uncomment the following line: */%>
     <%/* <meta name="robots" content="noindex"> */%>
-    <!--SCRIPTS-->
-    <script src="/dependencies/angular.min.js"></script>
-    <script src="/dependencies/jquery-3.4.1.min.js"></script>
-    <script src="/js/admin_register_requests.js"></script>
-    <script src="/js/user_login.js"></script>
-    <script src="/js/user_registration.js"></script>
-    <script src="/js/view_data_table.js"></script>
-    <script src="/js/view_single_record.js"></script>
-    <!--SCRIPTS END-->
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!-- Kept bootstrap cdn to load it first, keeping it local gives error in console i.e icons missing-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
 
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/importer.css">
@@ -88,6 +79,16 @@
 <!--TEMPLATES-->
 <!--TEMPLATES END-->
 
+<!--SCRIPTS-->
+<script src="/dependencies/angular.min.js"></script>
+<script src="/dependencies/jquery-3.4.1.min.js"></script>
+<script src="/dependencies/UI/bootstrap.min.js"></script>
+<script src="/js/admin_register_requests.js"></script>
+<script src="/js/user_login.js"></script>
+<script src="/js/user_registration.js"></script>
+<script src="/js/view_data_table.js"></script>
+<script src="/js/view_single_record.js"></script>
+<!--SCRIPTS END-->
 
 </body>
 </html>

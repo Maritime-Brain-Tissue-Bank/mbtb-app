@@ -1,6 +1,5 @@
 // To get id from selected checkbox and send a patch request to approve status
 $('#accept_request_btn').click(function(e){
-
   var requests_ids = get_checkbox_values();
   var email_data = get_email_data(requests_ids);
 
@@ -17,8 +16,8 @@ $('#accept_request_btn').click(function(e){
   }).
     fail(function(status) {
       alert( "Please select at least one request.");
-      })
-    ;
+      });
+
 });
 
 // To get id from selected checkbox and send a delete request to deny status
