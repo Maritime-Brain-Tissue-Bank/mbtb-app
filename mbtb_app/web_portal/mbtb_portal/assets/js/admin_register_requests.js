@@ -4,7 +4,7 @@ $('#accept_request_btn').click(function(e){
   var email_data = get_email_data(requests_ids);
 
   // patch request
-  $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
+  var post_request = $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'approved'){
       alert("Your selected requested are approved.");
       location.reload();
@@ -13,8 +13,9 @@ $('#accept_request_btn').click(function(e){
       alert("Something went wrong, Please try again.");
     }
 
-  }).
-    fail(function(status) {
+  });
+
+  post_request.fail(function(status) {
       alert( "Please select at least one request.");
       });
 

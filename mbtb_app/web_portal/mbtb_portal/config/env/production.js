@@ -251,7 +251,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
      onlyAllowOrigins: [
-       'https://mbtb-portal.herokuapp.com',
+       'https://mbtb-portal.herokuapp.com'
      ],
 
 
