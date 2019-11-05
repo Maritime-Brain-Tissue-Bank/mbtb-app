@@ -48,6 +48,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    // using sails email package to send an email
     sails.hooks.email.send(inputs.template, inputs.templateData, {
       to:inputs.to,
       subject: inputs.subject

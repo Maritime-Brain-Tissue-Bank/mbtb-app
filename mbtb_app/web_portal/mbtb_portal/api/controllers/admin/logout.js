@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Logout',
 
 
-  description: 'Admin Logout',
+  description: 'Admin Logout action',
 
 
   inputs: {
@@ -19,7 +19,9 @@ module.exports = {
   fn: async function (inputs, exits) {
     var res = this.res;
 
-    delete this.req.session.user_type;
+    // deleting session variables: admin_user, auth token
+    // redirect a user to admin homepage
+    delete this.req.session.admin_user;
     delete this.req.session.admin_auth_token_val;
     return res.redirect('/admin');
   }

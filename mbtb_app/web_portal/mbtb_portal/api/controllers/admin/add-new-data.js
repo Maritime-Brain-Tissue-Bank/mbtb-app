@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Add new data',
 
 
-  description: '',
+  description: 'This controller is for adding a new data to DB. For now, it redirects to the "admin_add_new_data" template',
 
 
   inputs: {

@@ -6,7 +6,7 @@ module.exports = {
   friendlyName: 'View data table',
 
 
-  description: 'Display "Data table" page.',
+  description: 'Retrieve mbtb data from API',
 
 
   inputs: {
@@ -18,6 +18,7 @@ module.exports = {
 
     success: {
       viewTemplatePath: 'pages/admin_view_data_table',
+      description: 'On sucess, return to `admin_view_data_table` template',
       locals: {
         layout: 'layouts/admin_layout'
       }
@@ -27,13 +28,15 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+
+    // get request to retrieve mbtb data from api with admin auth token
     request.get('https://mbtb-data.herokuapp.com/brain_dataset/', {
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
         }},
       function optionalCallback(err, httpResponse, body) {
         if (err) {
-          console.log({'error_msg': err});
+          console.log({'error_msg': err}); // log error to server console
         }
         else {
           var response = JSON.parse(body);
@@ -43,6 +46,7 @@ module.exports = {
             var time_date = response[i].storage_year.split("T");
             response[i].storage_year = time_date[0];
           }
+          // return retrieved data to template in form of dictionary with key: `data`
           return exits.success({data: response});
         }
       });

@@ -11,6 +11,7 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
   // data binding to angular variable
   $scope.gridOptions.data = $window.mbtb_data;
 
+  // exporting data or filtered data to csv
   $scope.exportToCsv = function (currentData) {
     var exportData = [];
     currentData.forEach(function (item) {
