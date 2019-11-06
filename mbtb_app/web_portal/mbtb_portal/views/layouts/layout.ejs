@@ -41,6 +41,7 @@
               <li><a href="/faq">FAQ</a></li>
             </ul>
 
+            <% // check for auth token if user is logged in or not %>
             <% if (req.session.auth_token === undefined) { %>
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>

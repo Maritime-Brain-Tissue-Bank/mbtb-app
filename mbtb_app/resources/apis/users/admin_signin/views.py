@@ -5,6 +5,8 @@ from .models import AdminAccount
 import jwt
 
 
+# Authenticate credentials for admin and return auth token
+# Also, written view for post request only
 class AdminAccountView(views.APIView):
     permission_classes = [AllowAny, ]
 
