@@ -23,6 +23,7 @@
 <body>
 <div class="container">
 
+    <!-- Navigation Bar -->
     <div class="header_nav_wrapper ">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -47,6 +48,7 @@
                     <li><a href="/admin_faq">FAQ</a></li>
                 </ul>
 
+                <% // check for auth token if admin is logged in or not %>
                 <% if (req.session.admin_auth_token_val === undefined) { %>
                     <% delete req.session.auth_token %>
                     <% delete req.session.user_type %>

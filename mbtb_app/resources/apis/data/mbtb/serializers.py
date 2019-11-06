@@ -9,6 +9,7 @@ class AutopsyTypeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# Serializer to have all mbtb_data from `BrainDataset` model
 class BrainDatasetSerializer(serializers.ModelSerializer):
     neuro_diseases = serializers.CharField(source='neuro_diseases.disease_name', read_only=True)
     tissue_type = serializers.CharField(source='tissue_type.tissue_type', read_only=True)
@@ -18,6 +19,7 @@ class BrainDatasetSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# Serializer to have detailed view for a single record from `DatasetOthrDetails` model
 class DatasetOtherDetailsSerializer(serializers.ModelSerializer):
     mbtb_code = serializers.CharField(source='brain_data_id.mbtb_code', read_only=True)
     sex = serializers.CharField(source='brain_data_id.sex', read_only=True)

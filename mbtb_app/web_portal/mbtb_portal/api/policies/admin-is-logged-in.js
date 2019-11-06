@@ -1,3 +1,11 @@
+/*
+  A policy to check incoming request is from admin or not
+  If not then redirect to admin login.
+
+  Also, if incoming request is from logged_in user,
+  it does: logout current user and redirect to user homepage.
+ */
+
 module.exports = async function (req, res, proceed) {
 
   if (req.session.admin_auth_token_val && req.session.admin_user === true) {

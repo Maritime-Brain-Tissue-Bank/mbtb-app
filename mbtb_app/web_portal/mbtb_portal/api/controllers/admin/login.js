@@ -22,7 +22,8 @@ module.exports = {
   exits: {
     bad_combo: {
       responseType: 'view',
-      viewTemplatePath: 'pages/admin_login'
+      viewTemplatePath: 'pages/admin_login',
+      description: 'return view for password mismatch, display error msg'
     }
   },
 
@@ -36,19 +37,22 @@ module.exports = {
       password: inputs.admin_password,
     };
 
+    // post request for retrieving auth token from api, with credentials as payload
     request.post({url: 'https://mbtb-users.herokuapp.com/admin_auth', formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
-          return exits.bad_combo({'error_msg': err})
+          return exits.bad_combo({'error_msg': err}) // display error msg if something goes wrong with request
         }
         else {
           try {
             const response = JSON.parse(body);
             if(typeof (response) == "object"){
-              return exits.bad_combo({'error_msg': response.Error})
+              return exits.bad_combo({'error_msg': response.Error}) // display error msg for wrong email, password
             }
           }
           catch (e) {
+            // set session variables: admin_user to true and save auth token for further usage
+            // redirect to admin homepage
             req.session.admin_user = true;
             req.session.admin_auth_token_val = body;
             return res.redirect('/admin');
