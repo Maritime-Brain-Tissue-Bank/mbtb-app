@@ -14,8 +14,8 @@ class BrainDatasetViewTest(APITestCase):
         self.tissue_type_1 = TissueType.objects.create(tissue_type="brain")
         self.neuro_diseases_1 = NeurodegenerativeDiseases.objects.create(disease_name="Mixed AD VAD")
         self.brain_dataset_1 = BrainDataset.objects.create(
-            neuro_diseases=self.neuro_diseases_1, tissue_type=self.tissue_type_1, mbtb_code="BB00-001", sex="Female", age="92",
-            postmortem_interval="15", time_in_fix="10", storage_method='Fresh', storage_year="2018-06-06T03:03:03",
+            neuoropathology_diagnosis=self.neuro_diseases_1, tissue_type=self.tissue_type_1, mbtb_code="BB00-001", sex="Female", age="92",
+            postmortem_interval="15", time_in_fix="10", storage_method='Fresh Frozen', storage_year="2018-06-06T03:03:03",
             archive="No"
         )
         self.email = 'admin@mbtb.ca'

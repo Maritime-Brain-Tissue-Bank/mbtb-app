@@ -94,7 +94,7 @@ CREATE TABLE brain_dataset(
     time_in_fix varchar(255) DEFAULT NULL,
     neuro_diseases_id int unsigned NOT NULL,
     tissue_type_id int unsigned NOT NULL,
-    storage_method enum('Fresh', 'Not Fresh') DEFAULT NULL, -- To Do: Yet to be defined
+    storage_method enum('Formalin-Fixed', 'Fresh Frozen', 'Both') DEFAULT NULL, -- To Do: Yet to be confirmed
     storage_year datetime NOT NULL,
     archive enum('Yes', 'No') DEFAULT 'No',
     PRIMARY KEY (brain_data_id),
@@ -129,8 +129,8 @@ CREATE TABLE dataset_othr_details(
     othr_details_id int unsigned NOT NULL AUTO_INCREMENT,
     brain_data_id int unsigned NOT NULL,
     race varchar(255) DEFAULT NULL,
-    diagnosis_of_dementia varchar(255) DEFAULT NULL,
-    duration_of_dementia int(3) DEFAULT NULL,
+    diagnosis varchar(255) DEFAULT NULL,
+    duration int(3) DEFAULT NULL,
     clinical_history text DEFAULT NULL,
     cause_of_death varchar(255) DEFAULT NULL,
     brain_weight int(5) DEFAULT NULL,
@@ -143,7 +143,8 @@ CREATE TABLE dataset_othr_details(
     khachaturian varchar(255) DEFAULT NULL,
     abc varchar(255) DEFAULT NULL,
     autopsy_type_id int unsigned NOT NULL,
-    tissue_type_formalin_fixed enum('True', 'False') DEFAULT NULL,
+    formalin_fixed enum('True', 'False') DEFAULT NULL,
+    fresh_frozen enum('True', 'False') DEFAULT NULL,
     PRIMARY KEY (othr_details_id),
     FOREIGN KEY (brain_data_id)
         REFERENCES brain_dataset(brain_data_id)
