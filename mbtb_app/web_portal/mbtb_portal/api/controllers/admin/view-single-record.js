@@ -36,7 +36,7 @@ module.exports = {
   fn: async function ({id}, exits) {
 
     // get request to retrieve detailed mbtb data for single id from api with admin auth token
-    var url = 'https://mbtb-data.herokuapp.com/other_details/' + id + '/';
+    let url = sails.config.custom.data_api_url + 'other_details/' + id + '/';
     request.get(url, {
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,

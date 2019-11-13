@@ -39,7 +39,7 @@ module.exports = {
     };
 
     // post request for retrieving auth token from api, with credentials as payload
-    request.post({url: 'https://mbtb-users.herokuapp.com/user_auth', formData: credentials},
+    request.post({url: sails.config.custom.user_api_url + 'user_auth', formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
           return exits.success({'Error': err}); // display error msg if something goes wrong with request

@@ -22,5 +22,5 @@ class Users(models.Model):
     active_since = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'users'

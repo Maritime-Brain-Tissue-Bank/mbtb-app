@@ -37,7 +37,7 @@ module.exports = {
     for (i=0; i<request_ids.length; i++){
 
       // url for API
-      var url = 'https://mbtb-users.herokuapp.com/list_new_users/' + request_ids[i] + '/';
+      let url = sails.config.custom.user_api_url + 'list_new_users/' + request_ids[i] + '/';
 
       // delete request to deny new account requests
       // along with admin auth token
