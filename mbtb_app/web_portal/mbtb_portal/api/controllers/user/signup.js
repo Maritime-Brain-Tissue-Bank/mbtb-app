@@ -112,7 +112,7 @@ module.exports = {
       comments: inputs.comments,
     };
 
-    request.post({url: 'https://mbtb-users.herokuapp.com/add_new_users/', formData: data},
+    request.post({url: sails.config.custom.user_api_url + 'add_new_users/', formData: data},
       function optionalCallback(err, httpResponse, body) {
         var message_title = "";
         var message_body = "";

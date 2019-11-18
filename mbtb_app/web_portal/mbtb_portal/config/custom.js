@@ -20,4 +20,8 @@ module.exports.custom = {
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
   // …
 
+  baseUrl: 'http://localhost:1337',
+  user_api_url: 'http://127.0.0.1:8000/', // user api url i.e. for user, admin login, register
+  data_api_url: 'http://127.0.0.1:9000/', // data api url
+
 };

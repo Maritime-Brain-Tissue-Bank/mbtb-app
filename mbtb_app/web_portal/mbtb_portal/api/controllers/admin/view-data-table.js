@@ -28,9 +28,10 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    let url = sails.config.custom.data_api_url + 'brain_dataset/';
 
     // get request to retrieve mbtb data from api with admin auth token
-    request.get('https://mbtb-data.herokuapp.com/brain_dataset/', {
+    request.get(url, {
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
         }},

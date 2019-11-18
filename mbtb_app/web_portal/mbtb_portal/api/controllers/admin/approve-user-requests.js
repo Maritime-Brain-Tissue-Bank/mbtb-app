@@ -40,7 +40,7 @@ module.exports = {
     for (i=0; i<requests_ids.length; i++){
 
       // url for API
-      let url = 'https://mbtb-users.herokuapp.com/list_new_users/' + requests_ids[i] + '/';
+      let url = sails.config.custom.user_api_url + 'list_new_users/' + requests_ids[i] + '/';
       let payload = {
         pending_approval: "N",
         password_hash: generator.generate({

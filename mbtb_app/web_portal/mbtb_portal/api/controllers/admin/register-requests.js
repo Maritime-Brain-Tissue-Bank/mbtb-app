@@ -26,9 +26,10 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    let url = sails.config.custom.user_api_url + 'list_new_users/';
 
     // get request to retrieve registration requests from api with admin auth token
-    request.get('https://mbtb-users.herokuapp.com/list_new_users/', {
+    request.get(url, {
       'headers': {
         'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
       }},

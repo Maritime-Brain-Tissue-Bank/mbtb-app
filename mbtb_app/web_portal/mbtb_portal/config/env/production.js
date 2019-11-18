@@ -371,8 +371,10 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'https://example.com',
+    baseUrl: 'https://mbtb-portal.herokuapp.com/',
     internalEmailAddress: 'support@example.com',
+    user_api_url: 'https://mbtb-users.herokuapp.com/',
+    data_api_url: 'https://mbtb-data.herokuapp.com/',
 
     // mailgunDomain: 'mg.example.com',
     // mailgunSecret: 'key-prod_fake_bd32301385130a0bafe030c',

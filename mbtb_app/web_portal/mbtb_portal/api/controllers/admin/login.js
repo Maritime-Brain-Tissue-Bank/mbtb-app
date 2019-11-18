@@ -37,8 +37,10 @@ module.exports = {
       password: inputs.admin_password,
     };
 
+    let url = sails.config.custom.user_api_url + 'admin_auth';
+
     // post request for retrieving auth token from api, with credentials as payload
-    request.post({url: 'https://mbtb-users.herokuapp.com/admin_auth', formData: credentials},
+    request.post({url: url, formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
           return exits.bad_combo({'error_msg': err}) // display error msg if something goes wrong with request
