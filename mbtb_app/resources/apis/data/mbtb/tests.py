@@ -4,7 +4,6 @@ from .models import BrainDataset, NeurodegenerativeDiseases, TissueType, Autopsy
 from .models import AdminAccount
 from .serializers import BrainDatasetSerializer, DatasetOtherDetailsSerializer
 import jwt
-import json
 
 
 # This class is to set up test data
@@ -194,3 +193,67 @@ class DatasetOthrDetailsViewTest(SetUpTestData):
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
 
+
+class CreateDataAPIViewTest(SetUpTestData):
+
+    def setUp(cls):
+        super(SetUpTestData, cls).setUpClass()
+        cls.test_data = {
+            'mbtb_code': 'BB89-100',
+            'sex': 'Male',
+            'age': '70',
+            'postmortem_interval': '12',
+            'time_in_fix': 'Not known',
+            'tissue_type': 'Brain',
+            'storage_method': 'Fresh Frozen',
+            'autopsy_type': 'Brain',
+            'neuoropathology_diagnosis': "Mixed AD VAD",
+            'race': '',
+            'diagnosis': 'AD',
+            'duration': 0,
+            'clinical_history': 'AD',
+            'cause_of_death': '',
+            'brain_weight': 1080,
+            'neuoropathology_detailed': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
+            'neuropathology_gross': '',
+            'neuropathology_micro': '',
+            'neouropathology_criteria': 'KHACHATURIAN',
+            'cerad': '',
+            'braak_stage': '',
+            'khachaturian': '30',
+            'abc': '',
+            'formalin_fixed': 'True',
+            'fresh_frozen': 'True'
+        }
+
+    def test_insert_data_(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.credentials()
+
+    def test_insert_data_without_token(self):
+        response = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_invalid_data_check(self):
+        self.test_data['tissue_type'] = ''
+        self.test_data['autopsy_type'] = ''
+        self.test_data['neuoropathology_diagnosis'] = ''
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.client.credentials()
+
+    def test_invalid_token_header(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + 'get request with valid token')
+        response_invalid_header = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_request_with_empty_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    def tearDown(cls):
+        super(SetUpTestData, cls).tearDownClass()

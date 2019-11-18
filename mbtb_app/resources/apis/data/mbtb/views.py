@@ -76,5 +76,4 @@ class CreateDataAPIView(views.APIView):
 
         except (KeyError, BaseException, AutopsyType.DoesNotExist, TissueType.DoesNotExist,
                 NeurodegenerativeDiseases.DoesNotExist) as e:
-            return response.Response(e, status="400")
-            #return response.Response({'Error': "Either missing fields or incorrect data"}, status="400")
+            return response.Response({'Error': "Either missing fields or incorrect data"}, status="400")

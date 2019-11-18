@@ -35,23 +35,3 @@ class DatasetOtherDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DatasetOthrDetails
         fields = "__all__"
-
-
-class ImageRepositorySerializer(serializers.ModelSerializer):
-    brain_data_id = serializers.CharField(source='brain_data_id.brain_data_id', read_only=True)
-
-    class Meta:
-        model = ImageRepository
-        fields = "__all__"
-
-
-class NeurodegenerativeDiseasesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NeurodegenerativeDiseases
-        fields = "__all__"
-
-
-class TissueTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TissueType
-        fields = "__all__"
