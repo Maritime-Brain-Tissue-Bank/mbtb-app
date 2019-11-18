@@ -13,6 +13,11 @@ class IsAuthenticated(permissions.BasePermission):
             admin = self.authenticate(request)
             return admin
 
+        # only allow admin's POST request via authorized token
+        if request.method == 'POST':
+            admin = self.authenticate(request)
+            return admin
+
         return False
 
     # Check for auth_token length and pass it for decoding
