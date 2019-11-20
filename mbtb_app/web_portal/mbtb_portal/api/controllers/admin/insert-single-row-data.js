@@ -30,9 +30,24 @@ module.exports = {
       required: false
     },
 
-    cause_of_death: {
+    clinical_diagnosis: {
       type: 'string',
       required: true
+    },
+
+    duration: {
+      type: 'string',
+      required: false
+    },
+
+    clinical_history: {
+      type: 'string',
+      required: true
+    },
+
+    cause_of_death: {
+      type: 'string',
+      required: false
     },
 
     postmortem_interval: {
@@ -95,21 +110,6 @@ module.exports = {
       required: false
     },
 
-    clinical_diagnosis: {
-      type: 'string',
-      required: true
-    },
-
-    duration: {
-      type: 'number',
-      required: true
-    },
-
-    clinical_history: {
-      type: 'string',
-      required: false
-    },
-
     autopsy_type: {
       type: 'string',
       required: true
@@ -142,6 +142,8 @@ module.exports = {
     let formalin_fixed = '';
     let fresh_frozen = '';
     let storage_method = inputs.storage_method;
+    let duration = inputs.duration;
+
     switch (storage_method) {
       case 'Formalin-Fixed':
         formalin_fixed = 'True';
@@ -157,6 +159,14 @@ module.exports = {
         break;
     }
 
+    if (duration === ''){
+      duration = 0;
+    }
+    else {
+      duration = parseInt(duration);
+    }
+
+
     let payload = {
       mbtb_code: inputs.mbtb_code,
       sex: inputs.sex,
@@ -169,7 +179,7 @@ module.exports = {
       neuoropathology_diagnosis: inputs.neuoropathology_diagnosis,
       race: inputs.race,
       diagnosis: inputs.clinical_diagnosis,
-      duration: inputs.duration,
+      duration: duration,
       clinical_history: inputs.clinical_history,
       cause_of_death: inputs.cause_of_death,
       brain_weight: inputs.brain_weight,
