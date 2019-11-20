@@ -12,10 +12,11 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="mbtb_code">MBTB code</label>
+                    <label for="mbtb_code">MBTB Code</label>
                     <input name="mbtb_code" type="text" class="form-control" required>
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="sex">Sex</label>
@@ -26,12 +27,14 @@
                     </select>
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="age">Age</label>
                     <input name="age" type="number" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="race">Race</label>
@@ -39,34 +42,59 @@
                 </div>
             </div>
 
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="clinical_diagnosis">Clinical Diagnosis</label>
+                    <input name="clinical_diagnosis" type="text" class="form-control">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="duration">Duration of Disease</label>
+                    <input name="duration" type="text" class="form-control">
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="clinical_history">Clinical History</label>
+                    <textarea name="clinical_history" rows="5" class="form-control"></textarea>
+                </div>
+            </div>
+
             <!--id to be determined-->
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="cause_of_death">Cause of death</label>
+                    <label for="cause_of_death">Cause of Death</label>
                     <input name="cause_of_death" type="text" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="postmortem_interval">Post-mortem Interval (hrs)</label>
                     <input name="postmortem_interval" type="text" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="brain_weight">Brain weight (g)</label>
+                    <label for="brain_weight">Brain Weight (g)</label>
                     <input name="brain_weight" type="number" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="time_in_fix">Time in fix (days)</label>
+                    <label for="time_in_fix">Time in Fix (days)</label>
                     <input name="time_in_fix" type="number" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="neuoropathology_diagnosis">Neuropathological diagnosis</label>
+                    <label for="neuoropathology_diagnosis">Neuropathological Diagnosis</label>
                     <select name="neuoropathology_diagnosis" class="form-control">
                         <% for(var diagnosis_item=0; diagnosis_item < neuro_diagnosis.length; diagnosis_item++) { %>
                             <option><%= neuro_diagnosis[diagnosis_item] %></option>
@@ -74,70 +102,60 @@
                     </select>
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="neuoropathology_detailed">Neuropathology - Detailed </label>
                     <textarea name="neuoropathology_detailed" rows="5" class="form-control"></textarea>
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="neuoropathology_gross">Neuropathology - Gross </label>
                     <textarea name="neuoropathology_gross" rows="5" class="form-control"></textarea>
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="neuoropathology_micro">Neuropathology - Micro </label>
                     <textarea name="neuoropathology_micro" rows="5" class="form-control"></textarea>
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="neuoropathology_criteria">Neuropathology Criteria </label>
                     <textarea name="neuoropathology_criteria" rows="5" class="form-control"></textarea>
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="cerad">CERAD </label>
                     <input name="cerad" type="text" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="braak_stage">BRAAK Stage </label>
                     <input name="braak_stage" type="text" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="khachaturian">KHACHATURIAN </label>
                     <input name="khachaturian" type="text" class="form-control">
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="abc">ABC </label>
                     <input name="abc" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="clinical_diagnosis">Clinical Diagnosis</label>
-                    <input name="clinical_diagnosis" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="duration">Duration of Disease</label>
-                    <input name="duration" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="clinical_history">Clinical History</label>
-                    <input name="clinical_history" type="text" class="form-control">
                 </div>
             </div>
 
@@ -151,6 +169,7 @@
                     </select>
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="tissue_type">Tissue Type </label>
@@ -161,7 +180,8 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-6">
+
+            <div class="col-md-12">
                 <div class="form-group">
                     <label for="storage_method">Storage method </label>
                     <select name="storage_method" class="form-control">
@@ -172,27 +192,6 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="formalin_fixed">Formalin Fixed</label>
-                    <select name="formalin_fixed" class="form-control">
-                        <% for(var formalin_item=0; formalin_item < boolean_values.length; formalin_item++) { %>
-                            <option><%= boolean_values[formalin_item] %></option>
-                        <% } %>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="fresh_frozen">Fresh Frozen</label>
-                    <select name="fresh_frozen" class="form-control">
-                        <% for(var frozen_item=0; frozen_item < boolean_values.length; frozen_item++) { %>
-                            <option><%= boolean_values[frozen_item] %></option>
-                        <% } %>
-                    </select>
-                </div>
-            </div>
         </div>
         <br>
         <div class="form-group button_holder">

@@ -123,31 +123,39 @@ module.exports = {
     storage_method: {
       type: 'string',
       required: true
-    },
-
-    formalin_fixed: {
-      type: 'string',
-      required: true
-    },
-
-    fresh_frozen: {
-      type: 'string',
-      required: true
-    },
+    }
 
   },
 
 
   exits: {
-    bad_combo: {
+    return_view: {
       responseType: 'view',
-      viewTemplatePath: 'pages/add_new_data',
-      description: 'return view for password mismatch, display error msg'
+      viewTemplatePath: 'pages/message',
+      description: 'return view to display msg'
     }
   },
 
 
   fn: async function (inputs, exits) {
+
+    let formalin_fixed = '';
+    let fresh_frozen = '';
+    let storage_method = inputs.storage_method;
+    switch (storage_method) {
+      case 'Formalin-Fixed':
+        formalin_fixed = 'True';
+        fresh_frozen = 'False';
+        break;
+      case 'Fresh Frozen':
+        formalin_fixed = 'False';
+        fresh_frozen = 'True';
+        break;
+      case 'Both':
+        formalin_fixed = 'True';
+        fresh_frozen = 'True';
+        break;
+    }
 
     let payload = {
       mbtb_code: inputs.mbtb_code,
@@ -173,12 +181,12 @@ module.exports = {
       braak_stage: inputs.braak_stage,
       khachaturian: inputs.khachaturian,
       abc: inputs.abc,
-      formalin_fixed: inputs.formalin_fixed,
-      fresh_frozen: inputs.fresh_frozen
+      formalin_fixed: formalin_fixed,
+      fresh_frozen: fresh_frozen
     };
 
     let url = sails.config.custom.data_api_url + 'add_new_data/';
-
+    var msg_ = '';
     // post request to insert single row in db via api with admin auth token
     request.post({
         url: url,
@@ -189,18 +197,23 @@ module.exports = {
           },
       function optionalCallback(err, httpResponse, body) {
         if (err) {
-          console.log({'error_msg': err}); // log error to server console
+          console.log('Error: insert single row data ' + err); // log error to server console
         }
         else {
-
           try {
             const response = JSON.parse(body);
-            if(typeof (response) == "object"){
-              return exits.bad_combo({'error_msg': response.Error}) // display error msg for wrong email, password
+            if(response.Error){
+              msg = response.Error;
+              return exits.return_view({'msg_title': 'Error', 'msg_body': msg}) // display error msg
+            }
+            else if (response.Response){
+              msg = 'Cheers, Your data is uploaded';
+              return exits.return_view({'msg_title': 'Confirmation', 'msg_body': msg});
             }
           }
           catch (e) {
-            return exits.success();
+            msg = 'Something went wrong, Please try again';
+            return exits.return_view({'msg_title': 'Error', 'msg_body': msg});
           }
 
         }

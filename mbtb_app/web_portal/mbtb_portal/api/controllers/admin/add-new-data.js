@@ -30,9 +30,8 @@ module.exports = {
     var autopsy_type = ['Brain', 'Full Body', 'Brain & Spinal'];
     var tissue_type = ['Brain', 'Spinal Cord', 'Ocular'];
     var storage_methods = ['Formalin-Fixed', 'Fresh Frozen', 'Both'];
-    var boolean_values = ['True', 'False'];
     return exits.success({sex: sex, neuro_diagnosis: neuro_diagnosis, autopsy_type:autopsy_type, tissue_type:tissue_type,
-      storage_method: storage_methods, boolean_values: boolean_values});
+      storage_method: storage_methods});
 
   }
 
