@@ -6,7 +6,7 @@ module.exports = {
   friendlyName: 'Insert single row data',
 
 
-  description: '',
+  description: 'Fetch data from add_new_data.ejs form and perform post request to data api',
 
 
   inputs: {
