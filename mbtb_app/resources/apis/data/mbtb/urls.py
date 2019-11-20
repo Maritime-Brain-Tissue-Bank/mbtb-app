@@ -10,4 +10,5 @@ router.register('other_details', views.DatasetOthrDetailsAPIView)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('add_new_data/', views.CreateDataAPIView.as_view())
 ]

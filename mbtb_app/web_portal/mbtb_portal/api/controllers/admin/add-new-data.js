@@ -4,7 +4,8 @@ module.exports = {
   friendlyName: 'Add new data',
 
 
-  description: 'This controller is for adding a new data to DB. For now, it redirects to the "admin_add_new_data" template',
+  description: `It redirects to the "admin_add_new_data" template and load data for dropdowns i.e. autopsy_type, tissue_type
+                , storage_methods, sex, disease_names`,
 
 
   inputs: {
@@ -24,7 +25,13 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    return exits.success();
+    var sex = ['Male', 'Female'];
+    var neuro_diagnosis = ['TAUOPATHY', 'MIXED AD LBD', 'MIXED AD DS'];
+    var autopsy_type = ['Brain', 'Full Body', 'Brain & Spinal'];
+    var tissue_type = ['Brain', 'Spinal Cord', 'Ocular'];
+    var storage_methods = ['Formalin-Fixed', 'Fresh Frozen', 'Both'];
+    return exits.success({sex: sex, neuro_diagnosis: neuro_diagnosis, autopsy_type:autopsy_type, tissue_type:tissue_type,
+      storage_method: storage_methods});
 
   }
 

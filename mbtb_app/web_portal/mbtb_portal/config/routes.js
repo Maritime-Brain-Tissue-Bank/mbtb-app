@@ -116,4 +116,11 @@ module.exports.routes = {
     }
   },
 
+  'POST /insert_single_row': {
+    action: 'admin/insert-single-row-data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

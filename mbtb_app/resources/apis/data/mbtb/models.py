@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 class AutopsyType(models.Model):
@@ -20,10 +21,10 @@ class BrainDataset(models.Model):
     age = models.CharField(max_length=50, blank=True, null=True)
     postmortem_interval = models.CharField(max_length=255, blank=True, null=True)
     time_in_fix = models.CharField(max_length=255, blank=True, null=True)
-    neuoropathology_diagnosis = models.ForeignKey('NeurodegenerativeDiseases', models.DO_NOTHING)
+    neuro_diseases_id = models.ForeignKey('NeurodegenerativeDiseases', models.DO_NOTHING, db_column="neuro_diseases_id")
     tissue_type = models.ForeignKey('TissueType', models.DO_NOTHING)
     storage_method = models.CharField(max_length=20, blank=True, null=True)
-    storage_year = models.DateTimeField()
+    storage_year = models.DateTimeField(default=datetime.now, blank=True)
     archive = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta:

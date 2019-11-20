@@ -15,11 +15,9 @@ class SetUpTestData(APITestCase):
         cls.neuro_diseases_1 = NeurodegenerativeDiseases.objects.create(disease_name="Mixed AD VAD")
         cls.autopsy_type_1 = AutopsyType.objects.create(autopsy_type="Brain")
         cls.brain_dataset_1 = BrainDataset.objects.create(
-            neuoropathology_diagnosis=cls.neuro_diseases_1, tissue_type=cls.tissue_type_1, mbtb_code="BB00-001",
-            sex="Female", age="92",
-            postmortem_interval="15", time_in_fix="10", storage_method='Fresh Frozen',
-            storage_year="2018-06-06T03:03:03",
-            archive="No"
+            neuro_diseases_id=cls.neuro_diseases_1, tissue_type=cls.tissue_type_1, mbtb_code="BB00-001",
+            sex="Female", age="92", postmortem_interval="15", time_in_fix="10", storage_method='Fresh Frozen',
+            storage_year="2018-06-06T03:03:03", archive="No"
         )
         cls.datasetOthrDetails = DatasetOthrDetails.objects.create(
             brain_data_id=cls.brain_dataset_1, autopsy_type=cls.autopsy_type_1, race='test', diagnosis='test',
@@ -28,7 +26,6 @@ class SetUpTestData(APITestCase):
             neouropathology_criteria='test', cerad='', abc='', khachaturian='', braak_stage='test',
             formalin_fixed=True, fresh_frozen=True,
         )
-
 
         cls.email = 'admin@mbtb.ca'
         cls.password = 'asdfghjkl123'
@@ -92,11 +89,31 @@ class BrainDatasetViewTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.client.credentials()
 
+    # get request with empty token
+    def test_get_with_empty_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.client.get('/brain_dataset/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    # get request with invalid token header
+    def test_invalid_token_header(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
+        response_invalid_header = self.client.get('/brain_dataset/')
+        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+
     # post request with and without token
     def test_post_request(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        response_with_token = self.client.post('/brain_dataset/')
+        response_with_token = self.client.post('/brain_dataset/1/')
         response_without_token = self.client.post('/brain_dataset/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # delete request with and without token
+    def test_delete_request(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_with_token = self.client.delete('/brain_dataset/1/')
+        response_without_token = self.client.delete('/brain_dataset/')
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -111,6 +128,7 @@ class DatasetOthrDetailsViewTest(SetUpTestData):
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
 
+    #  get request with valid token
     def test_get_all_othr_details(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get('/other_details/')
@@ -144,13 +162,98 @@ class DatasetOthrDetailsViewTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.client.credentials()
 
+    # get request with empty token
+    def test_get_with_empty_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.client.get('/other_details/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    # get request with invalid token header
+    def test_invalid_token_header(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
+        response_invalid_header = self.client.get('/other_details/')
+        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+
     # post request with and without token
     def test_post_request(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        response_with_token = self.client.post('/other_details/')
+        response_with_token = self.client.post('/other_details/1/')
         response_without_token = self.client.post('/other_details/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # delete request with and without token
+    def test_delete_request(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_with_token = self.client.delete('/other_details/1/')
+        response_without_token = self.client.delete('/other_details/')
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    def tearDown(cls):
+        super(SetUpTestData, cls).tearDownClass()
+
+
+class CreateDataAPIViewTest(SetUpTestData):
+
+    def setUp(cls):
+        super(SetUpTestData, cls).setUpClass()
+        cls.test_data = {
+            'mbtb_code': 'BB89-100',
+            'sex': 'Male',
+            'age': '70',
+            'postmortem_interval': '12',
+            'time_in_fix': 'Not known',
+            'tissue_type': 'Brain',
+            'storage_method': 'Fresh Frozen',
+            'autopsy_type': 'Brain',
+            'neuoropathology_diagnosis': "Mixed AD VAD",
+            'race': '',
+            'diagnosis': 'AD',
+            'duration': 0,
+            'clinical_history': 'AD',
+            'cause_of_death': '',
+            'brain_weight': 1080,
+            'neuoropathology_detailed': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
+            'neuropathology_gross': '',
+            'neuropathology_micro': '',
+            'neouropathology_criteria': 'KHACHATURIAN',
+            'cerad': '',
+            'braak_stage': '',
+            'khachaturian': '30',
+            'abc': '',
+            'formalin_fixed': 'True',
+            'fresh_frozen': 'True'
+        }
+
+    def test_insert_data_(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.credentials()
+
+    def test_insert_data_without_token(self):
+        response = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_invalid_data_check(self):
+        self.test_data['tissue_type'] = ''
+        self.test_data['autopsy_type'] = ''
+        self.test_data['neuoropathology_diagnosis'] = ''
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.client.credentials()
+
+    def test_invalid_token_header(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + 'get request with valid token')
+        response_invalid_header = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_request_with_empty_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.client.post('/add_new_data/', self.test_data, format='json')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
