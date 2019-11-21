@@ -30,6 +30,7 @@ module.exports.routes = {
   'GET /view_data': { action: 'user/view-data-table' },
   'GET /logout': { action: 'user/logout'},
   'GET /view_data/:id': {action: 'user/view-single-record'},
+  'GET /tissue_requests': {action: 'user/user-tissue-requests'},
 
   // admin views
   'GET /admin': {

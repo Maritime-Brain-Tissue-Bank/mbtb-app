@@ -16,6 +16,7 @@ class DatasetOthrDetailsAPIView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = DatasetOthrDetails.objects.all()
     serializer_class = DatasetOtherDetailsSerializer
+    lookup_field = 'brain_data_id'
 
 
 class CreateDataAPIView(views.APIView):
