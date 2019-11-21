@@ -15,7 +15,8 @@
         var mbtb_data = <%- JSON.stringify(data) %>;
     </script>
 
-    <div class="col-md-6">
+    <div class="row">
+    <div class="col-md-4">
         <div class="form-group">
             <label for="clid">Clinical Diagnosis</label>
             <input id="clid"
@@ -24,18 +25,18 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="form-group">
             <label for="diafilter">Neuropathological Diagnosis</label>
             <input id="diafilter" type="text" class="form-control"
                    ng-change="gridActions1.filter()"
                    ng-model="neuro_diseases"
-                   filter-by="neuro_diseases"
+                   filter-by="neuro_diseases_id"
                    filter-type="text">
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="form-group">
             <label for="tissuefilter">Tissue Type</label>
             <select id="tissuefilter" class="form-control" ng-change="gridActions1.filter()"
@@ -49,107 +50,117 @@
 
         </div>
     </div>
-
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="selectSex">Sex</label>
-            <select id="selectSex"
-                    class="form-control"
-                    ng-change="gridActions1.filter()"
-                    ng-model="sex"
-                    filter-by="sex"
-                    filter-type="select">
-                <option value="">Both</option>
-                <option value="Female">FEMALE</option>
-                <option value="Male">MALE</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="storage">Method of Preservation</label>
-            <select id="storage"
-                    class="form-control"
-                    ng-change="gridActions1.filter()"
-                    ng-model="storage_method"
-                    filter-by="storage_method"
-                    filter-type="select">
-                <option value="">All</option>
-                <option value="Formalin-Fixed">Formalin Fixed</option>
-                <option value="Fresh Frozen">Fresh Frozen</option>
-            </select>
-        </div>
     </div>
 
     <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-6">
-                <label for="agemax">Age max</label>
-                <input id="agemax"
-                       class="form-control"
-                       ng-change="gridActions1.filter()"
-                       ng-model="AgeMax"
-                       filter-by="age"
-                       filter-type="text">
-            </div>
-            <div class="col-md-6">
-                <label for="agemin">Age min</label>
-                <input id="agemin"
-                       class="form-control"
-                       ng-change="gridActions1.filter()"
-                       ng-model="AgeMin"
-                       filter-by="age"
-                       filter-type="text">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="selectSex">Sex</label>
+                <select id="selectSex"
+                        class="form-control"
+                        ng-change="gridActions1.filter()"
+                        ng-model="sex"
+                        filter-by="sex"
+                        filter-type="select">
+                    <option value="">Both</option>
+                    <option value="Female">FEMALE</option>
+                    <option value="Male">MALE</option>
+                </select>
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="col-md-6">
-                <label for="PMImax">PMI (hrs) max</label>
-                <input id="PMImax"
-                       class="form-control"
-                       ng-change="gridActions1.filter()"
-                       ng-model="PMIMax"
-                       filter-by="postmortem_interval"
-                       filter-type="text">
+        <div class="col-md-2">
+            <label for="agemax">Age</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <input id="agemin"
+                           class="form-control"
+                           ng-change="gridActions1.filter()"
+                           ng-model="AgeMin"
+                           filter-by="age"
+                           filter-type="text"
+                           placeholder="min">
+                </div>
+                <div class="col-md-6">
+                    <input id="agemax"
+                           class="form-control"
+                           ng-change="gridActions1.filter()"
+                           ng-model="AgeMax"
+                           filter-by="age"
+                           filter-type="text"
+                           placeholder="max">
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="PMImin">PMI (hrs) min</label>
-                <input id="PMImin"
-                       class="form-control"
-                       ng-change="gridActions1.filter()"
-                       ng-model="PMIMin"
-                       filter-by="post_mortem_interval"
-                       filter-type="text">
+        </div>
+
+        <div class="col-md-3">
+            <label for="PMImax">Postmortem Interval (hrs)</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <input id="PMImin"
+                           class="form-control"
+                           ng-change="gridActions1.filter()"
+                           ng-model="PMIMin"
+                           filter-by="postmortem_interval"
+                           filter-type="text"
+                           placeholder="min">
+                </div>
+                <div class="col-md-6">
+                    <input id="PMImax"
+                           class="form-control"
+                           ng-change="gridActions1.filter()"
+                           ng-model="PMIMax"
+                           filter-by="postmortem_interval"
+                           filter-type="text"
+                           placeholder="max">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <label for="TiFmax">Time in Fix (days)</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <input id="TiFmin"
+                           class="form-control"
+                           ng-change="gridActions1.filter()"
+                           ng-model="TiFMin"
+                           filter-by="time_in_fix"
+                           filter-type="text"
+                           placeholder="min">
+                </div>
+                <div class="col-md-6">
+                    <input id="TiFmax"
+                           class="form-control"
+                           ng-change="gridActions1.filter()"
+                           ng-model="TiFMax"
+                           filter-by="time_in_fix"
+                           filter-type="text"
+                           placeholder="max">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="storage">Method of Preservation</label>
+                <select id="storage"
+                        class="form-control"
+                        ng-change="gridActions1.filter()"
+                        ng-model="storage_method"
+                        filter-by="storage_method"
+                        filter-type="select">
+                    <option value="">All</option>
+                    <option value="Formalin-Fixed">Formalin Fixed</option>
+                    <option value="Fresh Frozen">Fresh Frozen</option>
+                </select>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-6">
-                <label for="TiFmax">Time in Fix (days) max</label>
-                <input id="TiFmax"
-                       class="form-control"
-                       ng-change="gridActions1.filter()"
-                       ng-model="TiFMax"
-                       filter-by="time_in_fix"
-                       filter-type="text">
-            </div>
-            <div class="col-md-6">
-                <label for="TiFmin">Time in Fix (days) min</label>
-                <input id="TiFmin"
-                       class="form-control"
-                       ng-change="gridActions1.filter()"
-                       ng-model="TiFMin"
-                       filter-by="time_in_fix"
-                       filter-type="text">
-            </div>
-        </div>
-    </div>
+    <br>
 
-    <div class="text-right">
+    <div class="row button_holder">
         <button class="btn btn-primary export_button" onclick="myFunction()">Search</button>
     </div>
 
@@ -183,7 +194,6 @@
                         </form>
                     </div>
 
-
                     <table class="table table-bordered table-striped data_table">
                         <thead>
                         <tr>
@@ -212,7 +222,7 @@
                             <td ng-bind="item.postmortem_interval"></td>
                             <td ng-bind="item.time_in_fix"></td>
                             <td ng_bind="item.storage_method"></td>
-                            <td ng-bind="item.neuro_diseases"></td>
+                            <td ng-bind="item.neuro_diseases_id"></td>
                             <td ng_bind="item.tissue_type"></td>
                             <td ng_bind="item.storage_year"></td>
                         </tr>
@@ -242,7 +252,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
 
