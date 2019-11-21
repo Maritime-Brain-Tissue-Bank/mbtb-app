@@ -15,35 +15,215 @@
         var mbtb_data = <%- JSON.stringify(data) %>;
     </script>
 
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="clid">Clinical Diagnosis</label>
+            <input id="clid"
+                   class="form-control"
+                   type="text">
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="diafilter">Neuropathological Diagnosis</label>
+            <input id="diafilter" type="text" class="form-control"
+                   ng-change="gridActions1.filter()"
+                   ng-model="neuro_diseases"
+                   filter-by="neuro_diseases"
+                   filter-type="text">
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="tissuefilter">Tissue Type</label>
+            <select id="tissuefilter" class="form-control" ng-change="gridActions1.filter()"
+                    ng-model="tissue_type"
+                    filter-by="tissue_type"
+                    filter-type="select">
+                <option value="Brain">BRAIN</option>
+                <option value="Spinal Cord">SPINAL CORD</option>
+                <option value="Eyes">EYES</option>
+            </select>
+
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="selectSex">Sex</label>
+            <select id="selectSex"
+                    class="form-control"
+                    ng-change="gridActions1.filter()"
+                    ng-model="sex"
+                    filter-by="sex"
+                    filter-type="select">
+                <option value="">Both</option>
+                <option value="Female">FEMALE</option>
+                <option value="Male">MALE</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="storage">Method of Preservation</label>
+            <select id="storage"
+                    class="form-control"
+                    ng-change="gridActions1.filter()"
+                    ng-model="storage_method"
+                    filter-by="storage_method"
+                    filter-type="select">
+                <option value="">All</option>
+                <option value="Formalin-Fixed">Formalin Fixed</option>
+                <option value="Fresh Frozen">Fresh Frozen</option>
+            </select>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="orderIdFilter">Search by MBTB Code</label>
-                <input id="orderIdFilter" type="text" class="form-control"
-                       placeholder="Enter mbtb code"
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <label for="agemax">Age max</label>
+                <input id="agemax"
+                       class="form-control"
                        ng-change="gridActions1.filter()"
-                       ng-model="mbtb_code"
-                       filter-by="mbtb_code"
+                       ng-model="AgeMax"
+                       filter-by="age"
+                       filter-type="text">
+            </div>
+            <div class="col-md-6">
+                <label for="agemin">Age min</label>
+                <input id="agemin"
+                       class="form-control"
+                       ng-change="gridActions1.filter()"
+                       ng-model="AgeMin"
+                       filter-by="age"
                        filter-type="text">
             </div>
         </div>
 
-        <div class="col-md-6">
-            <label for="search">Search</label>
-            <input ng-model="q" id="search" class="form-control">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <label for="PMImax">PMI (hrs) max</label>
+                <input id="PMImax"
+                       class="form-control"
+                       ng-change="gridActions1.filter()"
+                       ng-model="PMIMax"
+                       filter-by="postmortem_interval"
+                       filter-type="text">
+            </div>
+            <div class="col-md-6">
+                <label for="PMImin">PMI (hrs) min</label>
+                <input id="PMImin"
+                       class="form-control"
+                       ng-change="gridActions1.filter()"
+                       ng-model="PMIMin"
+                       filter-by="post_mortem_interval"
+                       filter-type="text">
+            </div>
         </div>
     </div>
 
-    <div class="row container-fluid">
-        <div grid-data id="test" grid-options="gridOptions" grid-actions="gridActions1">
-            <div class="row-no-gutters">
-                <div class="col-sm-3">
-                    <span class="items">{{filtered.length}} items  total</span>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <label for="TiFmax">Time in Fix (days) max</label>
+                <input id="TiFmax"
+                       class="form-control"
+                       ng-change="gridActions1.filter()"
+                       ng-model="TiFMax"
+                       filter-by="time_in_fix"
+                       filter-type="text">
+            </div>
+            <div class="col-md-6">
+                <label for="TiFmin">Time in Fix (days) min</label>
+                <input id="TiFmin"
+                       class="form-control"
+                       ng-change="gridActions1.filter()"
+                       ng-model="TiFMin"
+                       filter-by="time_in_fix"
+                       filter-type="text">
+            </div>
+        </div>
+    </div>
+
+    <div class="text-right">
+        <button class="btn btn-primary export_button" onclick="myFunction()">Search</button>
+    </div>
+
+    <div id="test" style="display: none">
+        <div class="row container-fluid">
+            <div grid-data id="test" grid-options="gridOptions" grid-actions="gridActions1">
+                <div class="row-no-gutters">
+                    <div class="col-sm-3">
+                        <span class="items">{{filtered.length}} items  total</span>
+                    </div>
+
+                    <div class="row container-fluid">
+                        <form class="form-inline pull-right margin-bottom-basic">
+                            <div class="form-group">
+                                <grid-pagination max-size="5" boundary-links="true" class="pagination-sm"
+                                                 total-items="paginationOptions.totalItems" ng-model="paginationOptions.currentPage"
+                                                 ng-change="reloadGrid()" items-per-page="paginationOptions.itemsPerPage">
+                                </grid-pagination>
+                            </div>
+                            <div class="form-group items-per-page">
+                                <label for="select_page">Item per page:</label>
+                                <select id="select_page" class="form-control input-sm"
+                                        ng-init="paginationOptions.itemsPerPage = '10'"
+                                        ng-model="paginationOptions.itemsPerPage"
+                                        ng-change="reloadGrid()">
+                                    <option>10</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <table class="table table-bordered table-striped data_table">
+                        <thead>
+                        <tr>
+                            <th data-field="num">No</th>
+                            <th data-field="mbtb_code" sortable="mbtb_code" class="sortable">MBTB Code</th>
+                            <th data-field="sex">Sex</th>
+                            <th data-field="age">Age</th>
+                            <th data-field="postmortem_interval">Postmortem Interval</th>
+                            <th data-field="time_in_fix">Time in Fix (Days)</th>
+                            <th data-field="storage_method">Storage Method</th>
+                            <th data-field="neuro_diseases">Neuropathological Diagnosis</th>
+                            <th data-field="tissue_type">Tissue Type</th>
+                            <th data-field="storage_year">Storage Date</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr grid-item>
+                            <td ng-init="elem_index = $index">{{elem_index+1}}</td>
+                            <td>
+                                <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.brain_data_id}}"></a>
+                            </td>
+                            <td ng-bind="item.sex"></td>
+                            <td ng-bind="item.age"></td>
+                            <td ng-bind="item.postmortem_interval"></td>
+                            <td ng-bind="item.time_in_fix"></td>
+                            <td ng_bind="item.storage_method"></td>
+                            <td ng-bind="item.neuro_diseases"></td>
+                            <td ng_bind="item.tissue_type"></td>
+                            <td ng_bind="item.storage_year"></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
                 </div>
 
                 <div class="row container-fluid">
                     <form class="form-inline pull-right margin-bottom-basic">
-                        <div class="form-group">
+                        <div class="form-group pagination_container">
                             <grid-pagination max-size="5" boundary-links="true" class="pagination-sm"
                                              total-items="paginationOptions.totalItems" ng-model="paginationOptions.currentPage"
                                              ng-change="reloadGrid()" items-per-page="paginationOptions.itemsPerPage">
@@ -63,79 +243,21 @@
                     </form>
                 </div>
 
-
-                <table class="table table-bordered table-striped data_table">
-                    <thead>
-                    <tr>
-                        <th data-field="num">No</th>
-                        <th data-field="mbtb_code" sortable="mbtb_code" class="sortable">MBTB Code</th>
-                        <th data-field="sex">Sex</th>
-                        <th data-field="age">Age</th>
-                        <th data-field="postmortem_interval">Postmortem Interval</th>
-                        <th data-field="time_in_fix">Time in Fix (Days)</th>
-                        <th data-field="storage_method">Storage Method</th>
-                        <th data-field="neuro_diseases">Neuropathological Diagnosis</th>
-                        <th data-field="tissue_type">Tissue Type</th>
-                        <th data-field="storage_year">Storage Date</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-
-                        <tr grid-item>
-                            <td ng-init="elem_index = $index">{{elem_index+1}}</td>
-                            <td>
-                                <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.brain_data_id}}"></a>
-                            </td>
-                            <td ng-bind="item.sex"></td>
-                            <td ng-bind="item.age"></td>
-                            <td ng-bind="item.postmortem_interval"></td>
-                            <td ng-bind="item.time_in_fix"></td>
-                            <td ng_bind="item.storage_method"></td>
-                            <td ng-bind="item.neuro_diseases"></td>
-                            <td ng_bind="item.tissue_type"></td>
-                            <td ng_bind="item.storage_year"></td>
-                        </tr>
-
-                    </tbody>
-                </table>
             </div>
+        </div>
 
-            <div class="row container-fluid">
-                <form class="form-inline pull-right margin-bottom-basic">
-                    <div class="form-group pagination_container">
-                        <grid-pagination max-size="5" boundary-links="true" class="pagination-sm"
-                                         total-items="paginationOptions.totalItems" ng-model="paginationOptions.currentPage"
-                                         ng-change="reloadGrid()" items-per-page="paginationOptions.itemsPerPage">
-                        </grid-pagination>
-                    </div>
-                    <div class="form-group items-per-page">
-                        <label for="select_page">Item per page:</label>
-                        <select id="select_page" class="form-control input-sm"
-                                ng-init="paginationOptions.itemsPerPage = '10'"
-                                ng-model="paginationOptions.itemsPerPage"
-                                ng-change="reloadGrid()">
-                            <option>10</option>
-                            <option>50</option>
-                            <option>100</option>
-                        </select>
-                    </div>
-                </form>
+        <div class="row button_holder">
+            <div class="col-md-12">
+                <button class="btn btn-primary export_button" ng-click="exportToCsv(gridOptions.data)">Export data to CSV
+                    <i class="fa fa-download"></i>
+                </button>
+
+                <button class="btn btn-primary export_button" ng-click="exportToCsv(gridOptions.grid.filtered)">Export filtered data to CSV
+                    <i class="fa fa-download"></i>
+                </button>
             </div>
-
-        </div>
         </div>
 
-    <div class="row button_holder">
-        <div class="col-md-12">
-            <button class="btn btn-primary export_button" ng-click="exportToCsv(gridOptions.data)">Export data to CSV
-                <i class="fa fa-download"></i>
-            </button>
-
-            <button class="btn btn-primary export_button" ng-click="exportToCsv(gridOptions.grid.filtered)">Export filtered data to CSV
-                <i class="fa fa-download"></i>
-            </button>
-        </div>
     </div>
 
 </div>
