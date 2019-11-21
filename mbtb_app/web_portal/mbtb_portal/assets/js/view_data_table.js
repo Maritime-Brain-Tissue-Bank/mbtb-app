@@ -3,7 +3,47 @@ var myApp = angular.module('view_data_table_app', ['dataGrid', 'pagination']);
 myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', function ($scope, $filter, $window) {
 
   $scope.gridOptions = {
-    data: []
+    data: [],
+    customFilters: {
+      AgeMax:
+        function (items, value, predicate) {
+          return items.filter(function (item) {
+            return value && item[predicate] ? parseInt(item[predicate]) <= parseInt(value) : true;
+          });
+        },
+      AgeMin:
+        function (items, value, predicate) {
+          return items.filter(function (item) {
+            return value && item[predicate] ? parseInt(item[predicate]) >= parseInt(value) : true;
+          });
+        },
+      PMIMax:
+        function (items, value, predicate) {
+          return items.filter(function (item) {
+            return value && item[predicate] ? parseInt(item[predicate]) <= parseInt(value) : true;
+          });
+        },
+      PMIMin:
+        function (items, value, predicate) {
+          return items.filter(function (item) {
+            return value && item[predicate] ? parseInt(item[predicate]) >= parseInt(value) : true;
+          });
+        },
+
+      TiFMax:
+        function (items, value, predicate) {
+          return items.filter(function (item) {
+            return value && item[predicate] ? parseInt(item[predicate]) <= parseInt(value) : true;
+          });
+        },
+      TiFMin:
+        function (items, value, predicate) {
+          return items.filter(function (item) {
+            return value && item[predicate] ? parseInt(item[predicate]) >= parseInt(value) : true;
+          });
+        },
+
+    }
   };
 
   $scope.gridActions1 = {};
@@ -29,5 +69,12 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
     JSONToCSVConvertor(exportData, 'Export', true);
   }
 }]);
+
+function myFunction() {
+  if (document.getElementById("test").style.display === "none")
+    document.getElementById("test").style.display="block";
+}
+
+
 
 
