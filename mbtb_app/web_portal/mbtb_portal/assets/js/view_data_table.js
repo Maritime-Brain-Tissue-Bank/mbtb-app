@@ -51,6 +51,19 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
   // data binding to angular variable
   $scope.gridOptions.data = $window.mbtb_data;
 
+  // for finding unique elemenets in array
+  let unique = (value, index, self) => {
+    return self.indexOf(value) === index
+  };
+
+  // Neuropathological diagnosis
+  $scope.neuro_diagnosis = [];
+  $scope.gridOptions.data.forEach(function (item) {
+    $scope.neuro_diagnosis.push(item.neuro_diseases_id);
+  });
+  $scope.neuro_diagnosis = $scope.neuro_diagnosis.filter(unique);
+
+
   // exporting data or filtered data to csv
   $scope.exportToCsv = function (currentData) {
     var exportData = [];

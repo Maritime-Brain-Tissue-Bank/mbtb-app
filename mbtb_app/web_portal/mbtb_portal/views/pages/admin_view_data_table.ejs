@@ -28,11 +28,15 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label for="diafilter">Neuropathological Diagnosis</label>
-                <input id="diafilter" type="text" class="form-control"
-                       ng-change="gridActions1.filter()"
-                       ng-model="neuro_diseases"
-                       filter-by="neuro_diseases_id"
-                       filter-type="text">
+                <select id="diafilter" class="form-control" ng-change="gridActions1.filter()"
+                        ng-model="neuro_diseases"
+                        filter-by="neuro_diseases_id"
+                        filter-type="select">
+                    <option value="">All</option>
+                    <option value="{{disease_name}}" ng-repeat="disease_name in neuro_diagnosis">
+                        {{disease_name}}
+                    </option>
+                </select>
             </div>
         </div>
 
@@ -43,6 +47,7 @@
                         ng-model="tissue_type"
                         filter-by="tissue_type"
                         filter-type="select">
+                    <option value="">All</option>
                     <option value="Brain">BRAIN</option>
                     <option value="Spinal Cord">SPINAL CORD</option>
                     <option value="Eyes">EYES</option>
