@@ -78,3 +78,18 @@ class CreateDataAPIView(views.APIView):
         except (KeyError, BaseException, AutopsyType.DoesNotExist, TissueType.DoesNotExist,
                 NeurodegenerativeDiseases.DoesNotExist) as e:
             return response.Response({'Error': "Either missing fields or incorrect data"}, status="400")
+
+
+class GetSelectOptions(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        _neuoropathology_diagnosis = NeurodegenerativeDiseases.objects.values_list('disease_name', flat=True).order_by('disease_name')
+        _autopsy_type = AutopsyType.objects.values_list('autopsy_type', flat=True).order_by('autopsy_type')
+        _tissue_type = TissueType.objects.values_list('tissue_type', flat=True).order_by('tissue_type')
+
+        return response.Response({
+            'neuoropathology_diagnosis': _neuoropathology_diagnosis,
+            'autopsy_type': _autopsy_type,
+            'tissue_type': _tissue_type
+        })

@@ -10,5 +10,6 @@ router.register('other_details', views.DatasetOthrDetailsAPIView)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('add_new_data/', views.CreateDataAPIView.as_view())
+    path('add_new_data/', views.CreateDataAPIView.as_view()),
+    path('get_select_options/', views.GetSelectOptions.as_view())
 ]
