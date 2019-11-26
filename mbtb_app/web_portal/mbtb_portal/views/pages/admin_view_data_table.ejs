@@ -193,7 +193,7 @@
 
                         <tbody>
                             <tr ng-repeat="row in filtered_data.data">
-                                <td ng-init="elem_index = $index">{{elem_index+1}}</td>
+                                <td ng-init="elem_index = $index">{{$index+1}}</td>
                                 <td>
                                     <a ng-href="/admin_view_data/{{row.brain_data_id}}">{{row.mbtb_code}}</a>
                                 </td>
