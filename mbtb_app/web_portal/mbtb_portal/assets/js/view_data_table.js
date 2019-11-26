@@ -41,7 +41,9 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
       tissue_type: $scope.search_fields.tissue_type, neuro_diseases_id: $scope.search_fields.neuro_diseases
     });
 
-    // To Do: refactor below 3 custom filter for range, `range_filter` should be called once only
+    /*
+      To Do: refactor below 3 custom filter for range, `range_filter` should be called once only
+    */
 
     // filtering: time_in_fix
     $scope.filtered_data.data = $filter('range_filter')($scope.filtered_data.data, {
