@@ -26,11 +26,12 @@ class OtherDetailsSerializer(serializers.ModelSerializer):
     age = serializers.CharField(source='prime_details_id.age', read_only=True)
     postmortem_interval = serializers.CharField(source='prime_details_id.postmortem_interval', read_only=True)
     time_in_fix = serializers.CharField(source='prime_details_id.time_in_fix', read_only=True)
-    neuro_diagnosis = serializers.CharField(source='prime_details_id.neuro_diagnosis_id', read_only=True)
+    neuropathology_diagnosis = serializers.CharField(source='prime_details_id.neuro_diagnosis_id', read_only=True)
     tissue_type = serializers.CharField(source='prime_details_id.tissue_type', read_only=True)
     preservation_method = serializers.CharField(source='prime_details_id.preservation_method', read_only=True)
     storage_year = serializers.CharField(source='prime_details_id.storage_year', read_only=True)
     autopsy_type = serializers.CharField(source='autopsy_type.autopsy_type', read_only=True)
+    clinical_diagnosis = serializers.CharField(source='prime_details_id.clinical_diagnosis', read_only=True)
 
     class Meta:
         model = OtherDetails

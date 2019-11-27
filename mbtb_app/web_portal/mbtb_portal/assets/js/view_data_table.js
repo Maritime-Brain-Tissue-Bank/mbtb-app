@@ -77,9 +77,9 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
 
   // exporting data or filtered data to csv
   $scope.exportToCsv = function (currentData) {
-    var exportData = [];
+    var export_data = [];
     currentData.forEach(function (item) {
-      exportData.push({
+      export_data.push({
         'MBTB Code': item.mbtb_code,
         'Sex': item.sex,
         'Age': item.age,
@@ -87,10 +87,12 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
         'Time in Fix': item.time_in_fix,
         'Neuropathological Diagnosis': item.neuropathology_diagnosis,
         'Tissue Type': item.tissue_type,
-        'Storage Method': item.preservation_method
+        'Preservation Method': item.preservation_method,
+        'Clinical Diagnosis': item.clinical_diagnosis,
+        'Storage Date': item.storage_year
       });
     });
-    JSONToCSVConvertor(exportData, 'Export', true);
+    JSONToCSVConvertor(export_data, 'Export', true);
   }
 }]);
 
