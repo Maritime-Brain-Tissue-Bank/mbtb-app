@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, force_authenticate, APIClient
-from .models import BrainDataset, NeurodegenerativeDiseases, TissueType, AutopsyType, DatasetOthrDetails
+from .models import PrimeDetails, NeuropathologicalDiagnosis, TissueTypes, AutopsyTypes, OtherDetails
 from .models import AdminAccount
-from .serializers import BrainDatasetSerializer, DatasetOtherDetailsSerializer
+from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer
 import jwt
 
 
@@ -11,19 +11,19 @@ class SetUpTestData(APITestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.tissue_type_1 = TissueType.objects.create(tissue_type="brain")
-        cls.neuro_diseases_1 = NeurodegenerativeDiseases.objects.create(disease_name="Mixed AD VAD")
-        cls.autopsy_type_1 = AutopsyType.objects.create(autopsy_type="Brain")
-        cls.brain_dataset_1 = BrainDataset.objects.create(
-            neuro_diseases_id=cls.neuro_diseases_1, tissue_type=cls.tissue_type_1, mbtb_code="BB00-001",
-            sex="Female", age="92", postmortem_interval="15", time_in_fix="10", storage_method='Fresh Frozen',
-            storage_year="2018-06-06T03:03:03", archive="No"
+        cls.tissue_type_1 = TissueTypes.objects.create(tissue_type="brain")
+        cls.neuro_diagnosis_1 = NeuropathologicalDiagnosis.objects.create(neuro_diagnosis_name="Mixed AD VAD")
+        cls.autopsy_type_1 = AutopsyTypes.objects.create(autopsy_type="Brain")
+        cls.prime_details_1 = PrimeDetails.objects.create(
+            neuro_diagnosis_id=cls.neuro_diagnosis_1, tissue_type=cls.tissue_type_1, mbtb_code="BB00-001",
+            sex="Female", age="92", postmortem_interval="15", time_in_fix="10", preservation_method='Fresh Frozen',
+            storage_year="2018-06-06T03:03:03", archive="No", clinical_diagnosis='test'
         )
-        cls.datasetOthrDetails = DatasetOthrDetails.objects.create(
-            brain_data_id=cls.brain_dataset_1, autopsy_type=cls.autopsy_type_1, race='test', diagnosis='test',
-            duration=123, clinical_history='test', cause_of_death='test', brain_weight=123,
-            neuoropathology_detailed='test', neuropathology_gross='test', neuropathology_micro='test',
-            neouropathology_criteria='test', cerad='', abc='', khachaturian='', braak_stage='test',
+        cls.other_details_1 = OtherDetails.objects.create(
+            prime_details_id=cls.prime_details_1, autopsy_type=cls.autopsy_type_1, race='test',
+            duration=123, clinical_details='test', cause_of_death='test', brain_weight=123,
+            neuoropathology_summary='test', neuropathology_gross='test', neuropathology_microscopic='test',
+            cerad='', abc='', khachaturian='', braak_stage='test',
             formalin_fixed=True, fresh_frozen=True,
         )
 
@@ -40,17 +40,17 @@ class SetUpTestData(APITestCase):
 
     @classmethod
     def tearDownClass(cls):
-        DatasetOthrDetails.objects.all().delete()
-        BrainDataset.objects.filter().delete()
-        TissueType.objects.filter().delete()
-        NeurodegenerativeDiseases.objects.filter().delete()
-        AutopsyType.objects.filter().delete()
+        OtherDetails.objects.all().delete()
+        PrimeDetails.objects.filter().delete()
+        TissueTypes.objects.filter().delete()
+        NeuropathologicalDiagnosis.objects.filter().delete()
+        AutopsyTypes.objects.filter().delete()
         AdminAccount.objects.all().delete()
 
 
 # This class is to test BrainDatasetAPIView: all request
 # Default: only get request is allowed with auth_token, remaining is blocked
-class BrainDatasetViewTest(SetUpTestData):
+class PrimeDetailsViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
@@ -59,8 +59,8 @@ class BrainDatasetViewTest(SetUpTestData):
     def test_get_all_brain_dataset(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get('/brain_dataset/')
-        model_response = BrainDataset.objects.all()
-        serializer_response = BrainDatasetSerializer(model_response, many=True)
+        model_response = PrimeDetails.objects.all()
+        serializer_response = PrimeDetailsSerializer(model_response, many=True)
         self.assertEqual(response.data, serializer_response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
@@ -72,11 +72,11 @@ class BrainDatasetViewTest(SetUpTestData):
 
     # get request for single brain_dataset with valid token and payload data
     def test_get_single_request(self):
-        url = '/brain_dataset/' + str(self.brain_dataset_1.pk) + '/'
+        url = '/brain_dataset/' + str(self.prime_details_1.pk) + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get(url)
-        model_response = BrainDataset.objects.get(pk=self.brain_dataset_1.pk)
-        serializer_response = BrainDatasetSerializer(model_response)
+        model_response = PrimeDetails.objects.get(pk=self.prime_details_1.pk)
+        serializer_response = PrimeDetailsSerializer(model_response)
         self.assertEqual(response.data, serializer_response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
@@ -123,7 +123,7 @@ class BrainDatasetViewTest(SetUpTestData):
 
 # This class is to test DatasetOthrDetailsAPIView: all request
 # Default: only get request is allowed with auth_token, remaining is blocked
-class DatasetOthrDetailsViewTest(SetUpTestData):
+class OtherDetailsViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
@@ -132,8 +132,8 @@ class DatasetOthrDetailsViewTest(SetUpTestData):
     def test_get_all_othr_details(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get('/other_details/')
-        model_response = DatasetOthrDetails.objects.all()
-        serializer_response = DatasetOtherDetailsSerializer(model_response, many=True)
+        model_response = OtherDetails.objects.all()
+        serializer_response = OtherDetailsSerializer(model_response, many=True)
         self.assertEqual(response.data, serializer_response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
@@ -145,11 +145,11 @@ class DatasetOthrDetailsViewTest(SetUpTestData):
 
     # get request for single other_details with valid token and payload data
     def test_get_single_request(self):
-        url = '/other_details/' + str(self.datasetOthrDetails.pk) + '/'
+        url = '/other_details/' + str(self.other_details_1.pk) + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get(url)
-        model_response = DatasetOthrDetails.objects.get(pk=self.datasetOthrDetails.pk)
-        serializer_response = DatasetOtherDetailsSerializer(model_response)
+        model_response = OtherDetails.objects.get(pk=self.other_details_1.pk)
+        serializer_response = OtherDetailsSerializer(model_response)
         self.assertEqual(response.data, serializer_response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
@@ -205,19 +205,18 @@ class CreateDataAPIViewTest(SetUpTestData):
             'postmortem_interval': '12',
             'time_in_fix': 'Not known',
             'tissue_type': 'Brain',
-            'storage_method': 'Fresh Frozen',
+            'preservation_method': 'Fresh Frozen',
             'autopsy_type': 'Brain',
-            'neuoropathology_diagnosis': "Mixed AD VAD",
+            'neuropathology_diagnosis': "Mixed AD VAD",
             'race': '',
-            'diagnosis': 'AD',
+            'clinical_diagnosis': 'AD',
             'duration': 0,
-            'clinical_history': 'AD',
+            'clinical_details': 'AD',
             'cause_of_death': '',
             'brain_weight': 1080,
-            'neuoropathology_detailed': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
+            'neuoropathology_summary': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
             'neuropathology_gross': '',
-            'neuropathology_micro': '',
-            'neouropathology_criteria': 'KHACHATURIAN',
+            'neuropathology_microscopic': '',
             'cerad': '',
             'braak_stage': '',
             'khachaturian': '30',
@@ -239,7 +238,7 @@ class CreateDataAPIViewTest(SetUpTestData):
     def test_invalid_data_check(self):
         self.test_data['tissue_type'] = ''
         self.test_data['autopsy_type'] = ''
-        self.test_data['neuoropathology_diagnosis'] = ''
+        self.test_data['neuropathology_diagnosis'] = ''
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.post('/add_new_data/', self.test_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

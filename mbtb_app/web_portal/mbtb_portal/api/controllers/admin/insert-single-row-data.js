@@ -40,7 +40,7 @@ module.exports = {
       required: false
     },
 
-    clinical_history: {
+    clinical_details: {
       type: 'string',
       required: true
     },
@@ -70,7 +70,7 @@ module.exports = {
       required: true
     },
 
-    neuoropathology_detailed: {
+    neuoropathology_summary: {
       type: 'string',
       required: false
     },
@@ -80,12 +80,7 @@ module.exports = {
       required: false
     },
 
-    neuoropathology_micro: {
-      type: 'string',
-      required: false
-    },
-
-    neuoropathology_criteria: {
+    neuropathology_microscopic: {
       type: 'string',
       required: false
     },
@@ -120,7 +115,7 @@ module.exports = {
       required: true
     },
 
-    storage_method: {
+    preservation_method: {
       type: 'string',
       required: true
     }
@@ -141,10 +136,10 @@ module.exports = {
 
     let formalin_fixed = '';
     let fresh_frozen = '';
-    let storage_method = inputs.storage_method;
+    let preservation_method = inputs.preservation_method;
     let duration = inputs.duration;
 
-    switch (storage_method) {
+    switch (preservation_method) {
       case 'Formalin-Fixed':
         formalin_fixed = 'True';
         fresh_frozen = 'False';
@@ -174,19 +169,18 @@ module.exports = {
       postmortem_interval: inputs.postmortem_interval,
       time_in_fix: inputs.time_in_fix,
       tissue_type: inputs.tissue_type,
-      storage_method: inputs.storage_method,
+      preservation_method: inputs.preservation_method,
       autopsy_type: inputs.autopsy_type,
       neuoropathology_diagnosis: inputs.neuoropathology_diagnosis,
       race: inputs.race,
       diagnosis: inputs.clinical_diagnosis,
       duration: duration,
-      clinical_history: inputs.clinical_history,
+      clinical_details: inputs.clinical_details,
       cause_of_death: inputs.cause_of_death,
       brain_weight: inputs.brain_weight,
-      neuoropathology_detailed: inputs.neuoropathology_detailed,
+      neuoropathology_summary: inputs.neuoropathology_summary,
       neuropathology_gross: inputs.neuoropathology_gross,
-      neuropathology_micro: inputs.neuoropathology_micro,
-      neouropathology_criteria: inputs.neuoropathology_criteria,
+      neuropathology_micro: inputs.neuropathology_microscopic,
       cerad: inputs.cerad,
       braak_stage: inputs.braak_stage,
       khachaturian: inputs.khachaturian,

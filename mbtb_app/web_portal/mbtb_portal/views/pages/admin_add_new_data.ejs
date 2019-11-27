@@ -64,11 +64,11 @@
 
                 <div class="col-md-12">
                     <div class="form-group"
-                     ng-class="{ 'has-error' : add_new_data_form.clinical_history.$invalid && !add_new_data_form.clinical_history.$pristine }">
-                        <label for="clinical_history">Clinical History *</label>
-                        <textarea name="clinical_history" ng-model="clinical_history" rows="5" class="form-control" required=""></textarea>
+                     ng-class="{ 'has-error' : add_new_data_form.clinical_details.$invalid && !add_new_data_form.clinical_details.$pristine }">
+                        <label for="clinical_details">Clinical History *</label>
+                        <textarea name="clinical_details" ng-model="clinical_details" rows="5" class="form-control" required=""></textarea>
                     </div>
-                    <div ng-show="add_new_data_form.clinical_history.$dirty && add_new_data_form.clinical_history.$error.required" class="help-block">
+                    <div ng-show="add_new_data_form.clinical_details.$dirty && add_new_data_form.clinical_details.$error.required" class="help-block">
                         This field is required
                     </div>
                 </div>
@@ -116,11 +116,11 @@
 
                 <div class="col-md-12">
                     <div class="form-group"
-                     ng-class="{ 'has-error' : add_new_data_form.neuoropathology_diagnosis.$invalid && !add_new_data_form.neuoropathology_diagnosis.$pristine }">
-                        <label for="neuoropathology_diagnosis">Neuropathological Diagnosis *</label>
-                        <select name="neuoropathology_diagnosis" ng-model="neuoropathology_diagnosis" class="form-control" required="">
-                            <% for(var diagnosis_item=0; diagnosis_item < neuro_diagnosis.length; diagnosis_item++) { %>
-                                <option><%= neuro_diagnosis[diagnosis_item] %></option>
+                     ng-class="{ 'has-error' : add_new_data_form.neuropathology_diagnosis.$invalid && !add_new_data_form.neuropathology_diagnosis.$pristine }">
+                        <label for="neuropathology_diagnosis">Neuropathological Diagnosis *</label>
+                        <select name="neuropathology_diagnosis" ng-model="neuropathology_diagnosis" class="form-control" required="">
+                            <% for(var diagnosis_item=0; diagnosis_item < neuropathology_diagnosis.length; diagnosis_item++) { %>
+                                <option><%= neuropathology_diagnosis[diagnosis_item] %></option>
                             <% } %>
                         </select>
                     </div>
@@ -128,8 +128,8 @@
 
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="neuoropathology_detailed">Neuropathology - Detailed </label>
-                        <textarea name="neuoropathology_detailed" ng-model="neuoropathology_detailed" id="neuoropathology_detailed" rows="5" class="form-control"></textarea>
+                        <label for="neuoropathology_summary">Neuropathology - Detailed </label>
+                        <textarea name="neuoropathology_summary" ng-model="neuoropathology_summary" id="neuoropathology_summary" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
 
@@ -142,15 +142,8 @@
 
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="neuoropathology_micro">Neuropathology - Micro </label>
-                        <textarea name="neuoropathology_micro" ng-model="neuoropathology_micro" rows="5" class="form-control"></textarea>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="neuoropathology_criteria">Neuropathology Criteria </label>
-                        <textarea name="neuoropathology_criteria" ng-model="neuoropathology_criteria" rows="5" class="form-control"></textarea>
+                        <label for="neuropathology_microscopic">Neuropathology - Micro </label>
+                        <textarea name="neuropathology_microscopic" ng-model="neuropathology_microscopic" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
 
@@ -208,11 +201,11 @@
 
                 <div class="col-md-12">
                     <div class="form-group"
-                     ng-class="{ 'has-error' : add_new_data_form.storage_method.$invalid && !add_new_data_form.storage_method.$pristine }">
-                        <label for="storage_method">Storage method *</label>
-                        <select name="storage_method" ng-model="storage_method" class="form-control" required="">
-                            <% for(var storage_item=0; storage_item < storage_method.length; storage_item++) { %>
-                                <option><%= storage_method[storage_item] %></option>
+                     ng-class="{ 'has-error' : add_new_data_form.preservation_method.$invalid && !add_new_data_form.preservation_method.$pristine }">
+                        <label for="preservation_method">Storage method *</label>
+                        <select name="preservation_method" ng-model="preservation_method" class="form-control" required="">
+                            <% for(var preservation_item=0; preservation_item < preservation_method.length; preservation_item++) { %>
+                                <option><%= preservation_method[preservation_item] %></option>
                             <% } %>
                         </select>
                     </div>
