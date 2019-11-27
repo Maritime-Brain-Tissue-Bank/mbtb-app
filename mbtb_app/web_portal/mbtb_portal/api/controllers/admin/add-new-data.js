@@ -7,7 +7,7 @@ module.exports = {
 
 
   description: `It redirects to the "admin_add_new_data" template and load data for dropdowns i.e. autopsy_type, tissue_type
-                , storage_methods, sex, disease_names`,
+                , preservation_method, sex, disease_names`,
 
 
   inputs: {
@@ -34,7 +34,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     const sex = ['Male', 'Female'];
-    const storage_methods = ['Formalin-Fixed', 'Fresh Frozen', 'Both'];
+    const preservation_method = ['Formalin-Fixed', 'Fresh Frozen', 'Both'];
 
     let url = sails.config.custom.data_api_url + 'get_select_options/';
 
@@ -53,8 +53,8 @@ module.exports = {
         else {
           const response = JSON.parse(body);
           return exits.success({
-            sex: sex, neuro_diagnosis: response.neuoropathology_diagnosis, autopsy_type:response.autopsy_type,
-            tissue_type:response.tissue_type, storage_method: storage_methods
+            sex: sex, neuropathology_diagnosis: response.neuropathology_diagnosis, autopsy_type:response.autopsy_type,
+            tissue_type:response.tissue_type, preservation_method: preservation_method
           });
         }
       });

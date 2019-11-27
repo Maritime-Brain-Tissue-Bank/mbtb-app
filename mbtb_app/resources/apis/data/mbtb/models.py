@@ -22,11 +22,12 @@ class PrimeDetails(models.Model):
     postmortem_interval = models.CharField(max_length=255, blank=True, null=True)
     time_in_fix = models.CharField(max_length=255, blank=True, null=True)
     clinical_diagnosis = models.CharField(max_length=255, blank=True, null=True)
-    neuro_diagnosis_id = models.ForeignKey('NeuropathologicalDiagnosis', models.DO_NOTHING, db_column="neuro_diagnosis_id")
     tissue_type = models.ForeignKey('TissueTypes', models.DO_NOTHING)
     preservation_method = models.CharField(max_length=20, blank=True, null=True)
     storage_year = models.DateTimeField(default=datetime.now, blank=True)
     archive = models.CharField(max_length=3, blank=True, null=True)
+    neuro_diagnosis_id = models.ForeignKey('NeuropathologicalDiagnosis', models.DO_NOTHING,
+                                           db_column="neuro_diagnosis_id")
 
     class Meta:
         managed = False

@@ -17,11 +17,11 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
   };
 
   // Neuropathological diagnosis
-  $scope.neuro_diagnosis = [];
+  $scope.neuropathology_diagnosis = [];
   $scope.gridOptions.data.forEach(function (item) {
-    $scope.neuro_diagnosis.push(item.neuro_diseases_id);
+    $scope.neuropathology_diagnosis.push(item.neuro_diagnosis_id);
   });
-  $scope.neuro_diagnosis = $scope.neuro_diagnosis.filter(unique);
+  $scope.neuropathology_diagnosis = $scope.neuropathology_diagnosis.filter(unique);
 
   $scope.search_fields = {}; // save user choices from form
   $scope.filtered_data = {
@@ -37,8 +37,8 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
 
     // filtering:
     $scope.filtered_data.data = $filter('filter')($scope.gridOptions.data, {
-      sex: $scope.search_fields.sex, age: $scope.search_fields.age, storage_method: $scope.search_fields.storage_method,
-      tissue_type: $scope.search_fields.tissue_type, neuro_diseases_id: $scope.search_fields.neuro_diseases
+      sex: $scope.search_fields.sex, age: $scope.search_fields.age, preservation_method: $scope.search_fields.preservation_method,
+      tissue_type: $scope.search_fields.tissue_type, neuro_diagnosis_id: $scope.search_fields.neuropathology_diagnosis
     });
 
     /*
@@ -75,9 +75,9 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
         'Age': item.age,
         'Postmortem Interval': item.postmortem_interval,
         'Time in Fix': item.time_in_fix,
-        'Neuropathological Diagnosis': item.neuro_diagnosis,
+        'Neuropathological Diagnosis': item.neuropathology_diagnosis,
         'Tissue Type': item.tissue_type,
-        'Storage Method': item.storage_method
+        'Storage Method': item.preservation_method
       });
     });
     JSONToCSVConvertor(exportData, 'Export', true);

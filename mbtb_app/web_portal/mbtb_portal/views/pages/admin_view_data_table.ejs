@@ -31,9 +31,9 @@
                 <div class="form-group">
                     <label for="diafilter">Neuropathological Diagnosis</label>
                     <select id="diafilter" class="form-control"
-                            ng-model="search_fields.neuro_diseases">
+                            ng-model="search_fields.neuropathology_diagnosis">
                         <option value="">All</option>
-                        <option value="{{disease_name}}" ng-repeat="disease_name in neuro_diagnosis">
+                        <option value="{{disease_name}}" ng-repeat="disease_name in neuropathology_diagnosis">
                             {{disease_name}}
                         </option>
                     </select>
@@ -128,7 +128,7 @@
                     <label for="storage">Method of Preservation</label>
                     <select id="storage"
                             class="form-control"
-                            ng-model="search_fields.storage_method">
+                            ng-model="search_fields.preservation_method">
                         <option value="">All</option>
                         <option value="Formalin-Fixed">Formalin Fixed</option>
                         <option value="Fresh Frozen">Fresh Frozen</option>
@@ -184,8 +184,9 @@
                             <th data-field="age">Age</th>
                             <th data-field="postmortem_interval">Postmortem Interval</th>
                             <th data-field="time_in_fix">Time in Fix (Days)</th>
-                            <th data-field="storage_method">Storage Method</th>
-                            <th data-field="neuro_diseases">Neuropathological Diagnosis</th>
+                            <th data-field="preservation_method">Storage Method</th>
+                            <th data-field="clinical_diagnosis">Clinical Diagnosis</th>
+                            <th data-field="neuropathology_diagnosis">Neuropathological Diagnosis</th>
                             <th data-field="tissue_type">Tissue Type</th>
                             <th data-field="storage_year">Storage Date</th>
                         </tr>
@@ -195,14 +196,15 @@
                             <tr ng-repeat="row in filtered_data.data">
                                 <td ng-init="elem_index = $index">{{$index+1}}</td>
                                 <td>
-                                    <a ng-href="/admin_view_data/{{row.brain_data_id}}">{{row.mbtb_code}}</a>
+                                    <a ng-href="/admin_view_data/{{row.prime_details_id}}">{{row.mbtb_code}}</a>
                                 </td>
                                 <td>{{row.sex}}</td>
                                 <td>{{row.age}}</td>
                                 <td>{{row.postmortem_interval}}</td>
                                 <td>{{row.time_in_fix}}</td>
-                                <td>{{row.storage_method}}</td>
-                                <td>{{row.neuro_diseases_id}}</td>
+                                <td>{{row.preservation_method}}</td>
+                                <td>{{row.clinical_diagnosis}}</td>
+                                <td>{{row.neuro_diagnosis_id}}</td>
                                 <td>{{row.tissue_type}}</td>
                                 <td>{{row.storage_year}}</td>
                             </tr>
