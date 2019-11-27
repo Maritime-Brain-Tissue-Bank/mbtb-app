@@ -20,10 +20,14 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="clid">Clinical Diagnosis</label>
-                    <input id="clid"
-                           class="form-control"
-                           type="text" ng-model="search_fields.clinical_diagnosis">
+                    <label for="clinical_diagnosis">Clinical Diagnosis</label>
+                    <select id="clinical_diagnosis" class="form-control"
+                            ng-model="search_fields.clinical_diagnosis">
+                        <option value="">All</option>
+                        <option value="{{c_diagnosis_name}}" ng-repeat="c_diagnosis_name in clinical_diagnosis">
+                            {{c_diagnosis_name}}
+                        </option>
+                    </select>
                 </div>
             </div>
 
@@ -33,8 +37,8 @@
                     <select id="diafilter" class="form-control"
                             ng-model="search_fields.neuropathology_diagnosis">
                         <option value="">All</option>
-                        <option value="{{disease_name}}" ng-repeat="disease_name in neuropathology_diagnosis">
-                            {{disease_name}}
+                        <option value="{{diagnosis_name}}" ng-repeat="diagnosis_name in neuropathology_diagnosis">
+                            {{diagnosis_name}}
                         </option>
                     </select>
                 </div>

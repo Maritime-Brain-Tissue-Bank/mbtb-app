@@ -16,6 +16,15 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
     return self.indexOf(value) === index
   };
 
+  // clinical diagnosis
+  $scope.clinical_diagnosis = [];
+  $scope.gridOptions.data.forEach(function (item) {
+    if (item.clinical_diagnosis.length > 0){
+      $scope.clinical_diagnosis.push(item.clinical_diagnosis);
+    }
+  });
+  $scope.clinical_diagnosis = $scope.clinical_diagnosis.filter(unique);
+
   // Neuropathological diagnosis
   $scope.neuropathology_diagnosis = [];
   $scope.gridOptions.data.forEach(function (item) {
@@ -38,7 +47,8 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
     // filtering:
     $scope.filtered_data.data = $filter('filter')($scope.gridOptions.data, {
       sex: $scope.search_fields.sex, age: $scope.search_fields.age, preservation_method: $scope.search_fields.preservation_method,
-      tissue_type: $scope.search_fields.tissue_type, neuro_diagnosis_id: $scope.search_fields.neuropathology_diagnosis
+      tissue_type: $scope.search_fields.tissue_type, neuro_diagnosis_id: $scope.search_fields.neuropathology_diagnosis,
+      clinical_diagnosis: $scope.search_fields.clinical_diagnosis
     });
 
     /*
