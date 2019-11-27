@@ -65,17 +65,17 @@ module.exports = {
       required: true
     },
 
-    neuoropathology_diagnosis: {
+    neuropathology_diagnosis: {
       type: 'string',
       required: true
     },
 
-    neuoropathology_summary: {
+    neuropathology_summary: {
       type: 'string',
       required: false
     },
 
-    neuoropathology_gross: {
+    neuropathology_gross: {
       type: 'string',
       required: false
     },
@@ -171,16 +171,16 @@ module.exports = {
       tissue_type: inputs.tissue_type,
       preservation_method: inputs.preservation_method,
       autopsy_type: inputs.autopsy_type,
-      neuoropathology_diagnosis: inputs.neuoropathology_diagnosis,
+      neuropathology_diagnosis: inputs.neuropathology_diagnosis,
       race: inputs.race,
-      diagnosis: inputs.clinical_diagnosis,
+      clinical_diagnosis: inputs.clinical_diagnosis,
       duration: duration,
       clinical_details: inputs.clinical_details,
       cause_of_death: inputs.cause_of_death,
       brain_weight: inputs.brain_weight,
-      neuoropathology_summary: inputs.neuoropathology_summary,
-      neuropathology_gross: inputs.neuoropathology_gross,
-      neuropathology_micro: inputs.neuropathology_microscopic,
+      neuropathology_summary: inputs.neuropathology_summary,
+      neuropathology_gross: inputs.neuropathology_gross,
+      neuropathology_microscopic: inputs.neuropathology_microscopic,
       cerad: inputs.cerad,
       braak_stage: inputs.braak_stage,
       khachaturian: inputs.khachaturian,
