@@ -15,163 +15,139 @@
         var mbtb_data = <%- JSON.stringify(data) %>;
     </script>
 
-    <div class="row">
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="clid">Clinical Diagnosis</label>
-            <input id="clid"
-                   class="form-control"
-                   type="text">
-        </div>
-    </div>
+    <form name="search_fields_form" ng-submit="submit_search_fields()" novalidate>
 
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="diafilter">Neuropathological Diagnosis</label>
-            <select id="diafilter" class="form-control" ng-change="gridActions1.filter()"
-                    ng-model="neuro_diseases"
-                    filter-by="neuro_diseases_id"
-                    filter-type="select">
-                <option value="">All</option>
-                <option value="{{disease_name}}" ng-repeat="disease_name in neuro_diagnosis">
-                    {{disease_name}}
-                </option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="tissuefilter">Tissue Type</label>
-            <select id="tissuefilter" class="form-control" ng-change="gridActions1.filter()"
-                    ng-model="tissue_type"
-                    filter-by="tissue_type"
-                    filter-type="select">
-                <option value="">All</option>
-                <option value="Brain">BRAIN</option>
-                <option value="Spinal Cord">SPINAL CORD</option>
-                <option value="Eyes">EYES</option>
-            </select>
-
-        </div>
-    </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="selectSex">Sex</label>
-                <select id="selectSex"
-                        class="form-control"
-                        ng-change="gridActions1.filter()"
-                        ng-model="sex"
-                        filter-by="sex"
-                        filter-type="select">
-                    <option value="">Both</option>
-                    <option value="Female">FEMALE</option>
-                    <option value="Male">MALE</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <label for="agemax">Age</label>
-            <div class="row">
-                <div class="col-md-6">
-                    <input id="agemin"
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="clid">Clinical Diagnosis</label>
+                    <input id="clid"
                            class="form-control"
-                           ng-change="gridActions1.filter()"
-                           ng-model="AgeMin"
-                           filter-by="age"
-                           filter-type="text"
-                           placeholder="min">
+                           type="text" ng-model="search_fields.clinical_diagnosis">
                 </div>
-                <div class="col-md-6">
-                    <input id="agemax"
-                           class="form-control"
-                           ng-change="gridActions1.filter()"
-                           ng-model="AgeMax"
-                           filter-by="age"
-                           filter-type="text"
-                           placeholder="max">
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="diafilter">Neuropathological Diagnosis</label>
+                    <select id="diafilter" class="form-control"
+                            ng-model="search_fields.neuropathology_diagnosis">
+                        <option value="">All</option>
+                        <option value="{{disease_name}}" ng-repeat="disease_name in neuropathology_diagnosis">
+                            {{disease_name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="tissuefilter">Tissue Type</label>
+                    <select id="tissuefilter" class="form-control"
+                            ng-model="search_fields.tissue_type">
+                        <option value="">All</option>
+                        <option value="Brain">Brain</option>
+                        <option value="Ocular">Ocular</option>
+                        <option value="Eyes">Eyes</option>
+                    </select>
+
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <label for="PMImax">Postmortem Interval (hrs)</label>
-            <div class="row">
-                <div class="col-md-6">
-                    <input id="PMImin"
-                           class="form-control"
-                           ng-change="gridActions1.filter()"
-                           ng-model="PMIMin"
-                           filter-by="postmortem_interval"
-                           filter-type="text"
-                           placeholder="min">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="selectSex">Sex</label>
+                    <select id="selectSex"
+                            class="form-control"
+                            ng-model="search_fields.sex">
+                        <option value="">Both</option>
+                        <option value="Female">FEMALE</option>
+                        <option value="Male">MALE</option>
+                    </select>
                 </div>
-                <div class="col-md-6">
-                    <input id="PMImax"
-                           class="form-control"
-                           ng-change="gridActions1.filter()"
-                           ng-model="PMIMax"
-                           filter-by="postmortem_interval"
-                           filter-type="text"
-                           placeholder="max">
+            </div>
+
+            <div class="col-md-2">
+                <label for="agemax">Age</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input id="age_min"
+                               class="form-control"
+                               ng-model="search_fields.age_min"
+                               placeholder="min">
+                    </div>
+                    <div class="col-md-6">
+                        <input id="age_max"
+                               class="form-control"
+                               ng-model="search_fields.age_max"
+                               placeholder="max">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label for="PMImax">Postmortem Interval (hrs)</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input id="pmi_min"
+                               class="form-control"
+                               ng-model="search_fields.pmi_min"
+                               placeholder="min">
+                    </div>
+                    <div class="col-md-6">
+                        <input id="pmi_max"
+                               class="form-control"
+                               ng-model="search_fields.pmi_max"
+                               placeholder="max">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label for="TiFmax">Time in Fix (days)</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input id="tif_min"
+                               class="form-control"
+                               ng-model="search_fields.tif_min"
+                               placeholder="min">
+                    </div>
+                    <div class="col-md-6">
+                        <input id="tif_max"
+                               class="form-control"
+                               ng-model="search_fields.tif_max"
+                               placeholder="max">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="storage">Method of Preservation</label>
+                    <select id="storage"
+                            class="form-control"
+                            ng-model="search_fields.preservation_method">
+                        <option value="">All</option>
+                        <option value="Formalin-Fixed">Formalin Fixed</option>
+                        <option value="Fresh Frozen">Fresh Frozen</option>
+                    </select>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-2">
-            <label for="TiFmax">Time in Fix (days)</label>
-            <div class="row">
-                <div class="col-md-6">
-                    <input id="TiFmin"
-                           class="form-control"
-                           ng-change="gridActions1.filter()"
-                           ng-model="TiFMin"
-                           filter-by="time_in_fix"
-                           filter-type="text"
-                           placeholder="min">
-                </div>
-                <div class="col-md-6">
-                    <input id="TiFmax"
-                           class="form-control"
-                           ng-change="gridActions1.filter()"
-                           ng-model="TiFMax"
-                           filter-by="time_in_fix"
-                           filter-type="text"
-                           placeholder="max">
-                </div>
-            </div>
+        <br>
+
+        <div class="row button_holder">
+            <button class="btn btn-primary export_button">Search</button>
         </div>
 
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="storage">Method of Preservation</label>
-                <select id="storage"
-                        class="form-control"
-                        ng-change="gridActions1.filter()"
-                        ng-model="storage_method"
-                        filter-by="storage_method"
-                        filter-type="select">
-                    <option value="">All</option>
-                    <option value="Formalin-Fixed">Formalin Fixed</option>
-                    <option value="Fresh Frozen">Fresh Frozen</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <br>
-
-    <div class="row button_holder">
-        <button class="btn btn-primary export_button" onclick="myFunction()">Search</button>
-    </div>
+    </form>
 
     <div id="test" style="display: none">
         <div class="row container-fluid">
-            <div grid-data id="test" grid-options="gridOptions" grid-actions="gridActions1">
+            <div grid-data id="test" grid-options="filtered_data" grid-actions="gridActions1">
                 <div class="row-no-gutters">
                     <div class="col-sm-3">
                         <span class="items">{{filtered.length}} items  total</span>
@@ -208,28 +184,29 @@
                             <th data-field="age">Age</th>
                             <th data-field="postmortem_interval">Postmortem Interval</th>
                             <th data-field="time_in_fix">Time in Fix (Days)</th>
-                            <th data-field="storage_method">Storage Method</th>
-                            <th data-field="neuro_diseases">Neuropathological Diagnosis</th>
+                            <th data-field="preservation_method">Storage Method</th>
+                            <th data-field="clinical_diagnosis">Clinical Diagnosis</th>
+                            <th data-field="neuropathology_diagnosis">Neuropathological Diagnosis</th>
                             <th data-field="tissue_type">Tissue Type</th>
                             <th data-field="storage_year">Storage Date</th>
                         </tr>
                         </thead>
 
                         <tbody>
-
-                        <tr grid-item>
-                            <td ng-init="elem_index = $index">{{elem_index+1}}</td>
+                        <tr ng-repeat="row in filtered_data.data">
+                            <td ng-init="elem_index = $index">{{$index+1}}</td>
                             <td>
-                                <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.brain_data_id}}"></a>
+                                <a ng-href="/view_data/{{row.prime_details_id}}">{{row.mbtb_code}}</a>
                             </td>
-                            <td ng-bind="item.sex"></td>
-                            <td ng-bind="item.age"></td>
-                            <td ng-bind="item.postmortem_interval"></td>
-                            <td ng-bind="item.time_in_fix"></td>
-                            <td ng_bind="item.storage_method"></td>
-                            <td ng-bind="item.neuro_diseases_id"></td>
-                            <td ng_bind="item.tissue_type"></td>
-                            <td ng_bind="item.storage_year"></td>
+                            <td>{{row.sex}}</td>
+                            <td>{{row.age}}</td>
+                            <td>{{row.postmortem_interval}}</td>
+                            <td>{{row.time_in_fix}}</td>
+                            <td>{{row.preservation_method}}</td>
+                            <td>{{row.clinical_diagnosis}}</td>
+                            <td>{{row.neuro_diagnosis_id}}</td>
+                            <td>{{row.tissue_type}}</td>
+                            <td>{{row.storage_year}}</td>
                         </tr>
 
                         </tbody>
@@ -266,7 +243,7 @@
                     <i class="fa fa-download"></i>
                 </button>
 
-                <button class="btn btn-primary export_button" ng-click="exportToCsv(gridOptions.grid.filtered)">Export filtered data to CSV
+                <button class="btn btn-primary export_button" ng-click="exportToCsv(filtered_data.data)">Export filtered data to CSV
                     <i class="fa fa-download"></i>
                 </button>
             </div>
