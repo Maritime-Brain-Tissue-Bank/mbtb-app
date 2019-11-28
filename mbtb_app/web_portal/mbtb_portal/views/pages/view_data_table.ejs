@@ -145,6 +145,7 @@
 
         <div class="row button_holder">
             <button class="btn btn-primary export_button">Search</button>
+            <button class="btn btn-info export_button btn_space" ng-disabled="clear_btn" ng-click="clear_filter()">Clear</button>
         </div>
 
     </form>
@@ -197,22 +198,22 @@
                         </thead>
 
                         <tbody>
-                        <tr grid-item>
-                            <td ng-init="elem_index = $index">{{elem_index+1}}</td>
-                            <td>
-                                <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.prime_details_id}}"></a>
-                            </td>
+                            <tr grid-item>
+                                <td ng-init="elem_index = $index">{{elem_index+1}}</td>
+                                <td>
+                                    <a ng-bind="item.mbtb_code" ng-href="/view_data/{{item.prime_details_id}}"></a>
+                                </td>
 
-                            <td ng-bind="item.sex"></td>
-                            <td ng-bind="item.age"></td>
-                            <td ng-bind="item.postmortem_interval"></td>
-                            <td ng-bind="item.time_in_fix"></td>
-                            <td ng_bind="item.preservation_method"></td>
-                            <td ng_bind="item.clinical_diagnosis"></td>
-                            <td ng-bind="item.neuro_diagnosis_id"></td>
-                            <td ng_bind="item.tissue_type"></td>
-                            <td ng_bind="item.storage_year"></td>
-                        </tr>
+                                <td ng-bind="item.sex"></td>
+                                <td ng-bind="item.age"></td>
+                                <td ng-bind="item.postmortem_interval"></td>
+                                <td ng-bind="item.time_in_fix"></td>
+                                <td ng_bind="item.preservation_method"></td>
+                                <td ng_bind="item.clinical_diagnosis"></td>
+                                <td ng-bind="item.neuro_diagnosis_id"></td>
+                                <td ng_bind="item.tissue_type"></td>
+                                <td ng_bind="item.storage_year"></td>
+                            </tr>
 
                         </tbody>
                     </table>

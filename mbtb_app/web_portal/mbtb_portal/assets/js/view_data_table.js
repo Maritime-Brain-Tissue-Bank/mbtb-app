@@ -6,7 +6,7 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
     data: [],
   };
 
-  $scope.gridActions1 = {};
+  $scope.clear_btn = true; // for clear button, by default is is disabled
 
   // data binding to angular variable
   $scope.gridOptions.data = $window.mbtb_data;
@@ -76,6 +76,26 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
         max_value: $scope.search_fields[item + '_max']
       });
     });
+
+    $scope.clear_btn = false; // enable clear button
+  };
+
+  // clear filtered data and set table, options to default view
+  $scope.clear_filter = function(){
+    $scope.filtered_data.data = $scope.gridOptions.data;
+
+    // setting select options to default value
+    $scope.search_fields.select_options.forEach(function (item) {
+      $scope.search_fields[item] = "";
+    });
+
+    // setting input fields to null value
+    $scope.search_fields.range_options.forEach(function (item) {
+      $scope.search_fields[item + '_min'] = null;
+      $scope.search_fields[item + '_max'] = null;
+    });
+
+    $scope.clear_btn = true; // disable clear button
   };
 
   // exporting data or filtered data to csv
