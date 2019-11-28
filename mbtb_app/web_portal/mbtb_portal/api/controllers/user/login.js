@@ -2,9 +2,9 @@ const request = require('request');
 
 module.exports = {
 
-  friendlyName: 'Welcome Admin',
+  friendlyName: 'Welcome User',
 
-  description: 'Look up the specified admin and welcome them',
+  description: 'Look up the specified user and welcome them',
 
   inputs: {
     user_email: {
@@ -23,7 +23,8 @@ module.exports = {
 
     bad_combo: {
       responseType: 'view',
-      viewTemplatePath: 'pages/user_login'
+      viewTemplatePath: 'pages/user_login',
+      description: 'return view for password mismatch, display error msg'
     }
   },
 
@@ -37,19 +38,22 @@ module.exports = {
       password: inputs.user_password,
     };
 
-    request.post({url: 'https://mbtb-users.herokuapp.com/user_auth', formData: credentials},
+    // post request for retrieving auth token from api, with credentials as payload
+    request.post({url: sails.config.custom.user_api_url + 'user_auth', formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err && httpResponse.statusCode !== 200) {
-          return exits.success({'Error': err});
+          return exits.success({'Error': err}); // display error msg if something goes wrong with request
         }
         else {
           try {
             const response = JSON.parse(body);
             if(typeof (response) == "object"){
-              return exits.bad_combo({'error_msg': response.Error})
+              return exits.bad_combo({'error_msg': response.Error}) // display error msg for wrong email, password
             }
           }
           catch (e) {
+            // set session variables: user_type to `user` and save auth token for further usage
+            // redirect to user homepage
             req.session.user_type = 'user';
             req.session.auth_token = body;
             return res.redirect('/')

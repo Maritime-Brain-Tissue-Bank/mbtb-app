@@ -26,9 +26,9 @@
                 </tr>
                 </thead>
 
-                <tbody>
+                <tbody >
                 <tr>
-                    <td scope="row">MBTB Code</td>
+                    <td scope="row" class="col-md-3">MBTB Code</td>
                     <td>{{details.mbtb_code}}</td>
                 </tr>
 
@@ -43,18 +43,18 @@
                 </tr>
 
                 <tr>
-                    <td scope="row">Diagnosis of Dementia</td>
-                    <td>{{details.diagnosis_of_dementia}}</td>
-                </tr>
-
-                <tr>
-                    <td scope="row">Duration of Dementia (Years)</td>
-                    <td>{{details.duration_of_dementia}}</td>
-                </tr>
-
-                <tr>
                     <td scope="row">Clinical Diagnosis</td>
-                    <td>{{details.clinical_history}}</td>
+                    <td>{{details.clinical_diagnosis}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Clinical Details</td>
+                    <td>{{details.clinical_details}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Duration of Disease (Years)</td>
+                    <td>{{details.duration}}</td>
                 </tr>
 
                 <tr>
@@ -74,32 +74,27 @@
 
                 <tr>
                     <td scope="row">Time in Fix (Days)</td>
-                    <td>{{details.brain_weight}}</td>
+                    <td>{{details.time_in_fix}}</td>
                 </tr>
 
                 <tr>
                     <td scope="row">Neuropathology</td>
-                    <td>{{details.neuro_diseases}}</td>
+                    <td>{{details.neuropathology_diagnosis}}</td>
                 </tr>
 
                 <tr>
-                    <td scope="row">Neuropathology Detailed</td>
-                    <td>{{details.neuoropathology_detailed}}</td>
+                    <td scope="row">Neuropathology Summary</td>
+                    <td>{{details.neuropathology_summary}}</td>
                 </tr>
 
                 <tr>
-                    <td scope="row">Neuropathology Gross</td>
+                    <td scope="row">Gross Neuropathological Information</td>
                     <td>{{details.neuropathology_gross}}</td>
                 </tr>
 
                 <tr>
-                    <td scope="row">Neuropathology Micro</td>
-                    <td>{{details.neuropathology_micro}}</td>
-                </tr>
-
-                <tr>
-                    <td scope="row">Neuropathology Criteria</td>
-                    <td>{{details.neouropathology_criteria}}</td>
+                    <td scope="row">Microscopic Neuropathological Information</td>
+                    <td>{{details.neuropathology_microscopic}}</td>
                 </tr>
 
                 <tr>
@@ -123,28 +118,18 @@
                 </tr>
 
                 <tr>
-                    <td scope="row">Type of Autopsy</td>
-                    <td>{{details.autopsy_type}}</td>
-                </tr>
-
-                <tr>
                     <td>Tissue Type</td>
                     <td>{{details.tissue_type}}</td>
                 </tr>
 
                 <tr>
                     <td>Formalin Fixed</td>
-                    <td>{{details.tissue_type_formalin_fixed}}</td>
+                    <td>{{details.formalin_fixed}}</td>
                 </tr>
 
                 <tr>
-                    <td>Storage Method</td>
-                    <td>{{details.storage_method}}</td>
-                </tr>
-
-                <tr>
-                    <td>Storage Time</td>
-                    <td>{{details.storage_year}}</td>
+                    <td>Fresh Frozen</td>
+                    <td>{{details.fresh_frozen}}</td>
                 </tr>
 
             </table>

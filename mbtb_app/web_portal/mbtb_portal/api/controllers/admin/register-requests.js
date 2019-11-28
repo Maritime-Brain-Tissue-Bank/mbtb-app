@@ -6,7 +6,7 @@ module.exports = {
   friendlyName: 'Register requests',
 
 
-  description: '',
+  description: 'Retrieve new user registration requests from API',
 
 
   inputs: {
@@ -17,6 +17,7 @@ module.exports = {
   exits: {
     success: {
       viewTemplatePath: 'pages/admin_register_requests',
+      description: 'On sucess, redirect admin to `admin_register_requests` template',
       locals: {
         layout: 'layouts/admin_layout'
       }
@@ -25,16 +26,20 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    request.get('https://mbtb-users.herokuapp.com/list_new_users/', {
+    let url = sails.config.custom.user_api_url + 'list_new_users/';
+
+    // get request to retrieve registration requests from api with admin auth token
+    request.get(url, {
       'headers': {
         'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
       }},
       function optionalCallback(err, httpResponse, body) {
         if (err) {
-          console.log({'error_msg': err});
+          console.log({'error_msg': err}); // log error to server console
         }
         else {
           const response = JSON.parse(body);
+          // return retrieved data to template in form of dictionary with key: `data`
           return exits.success({data: response});
         }
       });

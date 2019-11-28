@@ -23,3 +23,35 @@
             ``` 
 * DEBUG:
     * Never enable it in production as it gives full tracebacks in browser and leaks informations about project.
+    
+    
+### Switching between environments
+
+* Add production.py in `users/envs/` dir.
+
+* Add separate secret key in `secret_key.cnf` for production in `config/production/` dir.
+
+* Add db config in `prod_db.cnf` for production in `config/production/` dir.
+    ```
+    Sample file content, values are without quotes.
+  
+    [client]
+    database = db_name
+    host = host_name
+    user = user_name
+    password = password
+    port = 3306
+    default-character-set = utf8
+    ```
+  
+* Changes in manage.py
+    * From:
+        ```python
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project_name.envs.development')
+        ```
+    * To:
+        ```python
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project_name.envs.production')
+        ```
+    
+  

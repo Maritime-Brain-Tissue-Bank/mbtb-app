@@ -8,18 +8,10 @@
     <%/* If you want to discourage search engines from indexing this site, uncomment the following line: */%>
     <%/* <meta name="robots" content="noindex"> */%>
 
-    <!--SCRIPTS-->
-    <script src="/dependencies/angular.min.js"></script>
-    <script src="/dependencies/jquery-3.4.1.min.js"></script>
-    <script src="/dependencies/UI/bootstrap.min.js"></script>
-    <script src="/js/admin_register_requests.js"></script>
-    <script src="/js/user_login.js"></script>
-    <script src="/js/user_registration.js"></script>
-    <script src="/js/view_data_table.js"></script>
-    <script src="/js/view_single_record.js"></script>
-    <!--SCRIPTS END-->
 
-    <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
@@ -33,22 +25,19 @@
 
       <div class="header_nav_wrapper ">
         <nav class="navbar navbar-default">
-          <div class="container-fluid">
-            <div class="page-header">
-              <h1>Maritime Brain Tissue Bank Dataset</h1> <!-- heading -->
-            </div>
 
-            <div class="navbar-header">
-              <a class="navbar-brand">MBTB</a>
+            <div class="page-header">
+              <h1>Maritime Brain Tissue Bank Database</h1> <!-- heading -->
             </div>
 
             <ul class="nav navbar-nav">
               <li><a href="/">Home</a></li>
               <li><a href="/view_data">Dataset</a></li>
-              <li><a href="#">Analysis</a></li>
+              <li><a href="/tissue_requests">Tissue Requests</a></li>
               <li><a href="/faq">FAQ</a></li>
             </ul>
 
+            <% // check for auth token if user is logged in or not %>
             <% if (req.session.auth_token === undefined) { %>
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -60,7 +49,6 @@
               </ul>
             <% }%>
 
-          </div>
         </nav>
       </div>
 
@@ -79,6 +67,15 @@
 
     <!--TEMPLATES-->
     <!--TEMPLATES END-->
+
+    <!--SCRIPTS-->
+    <script src="/js/admin_add_new_data.js"></script>
+    <script src="/js/admin_register_requests.js"></script>
+    <script src="/js/user_login.js"></script>
+    <script src="/js/user_registration.js"></script>
+    <script src="/js/view_data_table.js"></script>
+    <script src="/js/view_single_record.js"></script>
+    <!--SCRIPTS END-->
 
   </body>
 </html>

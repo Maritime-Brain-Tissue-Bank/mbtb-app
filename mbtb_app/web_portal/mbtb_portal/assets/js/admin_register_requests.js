@@ -1,11 +1,15 @@
 // To get id from selected checkbox and send a patch request to approve status
 $('#accept_request_btn').click(function(e){
+  // fetching selected checkbox's id from view
   var requests_ids = get_checkbox_values();
+
+  // fetching email data: first_name, last_name, email from selected checkbox
   var email_data = get_email_data(requests_ids);
 
-  // patch request
-  $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
+  // patch request for sending request_ids, email_data to controller
+  var post_request = $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'approved'){
+      // display alert on suceess and reload window
       alert("Your selected requested are approved.");
       location.reload();
     }
@@ -13,8 +17,10 @@ $('#accept_request_btn').click(function(e){
       alert("Something went wrong, Please try again.");
     }
 
-  }).
-    fail(function(status) {
+  });
+
+  // display error msg if no checkbox is selected
+  post_request.fail(function(status) {
       alert( "Please select at least one request.");
       });
 
@@ -23,12 +29,16 @@ $('#accept_request_btn').click(function(e){
 // To get id from selected checkbox and send a delete request to deny status
 $('#deny_request_btn').click(function(e){
 
+// fetching selected checkbox's id from view
   var requests_ids = get_checkbox_values();
+
+  // fetching email data: first_name, last_name, email from selected checkbox
   var email_data = get_email_data(requests_ids);
 
-  // patch request
-  $.post( "/deny_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
+  // patch request for sending request_ids, email_data to controller
+  var delete_request = $.post( "/deny_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'completed'){
+      // display alert on suceess and reload window
       alert("Your selected requested are denied.");
       location.reload();
     }
@@ -36,11 +46,12 @@ $('#deny_request_btn').click(function(e){
       alert("Something went wrong, Please try again.");
     }
 
-  }).
-  fail(function(status) {
+  });
+
+  // display error msg if no checkbox is selected
+  delete_request.fail(function(status) {
     alert( "Please select at least one request.");
-  })
-  ;
+  });
 });
 
 // For a checkbox in header to check or uncheck all remaining checkbox
@@ -58,6 +69,8 @@ function toggle_all(isChecked){
 
 }
 
+// For fetching email, first_name, last_name from selected checkbox
+// return it as array
 function get_email_data(requests_ids) {
   var mbtb_data_temp = window.mbtb_data;
   var email_data = [];
@@ -75,6 +88,8 @@ function get_email_data(requests_ids) {
   return email_data;
 }
 
+// For gettings mbtb_data ids from seleted checkbox
+// return it as array
 function get_checkbox_values() {
   var requests_ids = [];
   var data_length = document.getElementById('data_length').value;
