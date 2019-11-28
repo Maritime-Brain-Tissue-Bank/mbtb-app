@@ -6,4 +6,5 @@ class AdminAccount(models.Model):
     password_hash = models.CharField(max_length=50)
 
     class Meta:
+        #managed = False
         db_table = 'admins'

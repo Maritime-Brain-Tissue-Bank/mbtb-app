@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/min/production.min.css">
+    <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
 
@@ -25,22 +25,19 @@
 
       <div class="header_nav_wrapper ">
         <nav class="navbar navbar-default">
-          <div class="container-fluid">
-            <div class="page-header">
-              <h1>Maritime Brain Tissue Bank Dataset</h1> <!-- heading -->
-            </div>
 
-            <div class="navbar-header">
-              <a class="navbar-brand">MBTB</a>
+            <div class="page-header">
+              <h1>Maritime Brain Tissue Bank Database</h1> <!-- heading -->
             </div>
 
             <ul class="nav navbar-nav">
               <li><a href="/">Home</a></li>
               <li><a href="/view_data">Dataset</a></li>
-              <li><a href="#">Analysis</a></li>
+              <li><a href="/tissue_requests">Tissue Requests</a></li>
               <li><a href="/faq">FAQ</a></li>
             </ul>
 
+            <% // check for auth token if user is logged in or not %>
             <% if (req.session.auth_token === undefined) { %>
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -52,7 +49,6 @@
               </ul>
             <% }%>
 
-          </div>
         </nav>
       </div>
 
@@ -73,7 +69,12 @@
     <!--TEMPLATES END-->
 
     <!--SCRIPTS-->
-    <script src="/min/production.min.js"></script>
+    <script src="/js/admin_add_new_data.js"></script>
+    <script src="/js/admin_register_requests.js"></script>
+    <script src="/js/user_login.js"></script>
+    <script src="/js/user_registration.js"></script>
+    <script src="/js/view_data_table.js"></script>
+    <script src="/js/view_single_record.js"></script>
     <!--SCRIPTS END-->
 
   </body>

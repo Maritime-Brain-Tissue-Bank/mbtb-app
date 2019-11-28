@@ -7,6 +7,7 @@ import jwt
 
 class IsAuthenticated(permissions.BasePermission):
 
+    # Allow following request from user
     def has_permission(self, request, view):
         # only allow admin's GET request via authorized token
         if request.method == 'GET':
@@ -25,6 +26,7 @@ class IsAuthenticated(permissions.BasePermission):
 
         return False
 
+    # Check for auth_token length and pass it for decoding
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
         if not auth or auth[0].lower() != b'token':
@@ -53,7 +55,7 @@ class IsAuthenticated(permissions.BasePermission):
         email = payload['email']
         userid = payload['id']
         try:
-            admin = AdminAccount.objects.get(id=userid, email=email)
+            admin = AdminAccount.objects.get(id=userid, email=email)  # querying email, id against admin table
             return True
         except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
             return HttpResponse({'Error': "Token is invalid"}, status="403")

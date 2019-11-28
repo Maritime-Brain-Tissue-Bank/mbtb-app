@@ -16,22 +16,19 @@
 
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/min/production.min.css">
+    <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
 </head>
 
 <body>
 <div class="container">
 
+    <!-- Navigation Bar -->
     <div class="header_nav_wrapper ">
         <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="page-header">
-                    <h1>Maritime Brain Tissue Bank Dataset</h1> <!-- heading -->
-                </div>
 
-                <div class="navbar-header">
-                    <a class="navbar-brand">MBTB</a>
+                <div class="page-header">
+                    <h1>Maritime Brain Tissue Bank Database</h1> <!-- heading -->
                 </div>
 
                 <ul class="nav navbar-nav">
@@ -47,6 +44,7 @@
                     <li><a href="/admin_faq">FAQ</a></li>
                 </ul>
 
+                <% // check for auth token if admin is logged in or not %>
                 <% if (req.session.admin_auth_token_val === undefined) { %>
                     <% delete req.session.auth_token %>
                     <% delete req.session.user_type %>
@@ -62,7 +60,6 @@
                     <% }%>
                 <%}%>
 
-            </div>
         </nav>
     </div>
 
@@ -83,7 +80,12 @@
 <!--TEMPLATES END-->
 
 <!--SCRIPTS-->
-<script src="/min/production.min.js"></script>
+<script src="/js/admin_add_new_data.js"></script>
+<script src="/js/admin_register_requests.js"></script>
+<script src="/js/user_login.js"></script>
+<script src="/js/user_registration.js"></script>
+<script src="/js/view_data_table.js"></script>
+<script src="/js/view_single_record.js"></script>
 <!--SCRIPTS END-->
 
 </body>

@@ -3,7 +3,7 @@
 
 <div class="container-fluid requests_container">
     <div class="col-md-12">
-        <h2 class="heading_title">New User Requets</h2>
+        <h2 class="heading_title">New User Requests</h2>
         <br>
         <form id="user_requests_form" >
             <input type="hidden" id="data_length" value="<%= data.length %>">
@@ -35,7 +35,7 @@
 
                 <% for(var i=0; i < data.length; i++) { %>
                     <tr>
-                        <td><input type="checkbox" name="checkbox<%- i %>" value="<%= data[i].id %>")></td>
+                        <td><input type="checkbox" name="checkbox<%- i %>" id="checkbox<%- i %>" value="<%= data[i].id %>")></td>
                         <td data-field="title"><%= data[i].title %></td>
                         <td data-field="first_name"><%= data[i].first_name %></td>
                         <td data-field="middle_name"><%= data[i].middle_name %></td>
@@ -57,7 +57,7 @@
 
         <div class="text-right">
             <button class="btn btn-danger" id="deny_request_btn"> Deny</button>
-            <button class="btn btn-success" id="accept_request_btn">Accept</button>
+            <button class="btn btn-success" id="accept_request_btn">Approve</button>
         </div>
 
         <div id="temp_msg"></div>

@@ -38,14 +38,14 @@ INSERT INTO admins(email, password_hash, first_name) VALUE
     ('admin@mbtb.ca', 'asdfghjkl123', 'admin')
 
 
-CREATE TABLE neurodegenerative_diseases(
-    neuro_diseases_id int unsigned NOT NULL AUTO_INCREMENT,
-    disease_name varchar(255) NOT NULL,
-    PRIMARY KEY (neuro_diseases_id)
+CREATE TABLE neuropathological_diagnosis(
+    neuro_diagnosis_id int unsigned NOT NULL AUTO_INCREMENT,
+    neuro_diagnosis_name varchar(255) NOT NULL,
+    PRIMARY KEY (neuro_diagnosis_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
-INSERT INTO neurodegenerative_diseases(disease_name) VALUES
+INSERT INTO neuropathological_diagnosis(neuro_diagnosis_name) VALUES
     ('ALCOHOLIC CEREBELLAR DEGENERATION'),
     ('AMYOTROPHIC LATERAL SCLEROSIS'),
     ('ALZHEIMER''S DISEASE'),
@@ -59,57 +59,58 @@ INSERT INTO neurodegenerative_diseases(disease_name) VALUES
     ('FRONTOTEMPORAL DEMENTIA'); -- To Do: Need to add all diseases
 
 
-CREATE TABLE autopsy_type(
+CREATE TABLE autopsy_types(
     autopsy_type_id int unsigned NOT NULL AUTO_INCREMENT,
     autopsy_type varchar(255) NOT NULL,
     PRIMARY KEY (autopsy_type_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
-INSERT INTO autopsy_type(autopsy_type) VALUES
+INSERT INTO autopsy_types(autopsy_type) VALUES
     ('Brain'),
     ('Brain & Spinal'),
     ('Full Body');
 
 
-CREATE TABLE tissue_type(
+CREATE TABLE tissue_types(
     tissue_type_id int unsigned NOT NULL AUTO_INCREMENT,
     tissue_type varchar(255) NOT NULL,
     PRIMARY KEY (tissue_type_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
-INSERT INTO tissue_type(tissue_type) VALUES
+INSERT INTO tissue_types(tissue_type) VALUES
     ('Brain'),
     ('Spinal Cord'),
     ('Ocular');
 
 
-CREATE TABLE brain_dataset(
-    brain_data_id int unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE prime_details(
+    prime_details_id int unsigned NOT NULL AUTO_INCREMENT,
     mbtb_code varchar(255) NOT NULL,
     sex enum('Male', 'Female') DEFAULT NULL,
     age varchar(50) DEFAULT NULL,
     postmortem_interval varchar(255) DEFAULT NULL,
     time_in_fix varchar(255) DEFAULT NULL,
-    neuro_diseases_id int unsigned NOT NULL,
+    clinical_diagnosis varchar(255) DEFAULT NULL,
+    neuro_diagnosis_id int unsigned NOT NULL,
     tissue_type_id int unsigned NOT NULL,
-    storage_method enum('Fresh', 'Not Fresh') DEFAULT NULL, -- To Do: Yet to be defined
+    preservation_method enum('Formalin-Fixed', 'Fresh Frozen', 'Both') DEFAULT NULL, -- To Do: Yet to be confirmed
     storage_year datetime NOT NULL,
     archive enum('Yes', 'No') DEFAULT 'No',
-    PRIMARY KEY (brain_data_id),
-    FOREIGN KEY (neuro_diseases_id)
-        REFERENCES neurodegenerative_diseases(neuro_diseases_id)
+    PRIMARY KEY (prime_details_id),
+    FOREIGN KEY (neuro_diagnosis_id)
+        REFERENCES neuropathological_diagnosis(neuro_diagnosis_id)
         ON DELETE no action,
     FOREIGN KEY (tissue_type_id)
-        REFERENCES tissue_type(tissue_type_id)
+        REFERENCES tissue_types(tissue_type_id)
         ON DELETE no action
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
 CREATE TABLE image_repository(
     image_id int unsigned NOT NULL AUTO_INCREMENT,
-    brain_data_id int unsigned NOT NULL,
+    prime_details_id int unsigned NOT NULL,
     file_name varchar(255) NOT NULL,
     description text DEFAULT NULL,
     file_type varchar(255) NOT NULL,
@@ -119,36 +120,36 @@ CREATE TABLE image_repository(
     date_taken date DEFAULT NULL,
     date_inserted timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (image_id),
-    FOREIGN KEY (brain_data_id)
-        REFERENCES brain_dataset(brain_data_id)
+    FOREIGN KEY (prime_details_id)
+        REFERENCES prime_details(prime_details_id)
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
-CREATE TABLE dataset_othr_details(
-    othr_details_id int unsigned NOT NULL AUTO_INCREMENT,
-    brain_data_id int unsigned NOT NULL,
+CREATE TABLE other_details(
+    other_details_id int unsigned NOT NULL AUTO_INCREMENT,
+    prime_details_id int unsigned NOT NULL,
     race varchar(255) DEFAULT NULL,
-    diagnosis_of_dementia varchar(255) DEFAULT NULL,
-    duration_of_dementia int(3) DEFAULT NULL,
-    clinical_history text DEFAULT NULL,
+    duration int(3) DEFAULT NULL,
+    clinical_details text DEFAULT NULL,
     cause_of_death varchar(255) DEFAULT NULL,
     brain_weight int(5) DEFAULT NULL,
-    neuoropathology_detailed text DEFAULT NULL,
+    neuropathology_summary text DEFAULT NULL,
     neuropathology_gross text DEFAULT NULL,
-    neuropathology_micro text DEFAULT NULL,
-    neouropathology_criteria varchar(255) DEFAULT NULL,
+    neuropathology_microscopic text DEFAULT NULL,
+    neouropathology_criteria varchar(255) DEFAULT NULL, -- To Do: redundant column as per update on Nov 26, 2019
     cerad varchar(255) DEFAULT NULL,
     braak_stage varchar(255) DEFAULT NULL,
     khachaturian varchar(255) DEFAULT NULL,
     abc varchar(255) DEFAULT NULL,
     autopsy_type_id int unsigned NOT NULL,
-    tissue_type_formalin_fixed enum('True', 'False') DEFAULT NULL,
-    PRIMARY KEY (othr_details_id),
-    FOREIGN KEY (brain_data_id)
-        REFERENCES brain_dataset(brain_data_id)
+    formalin_fixed enum('True', 'False') DEFAULT NULL,
+    fresh_frozen enum('True', 'False') DEFAULT NULL,
+    PRIMARY KEY (other_details_id),
+    FOREIGN KEY (prime_details_id)
+        REFERENCES prime_details(prime_details_id)
         ON DELETE CASCADE,
     FOREIGN KEY (autopsy_type_id)
-        REFERENCES autopsy_type(autopsy_type_id)
+        REFERENCES autopsy_types(autopsy_type_id)
         ON DELETE no action
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;

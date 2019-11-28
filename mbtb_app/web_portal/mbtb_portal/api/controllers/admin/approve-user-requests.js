@@ -7,18 +7,21 @@ module.exports = {
   friendlyName: 'Approve user requests',
 
 
-  description: 'Approve new account requests and generate random password',
+  description: `Approve new user account requests and generate random password.
+    Also it sends a confirmation email to users with random  generated password`,
 
 
   inputs: {
     requests_ids:{
       type: 'json',
-      required: true
+      required: true,
+      description: 'Receives selected ids from users for patch request'
     },
 
     email_data:{
       type: 'json',
-      required: true
+      required: true,
+      description: 'Receives data i.e. email, first_name, last_name for sending email to users'
     },
   },
 
@@ -36,7 +39,8 @@ module.exports = {
 
     for (i=0; i<requests_ids.length; i++){
 
-      let url = 'https://mbtb-users.herokuapp.com/list_new_users/' + requests_ids[i] + '/';
+      // url for API
+      let url = sails.config.custom.user_api_url + 'list_new_users/' + requests_ids[i] + '/';
       let payload = {
         pending_approval: "N",
         password_hash: generator.generate({
@@ -45,6 +49,8 @@ module.exports = {
         })
       };
 
+      // patch request for updating following fields: `pending_approval`, `password_hash`
+      // along with admin auth token
       request.patch({url: url, body: payload, json: true,
           'headers': {
             'content-type': 'application/json',
@@ -54,16 +60,18 @@ module.exports = {
         function optionalCallback(err, httpResponse, body) {
           if (err && httpResponse.statusCode !== 200) {
             error_msg = 'Error';
-            return exits.success("error");
+            return exits.success("error"); // return error response if something does wrong
           }
           else {
+            // log approved request IDs
             console.log("New user request approved, ID: ", requests_ids[i-1]);
           }
         });
 
+      // if error not occurred during patch request, it goes for sending email to users
       if (error_msg !== 'Error'){
 
-        // sending confirmation email to users
+        // sending confirmation email to users with email, template, template data
         await sails.helpers.sendTemplateEmail.with({
           to: email_data[i].email,
           subject: `Welcome to MBTB`,

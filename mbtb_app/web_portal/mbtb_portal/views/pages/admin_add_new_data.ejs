@@ -1,184 +1,224 @@
-
-<title>Add New Data</title>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<title>Admin - Add New Data</title>
 
 <div class="container-fluid add_new_data_container">
     <h2 class="heading_title">Add New Data</h2>
     <br>
-    <form>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="mbtbcode">MBTB code</label>
-                    <input id="mbtbcode" type="text" class="form-control" required>
+    <div ng-app="add_new_data_app" ng-cloak="">
+        <form name="add_new_data_form" action="/insert_single_row" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{'has-error': add_new_data_form.mbtb_code.$invalid && !add_new_data_form.mbtb_code.$pristine }">
+                        <label for="mbtb_code">MBTB Code *</label>
+                        <input name="mbtb_code" ng-model="mbtb_code" type="text" class="form-control" required="">
+                    </div>
+                    <div ng-show="add_new_data_form.mbtb_code.$dirty && add_new_data_form.mbtb_code.$error.required" class="help-block">
+                        This field is required
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="sex">Sex</label>
-                    <select id="sex" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <input id="age" type="number" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="race">Race</label>
-                    <input id="race" type="text" class="form-control">
-                </div>
-            </div>
 
-            <!--id to be determined-->
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="cause_of_death">Cause of death</label>
-                    <input id="cause_of_death" type="text" class="form-control">
+                <div class="col-md-6">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.sex.$invalid && !add_new_data_form.sex.$pristine }">
+                        <label for="sex">Sex *</label>
+                        <select name="sex" ng-model="sex" class="form-control" required="">
+                            <% for(var i=0; i < sex.length; i++) { %>
+                                <option><%= sex[i] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.age.$invalid && !add_new_data_form.age.$pristine }">
+                        <label for="age">Age *</label>
+                        <input name="age" ng-model="age" type="number" min="0" class="form-control" required="">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="race">Race</label>
+                        <input name="race" ng-model="race" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.clinical_diagnosis.$invalid && !add_new_data_form.clinical_diagnosis.$pristine }">
+                        <label for="clinical_diagnosis">Clinical Diagnosis *</label>
+                        <input name="clinical_diagnosis" ng-model="clinical_diagnosis" type="text" class="form-control" required="">
+                    </div>
+                    <div ng-show="add_new_data_form.clinical_diagnosis.$dirty && add_new_data_form.clinical_diagnosis.$error.required" class="help-block">
+                        This field is required
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="duration">Duration of Disease (Years)</label>
+                        <input name="duration" ng-model="duration" type="number" min="0" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.clinical_details.$invalid && !add_new_data_form.clinical_details.$pristine }">
+                        <label for="clinical_details">Clinical History *</label>
+                        <textarea name="clinical_details" ng-model="clinical_details" rows="5" class="form-control" required=""></textarea>
+                    </div>
+                    <div ng-show="add_new_data_form.clinical_details.$dirty && add_new_data_form.clinical_details.$error.required" class="help-block">
+                        This field is required
+                    </div>
+                </div>
+
+                <!--id to be determined-->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="cause_of_death">Cause of Death</label>
+                        <input name="cause_of_death" ng-model="cause_of_death" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : add_new_data_form.postmortem_interval.$invalid && !add_new_data_form.postmortem_interval.$pristine }">
+                        <label for="postmortem_interval">Post-mortem Interval (hrs) *</label>
+                        <input name="postmortem_interval" ng-model="postmortem_interval" type="text" class="form-control" required="">
+                    </div>
+                    <div ng-show="add_new_data_form.postmortem_interval.$dirty && add_new_data_form.postmortem_interval.$error.required" class="help-block">
+                        This field is required
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.brain_weight.$invalid && !add_new_data_form.brain_weight.$pristine }">
+                        <label for="brain_weight">Brain Weight (g) *</label>
+                        <input name="brain_weight" ng-model="brain_weight" type="number" min="0" class="form-control" required="">
+                    </div>
+                    <div ng-show="add_new_data_form.brain_weight.$dirty && add_new_data_form.brain_weight.$error.required" class="help-block">
+                        This field is required
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.time_in_fix.$invalid && !add_new_data_form.time_in_fix.$pristine }">
+                        <label for="time_in_fix">Time in Fix (days) *</label>
+                        <input name="time_in_fix" ng-model="time_in_fix" type="number" min="0" class="form-control" required="">
+                    </div>
+                    <div ng-show="add_new_data_form.time_in_fix.$dirty && add_new_data_form.time_in_fix.$error.required" class="help-block">
+                        This field is required
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.neuropathology_diagnosis.$invalid && !add_new_data_form.neuropathology_diagnosis.$pristine }">
+                        <label for="neuropathology_diagnosis">Neuropathological Diagnosis *</label>
+                        <select name="neuropathology_diagnosis" ng-model="neuropathology_diagnosis" class="form-control" required="">
+                            <% for(var diagnosis_item=0; diagnosis_item < neuropathology_diagnosis.length; diagnosis_item++) { %>
+                                <option><%= neuropathology_diagnosis[diagnosis_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="neuropathology_summary">Neuropathology - Detailed </label>
+                        <textarea name="neuropathology_summary" ng-model="neuropathology_summary" id="neuropathology_summary" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="neuropathology_gross">Neuropathology - Gross </label>
+                        <textarea name="neuropathology_gross" ng-model="neuropathology_gross" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="neuropathology_microscopic">Neuropathology - Micro </label>
+                        <textarea name="neuropathology_microscopic" ng-model="neuropathology_microscopic" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="cerad">CERAD </label>
+                        <input name="cerad" ng-model="cerad" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="braak_stage">BRAAK Stage </label>
+                        <input name="braak_stage" ng-model="braak_stage" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="khachaturian">KHACHATURIAN </label>
+                        <input name="khachaturian" ng-model="khachaturian" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="abc">ABC </label>
+                        <input name="abc" ng-model="abc" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.autopsy_type.$invalid && !add_new_data_form.autopsy_type.$pristine }">
+                        <label for="autopsy_type">Type of Autopsy *</label>
+                        <select name="autopsy_type" ng-model="autopsy_type" class="form-control" required="">
+                            <% for(var autopsy_item=0; autopsy_item < autopsy_type.length; autopsy_item++) { %>
+                                <option><%= autopsy_type[autopsy_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.tissue_type.$invalid && !add_new_data_form.tissue_type.$pristine }">
+                        <label for="tissue_type">Tissue Type *</label>
+                        <select name="tissue_type" ng-model="tissue_type" class="form-control" required="">
+                            <% for(var tissue_item=0; tissue_item < tissue_type.length; tissue_item++) { %>
+                                <option><%= tissue_type[tissue_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group"
+                     ng-class="{ 'has-error' : add_new_data_form.preservation_method.$invalid && !add_new_data_form.preservation_method.$pristine }">
+                        <label for="preservation_method">Storage method *</label>
+                        <select name="preservation_method" ng-model="preservation_method" class="form-control" required="">
+                            <% for(var preservation_item=0; preservation_item < preservation_method.length; preservation_item++) { %>
+                                <option><%= preservation_method[preservation_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="form-group button_holder">
+                <div class="col" id="cancel_btn">
+                    <button class="btn btn-primary" id="submit_btn" ng-disabled="add_new_data_form.$invalid">Submit</button>
+                    <a href="/admin" class="btn btn_space">Cancel</a>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="post">Post-mortem Interval (hrs)</label>
-                    <input id="post" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="brain_weight">Brain weight (g)</label>
-                    <input id="brain_weight" type="number" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="time_in_fix">Time in fix (days)</label>
-                    <input id="time_in_fix" type="number" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="diagnosis">Neuropathological diagnosis</label>
-                    <select id="diagnosis" class="form-control">
-                        <option>Choose...</option>
-                        <option>ALCOHOLIC CEREBELLAR DEGENERATION</option>
-                        <option>AMYOTROPHIC LATERAL SCLEROSIS</option>
-                        <option>ALZHEIMER'S DISEASE</option>
-                        <option>BRAIN TUMOUR</option>
-                        <option>CEREBELLAR CORTICAL DEGENERATION</option>
-                        <option>CHRONIC MENIGOENCEPHALITIS</option>
-                        <option>CORTICOBASALGANGLIONIC DEGENERATOIN</option>
-                        <option>DOWN'S SYNDROME</option>
-                        <option>FAHR'S DISEASE</option>
-                        <option> FAMILIAL ALZHEIMER'S DISEASE</option>
-                        <option>FRONTOTEMPORAL DEMENTIA</option>
-                        <option>HUNTINGTON DISEASE</option>
-                        <option>HYPOXIC ISCHEMIC ENCEPHALOPATHY</option>
-                        <option>KORSAKOFF'S DISEASE</option>
-                        <option>KUFS DISEASE</option>
-                        <option> LEWY BODY DISEASE</option>
-                        <option>METABOLIC ENCEPHALOPATHY</option>
-                        <option> MULTIFOCAL AXONAL DYSTROPHY</option>
-                        <option>MULTIPLE SCLEROSIS</option>
-                        <option> MULTIPLE SYSTEM ATROPHY</option>
-                        <option>NEURONAL STORAGE DISORDER</option>
-                        <option> NORMAL</option>
-                        <option> PARKINSON'S DISEASE</option>
-                        <option> PRIMARY LATERAL SCLEROSIS</option>
-                        <option>PROGRESSIVE SUBCORTICAL GLIOSIS</option>
-                        <option>PROGRESSIVE SUPRANUCULEAR PALSY</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="detail">Neuropathology; Detailed </label>
-                    <textarea id="detail" rows="5" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="gross">Neuropathology; Gross </label>
-                    <textarea id="gross" rows="5" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="micro">Neuropathology; Micro </label>
-                    <textarea id="micro" rows="5" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="criteria">Neuropathology Criteria </label>
-                    <textarea id="criteria" rows="5" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="CERAD">CERAD </label>
-                    <input id="CERAD" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="BRAAK stage">BRAAK Stage </label>
-                    <input id="BRAAK stage" type="number" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="kha">KHACHATURIAN </label>
-                    <input id="kha" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="ABC">ABC </label>
-                    <input id="ABC" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="type_of_autopsy">Type of Autopsy </label>
-                    <input id="type_of_autopsy" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="tissuetype">Tissue Type </label>
-                    <input id="tissuetype" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="storagemethod">Storage method </label>
-                    <select id="storagemethod" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>Formalin fixed</option>
-                        <option>Fresh frozen</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="sampleimage1">Upload Images</label>
-                    <input type="file" class="form-control-file" id="sampleimage1">
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="form-group button_holder">
-            <button class="btn btn-primary" id="submit_btn">Submit</button>
-            <button id="cancel_btn">Cancel</button>
-        </div>
     </form>
+    </div>
 </div>

@@ -14,8 +14,12 @@ before_install:
   - sudo apt-get install libmysqlclient-dev
   - cd mbtb_app/resources/apis/users
   - pip install -r requirements.txt
+  - cd ../data
+  - pip install -r requirements.txt
 
 script:
+  - python3 manage.py test
+  - cd ../users
   - python3 manage.py test
 
 skip_cleanup: true

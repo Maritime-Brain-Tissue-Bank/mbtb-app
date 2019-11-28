@@ -3,8 +3,20 @@
   margin-bottom: 10vh;
 }
 
-select:focus,
-textarea:focus{
+select[name=sex]:focus,
+select[name=neuoropathology_diagnosis]:focus,
+select[name=autopsy_type]:focus,
+select[name=tissue_type]:focus,
+select[name=storage_method]:focus,
+textarea[name=clinical_history]:focus,
+textarea[name=neuoropathology_detailed]:focus,
+textarea[name=neuoropathology_gross]:focus,
+textarea[name=neuoropathology_micro]:focus,
+textarea[name=neuoropathology_criteria]:focus{
   border-color: #034F53;
   box-shadow: 0px 0px 8px rgba(3, 79, 83, 1);
+}
+
+.btn_space{
+  margin-left: 5px;
 }
