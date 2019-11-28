@@ -45,7 +45,7 @@ class OtherDetails(models.Model):
     clinical_details = models.CharField(max_length=255, blank=True, null=True)
     cause_of_death = models.CharField(max_length=255, blank=True, null=True)
     brain_weight = models.IntegerField(blank=True, null=True)
-    neuoropathology_summary = models.TextField(blank=True, null=True)
+    neuropathology_summary = models.TextField(blank=True, null=True)
     neuropathology_gross = models.TextField(blank=True, null=True)
     neuropathology_microscopic = models.TextField(blank=True, null=True)
     neouropathology_criteria = models.CharField(max_length=255, blank=True, null=True)

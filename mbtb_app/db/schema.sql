@@ -134,7 +134,7 @@ CREATE TABLE other_details(
     clinical_details text DEFAULT NULL,
     cause_of_death varchar(255) DEFAULT NULL,
     brain_weight int(5) DEFAULT NULL,
-    neuoropathology_summary text DEFAULT NULL,
+    neuropathology_summary text DEFAULT NULL,
     neuropathology_gross text DEFAULT NULL,
     neuropathology_microscopic text DEFAULT NULL,
     neouropathology_criteria varchar(255) DEFAULT NULL, -- To Do: redundant column as per update on Nov 26, 2019

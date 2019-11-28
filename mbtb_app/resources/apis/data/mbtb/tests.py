@@ -22,7 +22,7 @@ class SetUpTestData(APITestCase):
         cls.other_details_1 = OtherDetails.objects.create(
             prime_details_id=cls.prime_details_1, autopsy_type=cls.autopsy_type_1, race='test',
             duration=123, clinical_details='test', cause_of_death='test', brain_weight=123,
-            neuoropathology_summary='test', neuropathology_gross='test', neuropathology_microscopic='test',
+            neuropathology_summary='test', neuropathology_gross='test', neuropathology_microscopic='test',
             cerad='', abc='', khachaturian='', braak_stage='test',
             formalin_fixed=True, fresh_frozen=True,
         )
@@ -214,7 +214,7 @@ class CreateDataAPIViewTest(SetUpTestData):
             'clinical_details': 'AD',
             'cause_of_death': '',
             'brain_weight': 1080,
-            'neuoropathology_summary': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
+            'neuropathology_summary': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
             'neuropathology_gross': '',
             'neuropathology_microscopic': '',
             'cerad': '',

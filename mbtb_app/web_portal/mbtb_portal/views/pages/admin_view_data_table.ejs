@@ -5,7 +5,7 @@
 <script src="https://angular-data-grid.github.io/dist/dataGrid.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-<div ng-app="view_data_table_app" ng-controller="view_data_table_controller" grid-actions="gridActions1"
+<div ng-app="view_data_table_app" ng-controller="view_data_table_controller" grid-actions="filtered_data"
      class="container-fluid view_data_table_container">
     <h2 class="heading_title">View Data</h2>
     <br>
@@ -77,13 +77,13 @@
                 <label for="agemax">Age</label>
                 <div class="row">
                     <div class="col-md-6">
-                        <input id="age_min"
+                        <input id="age_min" type="number" min=0
                                class="form-control"
                                ng-model="search_fields.age_min"
                                placeholder="min">
                     </div>
                     <div class="col-md-6">
-                        <input id="age_max"
+                        <input id="age_max" type="number" min=0
                                class="form-control"
                                ng-model="search_fields.age_max"
                                placeholder="max">
@@ -95,15 +95,15 @@
                 <label for="PMImax">Postmortem Interval (hrs)</label>
                 <div class="row">
                     <div class="col-md-6">
-                        <input id="pmi_min"
+                        <input id="postmortem_interval_min" type="number" min=0
                                class="form-control"
-                               ng-model="search_fields.pmi_min"
+                               ng-model="search_fields.postmortem_interval_min"
                                placeholder="min">
                     </div>
                     <div class="col-md-6">
-                        <input id="pmi_max"
+                        <input id="postmortem_interval_max" type="number" min=0
                                class="form-control"
-                               ng-model="search_fields.pmi_max"
+                               ng-model="search_fields.postmortem_interval_max"
                                placeholder="max">
                     </div>
                 </div>
@@ -113,15 +113,15 @@
                 <label for="TiFmax">Time in Fix (days)</label>
                 <div class="row">
                     <div class="col-md-6">
-                        <input id="tif_min"
+                        <input id="time_in_fix_min" type="number" min=0
                                class="form-control"
-                               ng-model="search_fields.tif_min"
+                               ng-model="search_fields.time_in_fix_min"
                                placeholder="min">
                     </div>
                     <div class="col-md-6">
-                        <input id="tif_max"
+                        <input id="time_in_fix_max" type="number" min=0
                                class="form-control"
-                               ng-model="search_fields.tif_max"
+                               ng-model="search_fields.time_in_fix_max"
                                placeholder="max">
                     </div>
                 </div>
@@ -151,7 +151,7 @@
 
     <div id="test" style="display: none">
         <div class="row container-fluid">
-            <div grid-data id="test" grid-options="filtered_data" grid-actions="gridActions1">
+            <div grid-data id="test" grid-options="filtered_data" grid-actions="filtered_data">
                 <div class="row-no-gutters">
                     <div class="col-sm-3">
                         <span class="items">{{filtered.length}} items  total</span>
@@ -188,29 +188,30 @@
                             <th data-field="age">Age</th>
                             <th data-field="postmortem_interval">Postmortem Interval</th>
                             <th data-field="time_in_fix">Time in Fix (Days)</th>
-                            <th data-field="preservation_method">Storage Method</th>
+                            <th data-field="preservation_method">Preservation Method</th>
                             <th data-field="clinical_diagnosis">Clinical Diagnosis</th>
                             <th data-field="neuropathology_diagnosis">Neuropathological Diagnosis</th>
                             <th data-field="tissue_type">Tissue Type</th>
-                            <th data-field="storage_year">Storage Date</th>
+                            <th data-field="storage_year">Storage Year</th>
                         </tr>
                         </thead>
 
                         <tbody>
-                            <tr ng-repeat="row in filtered_data.data">
-                                <td ng-init="elem_index = $index">{{$index+1}}</td>
+                            <tr grid-item>
+                                <td ng-init="elem_index = $index">{{elem_index+1}}</td>
                                 <td>
-                                    <a ng-href="/admin_view_data/{{row.prime_details_id}}">{{row.mbtb_code}}</a>
+                                    <a ng-bind="item.mbtb_code" ng-href="/admin_view_data/{{item.prime_details_id}}"></a>
                                 </td>
-                                <td>{{row.sex}}</td>
-                                <td>{{row.age}}</td>
-                                <td>{{row.postmortem_interval}}</td>
-                                <td>{{row.time_in_fix}}</td>
-                                <td>{{row.preservation_method}}</td>
-                                <td>{{row.clinical_diagnosis}}</td>
-                                <td>{{row.neuro_diagnosis_id}}</td>
-                                <td>{{row.tissue_type}}</td>
-                                <td>{{row.storage_year}}</td>
+
+                                <td ng-bind="item.sex"></td>
+                                <td ng-bind="item.age"></td>
+                                <td ng-bind="item.postmortem_interval"></td>
+                                <td ng-bind="item.time_in_fix"></td>
+                                <td ng_bind="item.preservation_method"></td>
+                                <td ng_bind="item.clinical_diagnosis"></td>
+                                <td ng-bind="item.neuro_diagnosis_id"></td>
+                                <td ng_bind="item.tissue_type"></td>
+                                <td ng_bind="item.storage_year"></td>
                             </tr>
 
                         </tbody>
@@ -256,4 +257,3 @@
     </div>
 
 </div>
-

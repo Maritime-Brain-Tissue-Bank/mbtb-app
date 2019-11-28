@@ -39,7 +39,7 @@ class CreateDataAPIView(views.APIView):
             _clinical_details = request.data['clinical_details']
             _cause_of_death = request.data['cause_of_death']
             _brain_weight = request.data['brain_weight']
-            _neuoropathology_summary = request.data['neuoropathology_summary']
+            _neuropathology_summary = request.data['neuropathology_summary']
             _neuropathology_gross = request.data['neuropathology_gross']
             _neuropathology_microscopic = request.data['neuropathology_microscopic']
             _cerad = request.data['cerad']
@@ -67,7 +67,7 @@ class CreateDataAPIView(views.APIView):
             self.other_details = OtherDetails.objects.create(
                 prime_details_id=self.prime_details, autopsy_type=self.autopsy_type,
                 race=_race, duration=_duration, clinical_details=_clinical_details, cause_of_death=_cause_of_death,
-                brain_weight=_brain_weight, neuoropathology_summary=_neuoropathology_summary,
+                brain_weight=_brain_weight, neuropathology_summary=_neuropathology_summary,
                 neuropathology_gross=_neuropathology_gross, neuropathology_microscopic=_neuropathology_microscopic,
                 cerad=_cerad, braak_stage=_braak_stage, khachaturian=_khachaturian, abc=_abc,
                 formalin_fixed=_formalin_fixed, fresh_frozen=_fresh_frozen,

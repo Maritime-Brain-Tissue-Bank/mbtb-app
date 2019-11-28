@@ -38,48 +38,51 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
 
   };
 
+  // options for filtering with select options
+  $scope.search_fields.select_options = [
+    'sex', 'clinical_diagnosis', 'neuropathology_diagnosis', 'preservation_method', 'tissue_type'
+  ];
+
+  // options for range filtering with min, max values
+  $scope.search_fields.range_options = [
+    'time_in_fix', 'postmortem_interval', 'age'
+  ];
+
   // Once search button is pressed, filters are called
   $scope.submit_search_fields = function(){
 
     if (document.getElementById("test").style.display === "none")
       document.getElementById("test").style.display="block";
 
-    // filtering:
+    // ensuring if value is '' then delete that object so that all values can be displayed
+    // fix for filtering with exact match
+    $scope.search_fields.select_options.forEach(function (item) {
+      if ($scope.search_fields[item] === ""){
+        delete $scope.search_fields[item];
+      }
+    });
+
+    // filtering: exact match
     $scope.filtered_data.data = $filter('filter')($scope.gridOptions.data, {
       sex: $scope.search_fields.sex, age: $scope.search_fields.age, preservation_method: $scope.search_fields.preservation_method,
       tissue_type: $scope.search_fields.tissue_type, neuro_diagnosis_id: $scope.search_fields.neuropathology_diagnosis,
       clinical_diagnosis: $scope.search_fields.clinical_diagnosis
+    }, true);
+
+    // filtering: using custom range filter for time_in_fix, age, postmortem_interval
+    $scope.search_fields.range_options.forEach(function (item) {
+      $scope.filtered_data.data = $filter('range_filter')($scope.filtered_data.data,{
+        field_name: item, min_value: $scope.search_fields[item + '_min'],
+        max_value: $scope.search_fields[item + '_max']
+      });
     });
-
-    /*
-      To Do: refactor below 3 custom filter for range, `range_filter` should be called once only
-    */
-
-    // filtering: time_in_fix
-    $scope.filtered_data.data = $filter('range_filter')($scope.filtered_data.data, {
-      field_name: 'time_in_fix', min_value: $scope.search_fields.tif_min,
-      max_value: $scope.search_fields.tif_max
-    });
-
-    // filtering: postmortem_interval
-    $scope.filtered_data.data = $filter('range_filter')($scope.filtered_data.data, {
-      field_name: 'postmortem_interval', min_value: $scope.search_fields.pmi_min,
-      max_value: $scope.search_fields.pmi_max
-    });
-
-    // filtering: age
-    $scope.filtered_data.data = $filter('range_filter')($scope.filtered_data.data, {
-      field_name: 'age', min_value: $scope.search_fields.age_min,
-      max_value: $scope.search_fields.age_max
-    });
-
   };
 
   // exporting data or filtered data to csv
   $scope.exportToCsv = function (currentData) {
-    var exportData = [];
+    var export_data = [];
     currentData.forEach(function (item) {
-      exportData.push({
+      export_data.push({
         'MBTB Code': item.mbtb_code,
         'Sex': item.sex,
         'Age': item.age,
@@ -87,10 +90,12 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
         'Time in Fix': item.time_in_fix,
         'Neuropathological Diagnosis': item.neuropathology_diagnosis,
         'Tissue Type': item.tissue_type,
-        'Storage Method': item.preservation_method
+        'Preservation Method': item.preservation_method,
+        'Clinical Diagnosis': item.clinical_diagnosis,
+        'Storage Date': item.storage_year
       });
     });
-    JSONToCSVConvertor(exportData, 'Export', true);
+    JSONToCSVConvertor(export_data, 'Export', true);
   }
 }]);
 
