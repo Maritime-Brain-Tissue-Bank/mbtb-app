@@ -65,7 +65,7 @@
                 <div class="col-md-12">
                     <div class="form-group"
                      ng-class="{ 'has-error' : add_new_data_form.clinical_details.$invalid && !add_new_data_form.clinical_details.$pristine }">
-                        <label for="clinical_details">Clinical History *</label>
+                        <label for="clinical_details">Clinical Details *</label>
                         <textarea name="clinical_details" ng-model="clinical_details" rows="5" class="form-control" required=""></textarea>
                     </div>
                     <div ng-show="add_new_data_form.clinical_details.$dirty && add_new_data_form.clinical_details.$error.required" class="help-block">
@@ -85,7 +85,7 @@
                     <div class="form-group"
                          ng-class="{ 'has-error' : add_new_data_form.postmortem_interval.$invalid && !add_new_data_form.postmortem_interval.$pristine }">
                         <label for="postmortem_interval">Post-mortem Interval (hrs) *</label>
-                        <input name="postmortem_interval" ng-model="postmortem_interval" type="text" class="form-control" required="">
+                        <input name="postmortem_interval" ng-model="postmortem_interval" type="number" min="0" class="form-control" required="">
                     </div>
                     <div ng-show="add_new_data_form.postmortem_interval.$dirty && add_new_data_form.postmortem_interval.$error.required" class="help-block">
                         This field is required
@@ -128,21 +128,21 @@
 
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="neuropathology_summary">Neuropathology - Detailed </label>
+                        <label for="neuropathology_summary">Neuropathology Summary </label>
                         <textarea name="neuropathology_summary" ng-model="neuropathology_summary" id="neuropathology_summary" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
 
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="neuropathology_gross">Neuropathology - Gross </label>
+                        <label for="neuropathology_gross">Gross Neuropathological Information </label>
                         <textarea name="neuropathology_gross" ng-model="neuropathology_gross" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
 
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="neuropathology_microscopic">Neuropathology - Micro </label>
+                        <label for="neuropathology_microscopic">Microscopic Neuropathological Information </label>
                         <textarea name="neuropathology_microscopic" ng-model="neuropathology_microscopic" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
