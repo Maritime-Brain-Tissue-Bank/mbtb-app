@@ -16,22 +16,6 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
     return self.indexOf(value) === index
   };
 
-  // clinical diagnosis
-  $scope.clinical_diagnosis = [];
-  $scope.gridOptions.data.forEach(function (item) {
-    if (item.clinical_diagnosis.length > 0){
-      $scope.clinical_diagnosis.push(item.clinical_diagnosis);
-    }
-  });
-  $scope.clinical_diagnosis = $scope.clinical_diagnosis.filter(unique);
-
-  // Neuropathological diagnosis
-  $scope.neuropathology_diagnosis = [];
-  $scope.gridOptions.data.forEach(function (item) {
-    $scope.neuropathology_diagnosis.push(item.neuro_diagnosis_id);
-  });
-  $scope.neuropathology_diagnosis = $scope.neuropathology_diagnosis.filter(unique);
-
   $scope.search_fields = {}; // save user choices from form
   $scope.filtered_data = {
     data : [], // save filtered data

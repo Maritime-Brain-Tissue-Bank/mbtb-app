@@ -24,9 +24,9 @@
                     <select id="clinical_diagnosis" class="form-control"
                             ng-model="search_fields.clinical_diagnosis">
                         <option value="">All</option>
-                        <option value="{{c_diagnosis_name}}" ng-repeat="c_diagnosis_name in clinical_diagnosis">
-                            {{c_diagnosis_name}}
-                        </option>
+                        <% for(var cl_diagnosis_item=0; cl_diagnosis_item < clinical_diagnosis.length; cl_diagnosis_item++) { %>
+                            <option value="<%= clinical_diagnosis[cl_diagnosis_item] %>"><%= clinical_diagnosis[cl_diagnosis_item] %></option>
+                        <% } %>
                     </select>
                 </div>
             </div>
@@ -37,9 +37,9 @@
                     <select id="diafilter" class="form-control"
                             ng-model="search_fields.neuropathology_diagnosis">
                         <option value="">All</option>
-                        <option value="{{diagnosis_name}}" ng-repeat="diagnosis_name in neuropathology_diagnosis">
-                            {{diagnosis_name}}
-                        </option>
+                        <% for(var diagnosis_item=0; diagnosis_item < neuropathology_diagnosis.length; diagnosis_item++) { %>
+                            <option value="<%= neuropathology_diagnosis[diagnosis_item]%>"><%= neuropathology_diagnosis[diagnosis_item] %></option>
+                        <% } %>
                     </select>
                 </div>
             </div>
@@ -50,9 +50,9 @@
                     <select id="tissuefilter" class="form-control"
                             ng-model="search_fields.tissue_type">
                         <option value="">All</option>
-                        <option value="Brain">Brain</option>
-                        <option value="Ocular">Ocular</option>
-                        <option value="Eyes">Eyes</option>
+                        <% for(var tissue_item=0; tissue_item < tissue_type.length; tissue_item++) { %>
+                            <option value="<%= tissue_type[tissue_item]%>"><%= tissue_type[tissue_item] %></option>
+                        <% } %>
                     </select>
 
                 </div>
@@ -66,7 +66,7 @@
                     <select id="selectSex"
                             class="form-control"
                             ng-model="search_fields.sex">
-                        <option value="">Both</option>
+                        <option value="">All</option>
                         <option value="Female">FEMALE</option>
                         <option value="Male">MALE</option>
                     </select>
@@ -134,8 +134,9 @@
                             class="form-control"
                             ng-model="search_fields.preservation_method">
                         <option value="">All</option>
-                        <option value="Formalin-Fixed">Formalin Fixed</option>
-                        <option value="Fresh Frozen">Fresh Frozen</option>
+                        <% for(var preservation_item=0; preservation_item < preservation_method.length; preservation_item++) { %>
+                            <option value="<%= preservation_method[preservation_item]%>"><%= preservation_method[preservation_item] %></option>
+                        <% } %>
                     </select>
                 </div>
             </div>
