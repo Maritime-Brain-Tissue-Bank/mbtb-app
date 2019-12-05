@@ -14,7 +14,7 @@ describe('User Login - Successful', function() {
 
     before(function(done) {
       browser.fill('user_email',    'meow@gmail.com');
-      browser.fill('user_password', 'wbwIHCqRjEiMTeh');
+      browser.fill('user_password', 'iBjJqBTIBBSD53p');
       browser.pressButton('#submit_btn', done);
     });
 
