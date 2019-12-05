@@ -75,7 +75,7 @@ describe('Admin dd new data test', function() {
 
      //log out after all
     afterAll(function(){
-        element(by.id("logout")).click();
+        element(by.id("admin_logout")).click();
     });
 
 

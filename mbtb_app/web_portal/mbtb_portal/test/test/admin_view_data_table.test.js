@@ -41,7 +41,7 @@ describe('Admin view data test', function () {
     });
 
     afterAll(function(){
-        element(by.id("logout")).click();
+        element(by.id("admin_logout")).click();
     });
 
 
