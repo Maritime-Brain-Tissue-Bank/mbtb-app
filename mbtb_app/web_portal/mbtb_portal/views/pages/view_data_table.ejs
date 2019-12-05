@@ -33,8 +33,8 @@
 
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="diafilter">Neuropathological Diagnosis</label>
-                    <select id="diafilter" class="form-control"
+                    <label for="neuropathological_diagnosis">Neuropathological Diagnosis</label>
+                    <select id="neuropathological_diagnosis" class="form-control"
                             ng-model="search_fields.neuropathology_diagnosis">
                         <option value="">All</option>
                         <% for(var diagnosis_item=0; diagnosis_item < neuropathology_diagnosis.length; diagnosis_item++) { %>
@@ -46,8 +46,8 @@
 
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="tissuefilter">Tissue Type</label>
-                    <select id="tissuefilter" class="form-control"
+                    <label for="tissue_type">Tissue Type</label>
+                    <select id="tissue_type" class="form-control"
                             ng-model="search_fields.tissue_type">
                         <option value="">All</option>
                         <% for(var tissue_item=0; tissue_item < tissue_type.length; tissue_item++) { %>
@@ -62,8 +62,8 @@
         <div class="row">
             <div class="col-md-2">
                 <div class="form-group">
-                    <label for="selectSex">Sex</label>
-                    <select id="selectSex"
+                    <label for="sex">Sex</label>
+                    <select id="sex"
                             class="form-control"
                             ng-model="search_fields.sex">
                         <option value="">All</option>
