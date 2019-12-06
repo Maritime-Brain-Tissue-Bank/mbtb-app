@@ -36,3 +36,17 @@ class OtherDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = OtherDetails
         fields = "__all__"
+
+
+class FileUploadPrimeDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PrimeDetails
+        fields = "__all__"
+
+
+class FileUploadOtherDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OtherDetails
+        fields = "__all__"
