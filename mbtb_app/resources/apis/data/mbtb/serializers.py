@@ -46,3 +46,12 @@ class FileUploadOtherDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = OtherDetails
         fields = "__all__"
+
+
+# Serializer for inserting single row in `PrimeDetails` model
+# TODO: Switch to FileUploadPrimeDetailsSerializer if storage_year is added
+class InsertRowPrimeDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PrimeDetails
+        exclude = ['storage_year', ]

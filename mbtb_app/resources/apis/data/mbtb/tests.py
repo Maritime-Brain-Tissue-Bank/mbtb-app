@@ -228,7 +228,7 @@ class CreateDataAPIViewTest(SetUpTestData):
     def test_insert_data_(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.post('/add_new_data/', self.test_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.client.credentials()
 
     def test_insert_data_without_token(self):
@@ -236,9 +236,9 @@ class CreateDataAPIViewTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_invalid_data_check(self):
-        self.test_data['tissue_type'] = ''
-        self.test_data['autopsy_type'] = ''
-        self.test_data['neuropathology_diagnosis'] = ''
+        self.test_data['mbtb_code'] = ''
+        self.test_data['sex'] = ''
+        self.test_data['duration'] = ''
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.post('/add_new_data/', self.test_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
