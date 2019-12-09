@@ -106,8 +106,8 @@ class PrimeDetailsViewTest(SetUpTestData):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/brain_dataset/1/')
         response_without_token = self.client.post('/brain_dataset/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
 
     # delete request with and without token
     def test_delete_request(self):
@@ -179,8 +179,8 @@ class OtherDetailsViewTest(SetUpTestData):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/other_details/1/')
         response_without_token = self.client.post('/other_details/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
 
     # delete request with and without token
     def test_delete_request(self):

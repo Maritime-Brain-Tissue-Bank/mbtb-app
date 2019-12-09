@@ -8,15 +8,32 @@ class IsAuthenticated(permissions.BasePermission):
 
     # Allow following request from user
     def has_permission(self, request, view):
+
         # only allow admin's GET request via authorized token
         if request.method == 'GET':
-            admin = self.authenticate(request)
-            return admin
+            valid_url = ['brain_dataset', 'other_details', 'get_select_options']
+
+            # splitting url e.g. /brain_dataset/1/ to get brain_dataset for comparison
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny GET request if url is not in valid_url by default
+            return False
 
         # only allow admin's POST request via authorized token
         if request.method == 'POST':
-            admin = self.authenticate(request)
-            return admin
+            valid_url = ['file_upload', 'add_new_data']
+
+            # splitting url e.g. /brain_dataset/1/ to get brain_dataset for comparison
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny POST request if url is not in valid_url by default
+            return False
 
         return False
 
