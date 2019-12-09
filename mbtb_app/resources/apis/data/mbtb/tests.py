@@ -256,3 +256,56 @@ class CreateDataAPIViewTest(SetUpTestData):
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
+
+
+class GetSelectOptionsViewTest(SetUpTestData):
+
+    def setUp(cls):
+        super(SetUpTestData, cls).setUpClass()
+        _neuropathology_diagnosis = NeuropathologicalDiagnosis.objects.values_list('neuro_diagnosis_name', flat=True) \
+            .order_by('neuro_diagnosis_name')
+        _autopsy_type = AutopsyTypes.objects.values_list('autopsy_type', flat=True).order_by('autopsy_type')
+        _tissue_type = TissueTypes.objects.values_list('tissue_type', flat=True).order_by('tissue_type')
+        cls.valid_response = {
+            "neuropathology_diagnosis": _neuropathology_diagnosis,
+            "autopsy_type": _autopsy_type,
+            "tissue_type": _tissue_type
+        }
+
+    def test_get_valid_data(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.get('/get_select_options/')
+        self.assertQuerysetEqual(response.data, self.valid_response, transform=lambda x: x)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.credentials()
+
+    def test_get_data_without_token(self):
+        response = self.client.get('/get_select_options/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_invalid_token_header(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
+        response_invalid_header = self.client.get('/get_select_options/')
+        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_request_with_empty_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.client.get('/get_select_options/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_request(self):
+        response_without_token = self.client.post('/get_select_options/')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_with_token = self.client.post('/get_select_options/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_request(self):
+        response_without_token = self.client.delete('/get_select_options/')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_with_token = self.client.delete('/get_select_options/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    def tearDown(cls):
+        super(SetUpTestData, cls).tearDownClass()
