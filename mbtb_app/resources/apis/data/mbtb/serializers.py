@@ -3,13 +3,7 @@ from .models import AutopsyTypes, PrimeDetails, OtherDetails, NeuropathologicalD
     TissueTypes
 
 
-class AutopsyTypesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AutopsyTypes
-        fields = "__all__"
-
-
-# Serializer to have all mbtb_data from `BrainDataset` model
+# Serializer to have all mbtb_data from `PrimeDetails` model
 class PrimeDetailsSerializer(serializers.ModelSerializer):
     neuro_diagnosis_id = serializers.CharField(source='neuro_diagnosis_id.neuro_diagnosis_name', read_only=True)
     tissue_type = serializers.CharField(source='tissue_type.tissue_type', read_only=True)
@@ -19,7 +13,7 @@ class PrimeDetailsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# Serializer to have detailed view for a single record from `DatasetOthrDetails` model
+# Serializer to have detailed view for a single record from `OtherDetails` model
 class OtherDetailsSerializer(serializers.ModelSerializer):
     mbtb_code = serializers.CharField(source='prime_details_id.mbtb_code', read_only=True)
     sex = serializers.CharField(source='prime_details_id.sex', read_only=True)
@@ -38,6 +32,7 @@ class OtherDetailsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# Serializer for uploading data to `PrimeDetails` model
 class FileUploadPrimeDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -45,6 +40,7 @@ class FileUploadPrimeDetailsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# Serializer for uploading data to `OtherDetails` model
 class FileUploadOtherDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:

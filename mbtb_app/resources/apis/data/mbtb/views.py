@@ -12,12 +12,14 @@ from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUpl
     FileUploadOtherDetailsSerializer
 
 
+# This view class is to fetch prime_details, allowed methods: GET
 class PrimeDetailsAPIView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = PrimeDetails.objects.all()
     serializer_class = PrimeDetailsSerializer
 
 
+# This view class is to fetch other_details, allowed methods: GET
 class OtherDetailsAPIView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = OtherDetails.objects.all()
@@ -25,9 +27,11 @@ class OtherDetailsAPIView(viewsets.ModelViewSet):
     lookup_field = 'prime_details_id'
 
 
+# This view class is to add single row in prime_details, other_details, allowed methods: POST
 class CreateDataAPIView(views.APIView):
     permission_classes = [IsAuthenticated]
 
+    # TODO: Refactor view to use data_templates, serializer instead of models i.e. refer to FileUploadAPIView
     def post(self, request):
         if not request.data:
             return response.Response({'Error': "Please provide mbtb data"}, status="400")
@@ -86,6 +90,8 @@ class CreateDataAPIView(views.APIView):
             return response.Response({'Error': "Either missing fields or incorrect data"}, status="400")
 
 
+# This view class is to fetch data from following tables: neuropathology_diagnosis, autopsy_type, tissue_type
+# allowed methods: GET
 class GetSelectOptions(views.APIView):
     permission_classes = [IsAuthenticated]
 
@@ -102,23 +108,27 @@ class GetSelectOptions(views.APIView):
         })
 
 
+# This view class is to upload data via csv file in prime_details, other_details, allowed methods: POST
 class FileUploadAPIView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         file_obj = request.data['file']
 
+        # Converting file data into dictionary
         csv_file = csv.DictReader(codecs.iterdecode(file_obj, 'utf-8-sig'))
         csv_file = [dict(row) for row in csv_file]
 
         for row in csv_file:
+
+            # Get or Create (Get value or create new if not exists) for AutopsyType, TissuType and Neuro Diagnosis
             tissue_type = GetOrCreate(model_name='TissueTypes').run(tissue_type=row['tissue_type'])
             neuro_diagnosis_id = GetOrCreate(model_name='NeuropathologicalDiagnosis').run(
                 neuro_diagnosis_name=row['neuro_diagnosis_id'])
             autopsy_type = GetOrCreate(model_name='AutopsyTypes').run(autopsy_type=row['autopsy_type'])
 
-            print(neuro_diagnosis_id, tissue_type)
-            print(neuro_diagnosis_id.neuro_diagnosis_id, tissue_type.tissue_type_id, '\n\n')
+            # If prime_details data is validated then save it else return error response
             prime_details = PrimeDetailsTemplate(
                 mbtb_code=row['mbtb_code'], sex=row['sex'], age=row['age'],
                 postmortem_interval=row['postmortem_interval'], time_in_fix=row['time_in_fix'],
@@ -126,11 +136,12 @@ class FileUploadAPIView(views.APIView):
                 preservation_method=row['preservation_method'],
                 neuro_diagnosis_id=neuro_diagnosis_id.neuro_diagnosis_id,
                 storage_year=row['storage_year'])
-
             prime_details_serializer = FileUploadPrimeDetailsSerializer(data=prime_details.__dict__)
-            if prime_details_serializer.is_valid():
 
-                prime_details_serializer.save()
+            if prime_details_serializer.is_valid():
+                prime_details_serializer.save()  # Saving prime_details
+
+                # If other_details data is validated then save it else return error response
                 other_details = OtherDetailsTemplate(
                     prime_details_id=prime_details_serializer.data['prime_details_id'], race=row['race'],
                     duration=row['duration'], clinical_details=row['clinical_details'],
@@ -144,12 +155,10 @@ class FileUploadAPIView(views.APIView):
                 )
                 other_details_serializer = FileUploadOtherDetailsSerializer(data=other_details.__dict__)
                 if other_details_serializer.is_valid():
-                    other_details_serializer.save()
-                    response_msg = 'Success'
-
+                    other_details_serializer.save()  # Saving other_details
                 else:
                     # TODO: log errors here related to file data uploading for other details
-
+                    # Return error response if any error in other_details data
                     return response.Response({
                         'Response': 'Failure',
                         'Message': 'Error in other details, Data uploading failed at mbtb_code: {}'.format(
@@ -158,11 +167,12 @@ class FileUploadAPIView(views.APIView):
 
             else:
                 # TODO: log errors here related to file data uploading for prime details
-
+                # Return error response if any error in prime_details data
                 return response.Response({
                     'Response': 'Failure',
                     'Message': 'Error in other details, Data uploading failed at mbtb_code: {}'.format(
                         row['mbtb_code'])},
                     status="400")
 
+        # Return response: data is uploaded successfully
         return response.Response({'Response': 'Success'}, status="201")
