@@ -126,7 +126,7 @@ class FileUploadAPIView(views.APIView):
             # Get or Create (Get value or create new if not exists) for AutopsyType, TissuType and Neuro Diagnosis
             tissue_type = GetOrCreate(model_name='TissueTypes').run(tissue_type=row['tissue_type'])
             neuro_diagnosis_id = GetOrCreate(model_name='NeuropathologicalDiagnosis').run(
-                neuro_diagnosis_name=row['neuro_diagnosis_id'])
+                neuro_diagnosis_name=row['neuropathology_diagnosis'])
             autopsy_type = GetOrCreate(model_name='AutopsyTypes').run(autopsy_type=row['autopsy_type'])
 
             # If prime_details data is validated then save it else return error response
