@@ -171,8 +171,8 @@ class FileUploadAPIView(views.APIView):
                 # Return error response if any error in prime_details data
                 return response.Response({
                     'Response': 'Failure',
-                    'Message': 'Error in other details, Data uploading failed at mbtb_code: {}'.format(
-                        row['mbtb_code'])},
+                    'Message': 'Error in prime details, Data uploading failed at mbtb_code: {}'.format(
+                        row['mbtb_code']), 'Error': prime_details_serializer.errors},
                     status="400")
 
         # Return response: data is uploaded successfully
