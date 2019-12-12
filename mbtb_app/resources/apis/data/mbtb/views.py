@@ -36,6 +36,11 @@ class CreateDataAPIView(views.APIView):
         if not request.data:
             return response.Response({'Error': "Please provide mbtb data"}, status="400")
 
+        validate_data = ValidateData()
+        _column_names = validate_data.check_column_names(column_names=list(request.data.keys()))
+        if not _column_names['Response']:
+            return response.Response({'Error': _column_names['Message']}, status="400")
+
         # Get or Create (Get value or create new if not exists) for AutopsyType, TissuType and Neuro Diagnosis
         tissue_type = GetOrCreate(model_name='TissueTypes').run(tissue_type=request.data['tissue_type'])
         neuro_diagnosis_id = GetOrCreate(model_name='NeuropathologicalDiagnosis').run(

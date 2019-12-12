@@ -22,7 +22,7 @@ class ValidateData(object):
         csv_file = kwargs.get('csv_file', None)
         if len(csv_file) != 0:
             for row in csv_file:
-                if len(row) != 26:
+                if len(row) != 25:
                     return {'Response': False, 'Message': 'Not enough elements are present in single row.'}
             return {'Response': True}
         return {'Response': False, 'Message': 'Error in file size, please upload valid file.'}
@@ -33,13 +33,26 @@ class ValidateData(object):
         actual_column_names = [
             'mbtb_code', 'sex', 'age', 'postmortem_interval', 'time_in_fix', 'clinical_diagnosis',
             'preservation_method', 'storage_year', 'tissue_type', 'neuropathology_diagnosis', 'race', 'duration',
-            'clinical_details', '', 'cause_of_death', 'brain_weight', 'neuropathology_summary', 'neuropathology_gross',
+            'clinical_details', 'cause_of_death', 'brain_weight', 'neuropathology_summary', 'neuropathology_gross',
             'neuropathology_microscopic', 'cerad', 'braak_stage', 'khachaturian', 'abc', 'formalin_fixed',
             'fresh_frozen', 'autopsy_type'
         ]
+        difference = list(set(actual_column_names) - set(received_column_names))
 
-        if actual_column_names == received_column_names:
-            return {'Response': True}
-        return {'Response': False, 'Message': "Column names don't match, Please try again with valid names."}
+        # TODO: Once `storage_year` added in insert single row, need to rewrite below logic.
+        if len(difference) > 0:
+            # Check condition for insert single row; return true if `storage_year` is the only difference
+            if 'storage_year' in difference and len(difference) is 1:
+                return {'Response': True}
+            else:
+                if 'storage_year' in difference:
+                    difference.pop(difference.index('storage_year'))
+                return {
+                    'Response': False,
+                    'Message': "Column names don't match with following: {}, Please try again with valid names.".format(difference)
+                }
+        return {'Response': True}
+
+
 
     
