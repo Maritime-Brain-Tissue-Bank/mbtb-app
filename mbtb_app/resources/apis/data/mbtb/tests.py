@@ -39,27 +39,6 @@ class SetUpTestData(APITestCase):
             'khachaturian': '30', 'abc': '', 'formalin_fixed': 'True', 'fresh_frozen': 'True',
             'storage_year': '2018-06-06 03:03:03'
         }
-        cls.file_upload_data = cls.test_data.copy()
-        cls.file_upload_data['mbtb_code'] = 'BB99-103'
-
-        # prime_details and other_details data with error in datatype
-        cls.prime_details_error = cls.file_upload_data.copy()
-        cls.other_details_error = cls.file_upload_data.copy()
-        cls.missing_fields_error = cls.file_upload_data.copy()
-        cls.changed_column_names = cls.file_upload_data.copy()
-        cls.prime_details_error['storage_year'] = ''
-        cls.other_details_error['duration'] = None
-        del cls.missing_fields_error['duration']
-        cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
-
-        # Creating csv files for FileUploadAPIViewTest
-        cls.dict_to_csv_file(cls, 'file_upload_test.csv', cls.file_upload_data)
-        cls.dict_to_csv_file(cls, 'file_upload_test.txt', cls.file_upload_data)
-        cls.dict_to_csv_file(cls, 'prime_details_error.csv', cls.prime_details_error)
-        cls.dict_to_csv_file(cls, 'other_details_error.csv', cls.other_details_error)
-        cls.dict_to_csv_file(cls, 'empty_file.csv', {})
-        cls.dict_to_csv_file(cls, 'missing_fields.csv', cls.missing_fields_error)
-        cls.dict_to_csv_file(cls, 'changed_column_names.csv', cls.changed_column_names)
 
         # Admin Authentication: generate temp account and token
         cls.email = 'admin@mbtb.ca'
@@ -88,13 +67,6 @@ class SetUpTestData(APITestCase):
         NeuropathologicalDiagnosis.objects.filter().delete()
         AutopsyTypes.objects.filter().delete()
         AdminAccount.objects.all().delete()
-        os.remove('file_upload_test.csv')  # Removing csv files
-        os.remove('prime_details_error.csv')
-        os.remove('other_details_error.csv')
-        os.remove('file_upload_test.txt')
-        os.remove('empty_file.csv')
-        os.remove('missing_fields.csv')
-        os.remove('changed_column_names.csv')
 
 
 # This class is to test PrimeDetailsAPIView: all request
@@ -249,6 +221,8 @@ class CreateDataAPIViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
+        cls.changed_column_names = cls.test_data.copy()
+        cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
 
     # valid post request with token to insert data
     def test_insert_data_(self):
@@ -297,6 +271,14 @@ class CreateDataAPIViewTest(SetUpTestData):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
         response_with_token = self.client.post('/add_new_data/', self.test_data, format='json')
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_column_names(self):
+        predicted_msg = "Column names don't match with following: ['duration'], Please try again with valid names."
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_changed_names = self.client.post('/add_new_data/', self.changed_column_names, format='json')
+        self.assertEqual(response_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_changed_names.data['Error'], predicted_msg)
+        self.client.credentials()
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
@@ -371,6 +353,27 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
+        cls.file_upload_data = cls.test_data.copy()
+        cls.file_upload_data['mbtb_code'] = 'BB99-103'
+
+        # prime_details and other_details data with error in datatype
+        cls.prime_details_error = cls.file_upload_data.copy()
+        cls.other_details_error = cls.file_upload_data.copy()
+        cls.missing_fields_error = cls.file_upload_data.copy()
+        cls.changed_column_names = cls.file_upload_data.copy()
+        cls.prime_details_error['storage_year'] = ''
+        cls.other_details_error['duration'] = None
+        del cls.missing_fields_error['duration']
+        cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
+
+        # Creating csv files for FileUploadAPIViewTest
+        cls.dict_to_csv_file('file_upload_test.csv', cls.file_upload_data)
+        cls.dict_to_csv_file('file_upload_test.txt', cls.file_upload_data)
+        cls.dict_to_csv_file('prime_details_error.csv', cls.prime_details_error)
+        cls.dict_to_csv_file('other_details_error.csv', cls.other_details_error)
+        cls.dict_to_csv_file('empty_file.csv', {})
+        cls.dict_to_csv_file('missing_fields.csv', cls.missing_fields_error)
+        cls.dict_to_csv_file('changed_column_names.csv', cls.changed_column_names)
 
     def test_data_upload(self):
         # Upload data and check status code and response
@@ -530,3 +533,10 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
+        os.remove('file_upload_test.csv')  # Removing csv files
+        os.remove('prime_details_error.csv')
+        os.remove('other_details_error.csv')
+        os.remove('file_upload_test.txt')
+        os.remove('empty_file.csv')
+        os.remove('missing_fields.csv')
+        os.remove('changed_column_names.csv')
