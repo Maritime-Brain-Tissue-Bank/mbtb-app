@@ -45,13 +45,21 @@ class SetUpTestData(APITestCase):
         # prime_details and other_details data with error in datatype
         cls.prime_details_error = cls.file_upload_data.copy()
         cls.other_details_error = cls.file_upload_data.copy()
+        cls.missing_fields_error = cls.file_upload_data.copy()
+        cls.changed_column_names = cls.file_upload_data.copy()
         cls.prime_details_error['storage_year'] = ''
         cls.other_details_error['duration'] = None
+        del cls.missing_fields_error['duration']
+        cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
 
         # Creating csv files for FileUploadAPIViewTest
         cls.dict_to_csv_file(cls, 'file_upload_test.csv', cls.file_upload_data)
+        cls.dict_to_csv_file(cls, 'file_upload_test.txt', cls.file_upload_data)
         cls.dict_to_csv_file(cls, 'prime_details_error.csv', cls.prime_details_error)
         cls.dict_to_csv_file(cls, 'other_details_error.csv', cls.other_details_error)
+        cls.dict_to_csv_file(cls, 'empty_file.csv', {})
+        cls.dict_to_csv_file(cls, 'missing_fields.csv', cls.missing_fields_error)
+        cls.dict_to_csv_file(cls, 'changed_column_names.csv', cls.changed_column_names)
 
         # Admin Authentication: generate temp account and token
         cls.email = 'admin@mbtb.ca'
@@ -83,6 +91,10 @@ class SetUpTestData(APITestCase):
         os.remove('file_upload_test.csv')  # Removing csv files
         os.remove('prime_details_error.csv')
         os.remove('other_details_error.csv')
+        os.remove('file_upload_test.txt')
+        os.remove('empty_file.csv')
+        os.remove('missing_fields.csv')
+        os.remove('changed_column_names.csv')
 
 
 # This class is to test PrimeDetailsAPIView: all request
@@ -441,7 +453,8 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     # test: without `file` tag or empty `file` tag
     def test_file_not_found(self):
-        predicted_msg = 'File not found, please upload CSV file'
+        predicted_msg_1 = "File not found, please upload CSV file"
+        predicted_msg_2 = "File can't be empty, Please upload again."
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         resposne_no_file_tag = self.client.post(
             '/file_upload/', {'no_file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
@@ -451,8 +464,44 @@ class FileUploadAPIViewTest(SetUpTestData):
         )
         self.assertEqual(resposne_no_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response_empty_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(resposne_no_file_tag.data['Error'], predicted_msg)
-        self.assertEqual(response_empty_file_tag.data['Error'], predicted_msg)
+        self.assertEqual(resposne_no_file_tag.data['Error'], predicted_msg_1)
+        self.assertEqual(response_empty_file_tag.data['Error'], predicted_msg_2)
+        self.client.credentials()
+
+    def test_file_type(self):
+        predicted_msg = 'Wrong file type, please upload CSV file'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_no_file_extension = self.client.post(
+            '/file_upload/', {'file': open('file_upload_test.txt', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_no_file_extension.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_no_file_extension.data['Error'], predicted_msg)
+        self.client.credentials()
+
+    def test_file_size(self):
+        predicted_msg_1 = 'Error in file size, please upload valid file.'
+        predicted_msg_2 = 'Not enough elements are present in single row.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_empty_file = self.client.post(
+            '/file_upload/', {'file': open('empty_file.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        response_missing_data = self.client.post(
+            '/file_upload/', {'file': open('missing_fields.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_empty_file.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_missing_data.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_empty_file.data['Error'], predicted_msg_1)
+        self.assertEqual(response_missing_data.data['Error'], predicted_msg_2)
+        self.client.credentials()
+
+    def test_column_names(self):
+        predicted_msg = "Column names don't match with following: ['duration'], Please try again with valid names."
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_changed_names = self.client.post(
+            '/file_upload/', {'file': open('changed_column_names.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_changed_names.data['Error'], predicted_msg)
         self.client.credentials()
 
     # invalid get request test
