@@ -13,6 +13,7 @@ from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUpl
     FileUploadOtherDetailsSerializer, InsertRowPrimeDetailsSerializer
 from .validations.validate_data import ValidateData
 
+
 # This view class is to fetch prime_details, allowed methods: GET
 class PrimeDetailsAPIView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
