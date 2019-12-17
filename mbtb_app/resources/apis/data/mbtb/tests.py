@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase, force_authenticate, APIClient
 from .models import PrimeDetails, NeuropathologicalDiagnosis, TissueTypes, AutopsyTypes, OtherDetails
 from .models import AdminAccount
 from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUploadPrimeDetailsSerializer, \
-    FileUploadOtherDetailsSerializer
+    FileUploadOtherDetailsSerializer, InsertRowPrimeDetailsSerializer
 import jwt
 import csv
 import os
@@ -39,16 +39,8 @@ class SetUpTestData(APITestCase):
             'khachaturian': '30', 'abc': '', 'formalin_fixed': 'True', 'fresh_frozen': 'True',
             'storage_year': '2018-06-06 03:03:03'
         }
-        cls.file_upload_data = cls.test_data.copy()
-        cls.file_upload_data['mbtb_code'] = 'BB99-103'
-        cls.prime_details_error = cls.file_upload_data.copy()
-        cls.other_details_error = cls.file_upload_data.copy()
-        cls.prime_details_error['storage_year'] = ''
-        cls.other_details_error['duration'] = None
-        cls.dict_to_csv_file(cls, 'file_upload_test.csv', cls.file_upload_data)
-        cls.dict_to_csv_file(cls, 'prime_details_error.csv', cls.prime_details_error)
-        cls.dict_to_csv_file(cls, 'other_details_error.csv', cls.other_details_error)
 
+        # Admin Authentication: generate temp account and token
         cls.email = 'admin@mbtb.ca'
         cls.password = 'asdfghjkl123'
         AdminAccount.objects.create(email=cls.email, password_hash=cls.password)
@@ -60,7 +52,7 @@ class SetUpTestData(APITestCase):
         cls.token = jwt.encode(payload, "SECRET_KEY", algorithm='HS256')  # generating jwt token
         cls.client = APIClient(enforce_csrf_checks=True)  # enforcing csrf checks
 
-    # Creating csv file with test data for FileUploadAPIViewTest
+    # Create CSV file once filename and data is provided
     def dict_to_csv_file(self, filename, data):
         with open(filename, 'w') as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=data.keys())
@@ -75,9 +67,6 @@ class SetUpTestData(APITestCase):
         NeuropathologicalDiagnosis.objects.filter().delete()
         AutopsyTypes.objects.filter().delete()
         AdminAccount.objects.all().delete()
-        os.remove('file_upload_test.csv')
-        os.remove('prime_details_error.csv')
-        os.remove('other_details_error.csv')
 
 
 # This class is to test PrimeDetailsAPIView: all request
@@ -232,13 +221,29 @@ class CreateDataAPIViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
+        cls.changed_column_names = cls.test_data.copy()
+        cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
 
     # valid post request with token to insert data
     def test_insert_data_(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.post('/add_new_data/', self.test_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['Response'], 'Success')
         self.client.credentials()
+
+        # Fetch prime_details and other_details for mbtb_code `BB99-103` and compare its length
+        model_response_prime_details = PrimeDetails.objects.get(mbtb_code='BB99-102')
+        model_response_other_details = OtherDetails.objects.get(
+            prime_details_id=model_response_prime_details.prime_details_id
+        )
+        serializer_response_prime_details = InsertRowPrimeDetailsSerializer(model_response_prime_details)
+        serializer_response_other_details = FileUploadOtherDetailsSerializer(model_response_other_details)
+        set_test_data = set(self.test_data)
+        set_prime_details = set(serializer_response_prime_details.data)
+        set_other_details = set(serializer_response_other_details.data)
+        self.assertEqual(len(set_prime_details.intersection(set_test_data)), 8)
+        self.assertEqual(len(set_other_details.intersection(set_test_data)), 15)
 
     # post request without token
     def test_insert_data_without_token(self):
@@ -267,6 +272,14 @@ class CreateDataAPIViewTest(SetUpTestData):
         response_with_token = self.client.post('/add_new_data/', self.test_data, format='json')
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_column_names(self):
+        predicted_msg = "Column names don't match with following: ['duration'], Please try again with valid names."
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_changed_names = self.client.post('/add_new_data/', self.changed_column_names, format='json')
+        self.assertEqual(response_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_changed_names.data['Error'], predicted_msg)
+        self.client.credentials()
+
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
 
@@ -277,6 +290,8 @@ class GetSelectOptionsViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
+
+        # Fetch following values: autopsy_type, tissue_type, neuropathology_diagnosis for comparison
         _neuropathology_diagnosis = NeuropathologicalDiagnosis.objects.values_list('neuro_diagnosis_name', flat=True) \
             .order_by('neuro_diagnosis_name')
         _autopsy_type = AutopsyTypes.objects.values_list('autopsy_type', flat=True).order_by('autopsy_type')
@@ -338,8 +353,30 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
+        cls.file_upload_data = cls.test_data.copy()
+        cls.file_upload_data['mbtb_code'] = 'BB99-103'
+
+        # prime_details and other_details data with error in datatype
+        cls.prime_details_error = cls.file_upload_data.copy()
+        cls.other_details_error = cls.file_upload_data.copy()
+        cls.missing_fields_error = cls.file_upload_data.copy()
+        cls.changed_column_names = cls.file_upload_data.copy()
+        cls.prime_details_error['storage_year'] = ''
+        cls.other_details_error['duration'] = None
+        del cls.missing_fields_error['duration']
+        cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
+
+        # Creating csv files for FileUploadAPIViewTest
+        cls.dict_to_csv_file('file_upload_test.csv', cls.file_upload_data)
+        cls.dict_to_csv_file('file_upload_test.txt', cls.file_upload_data)
+        cls.dict_to_csv_file('prime_details_error.csv', cls.prime_details_error)
+        cls.dict_to_csv_file('other_details_error.csv', cls.other_details_error)
+        cls.dict_to_csv_file('empty_file.csv', {})
+        cls.dict_to_csv_file('missing_fields.csv', cls.missing_fields_error)
+        cls.dict_to_csv_file('changed_column_names.csv', cls.changed_column_names)
 
     def test_data_upload(self):
+        # Upload data and check status code and response
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.post(
             '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
@@ -347,6 +384,8 @@ class FileUploadAPIViewTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['Response'], 'Success')
         self.client.credentials()
+
+        # Fetch prime_details and other_details for mbtb_code `BB99-103` and compare its length
         model_response_prime_details = PrimeDetails.objects.get(mbtb_code='BB99-103')
         model_response_other_details = OtherDetails.objects.get(
             prime_details_id=model_response_prime_details.prime_details_id
@@ -417,7 +456,8 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     # test: without `file` tag or empty `file` tag
     def test_file_not_found(self):
-        predicted_msg = 'File not found, please upload CSV file'
+        predicted_msg_1 = "File not found, please upload CSV file"
+        predicted_msg_2 = "File can't be empty, Please upload again."
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         resposne_no_file_tag = self.client.post(
             '/file_upload/', {'no_file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
@@ -427,8 +467,44 @@ class FileUploadAPIViewTest(SetUpTestData):
         )
         self.assertEqual(resposne_no_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response_empty_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(resposne_no_file_tag.data['Error'], predicted_msg)
-        self.assertEqual(response_empty_file_tag.data['Error'], predicted_msg)
+        self.assertEqual(resposne_no_file_tag.data['Error'], predicted_msg_1)
+        self.assertEqual(response_empty_file_tag.data['Error'], predicted_msg_2)
+        self.client.credentials()
+
+    def test_file_type(self):
+        predicted_msg = 'Wrong file type, please upload CSV file'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_no_file_extension = self.client.post(
+            '/file_upload/', {'file': open('file_upload_test.txt', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_no_file_extension.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_no_file_extension.data['Error'], predicted_msg)
+        self.client.credentials()
+
+    def test_file_size(self):
+        predicted_msg_1 = 'Error in file size, please upload valid file.'
+        predicted_msg_2 = 'Not enough elements are present in single row.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_empty_file = self.client.post(
+            '/file_upload/', {'file': open('empty_file.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        response_missing_data = self.client.post(
+            '/file_upload/', {'file': open('missing_fields.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_empty_file.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_missing_data.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_empty_file.data['Error'], predicted_msg_1)
+        self.assertEqual(response_missing_data.data['Error'], predicted_msg_2)
+        self.client.credentials()
+
+    def test_column_names(self):
+        predicted_msg = "Column names don't match with following: ['duration'], Please try again with valid names."
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_changed_names = self.client.post(
+            '/file_upload/', {'file': open('changed_column_names.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_changed_names.data['Error'], predicted_msg)
         self.client.credentials()
 
     # invalid get request test
@@ -457,3 +533,10 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
+        os.remove('file_upload_test.csv')  # Removing csv files
+        os.remove('prime_details_error.csv')
+        os.remove('other_details_error.csv')
+        os.remove('file_upload_test.txt')
+        os.remove('empty_file.csv')
+        os.remove('missing_fields.csv')
+        os.remove('changed_column_names.csv')

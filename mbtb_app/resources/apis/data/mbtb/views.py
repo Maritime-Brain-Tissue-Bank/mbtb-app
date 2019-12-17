@@ -11,7 +11,7 @@ from .models import AutopsyTypes, PrimeDetails, OtherDetails, NeuropathologicalD
     TissueTypes
 from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUploadPrimeDetailsSerializer, \
     FileUploadOtherDetailsSerializer, InsertRowPrimeDetailsSerializer
-
+from .validations.validate_data import ValidateData
 
 # This view class is to fetch prime_details, allowed methods: GET
 class PrimeDetailsAPIView(viewsets.ModelViewSet):
@@ -35,6 +35,11 @@ class CreateDataAPIView(views.APIView):
     def post(self, request):
         if not request.data:
             return response.Response({'Error': "Please provide mbtb data"}, status="400")
+
+        validate_data = ValidateData()
+        _column_names = validate_data.check_column_names(column_names=list(request.data.keys()))
+        if not _column_names['Response']:
+            return response.Response({'Error': _column_names['Message']}, status="400")
 
         # Get or Create (Get value or create new if not exists) for AutopsyType, TissuType and Neuro Diagnosis
         tissue_type = GetOrCreate(model_name='TissueTypes').run(tissue_type=request.data['tissue_type'])
@@ -110,16 +115,27 @@ class FileUploadAPIView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAuthenticated]
 
-    # TODO: Add validators here to check filed names, data
     def post(self, request, format=None):
-        if not request.data.__contains__('file') or len(request.data.__getitem__('file')) <= 0:
-            return response.Response({'Error': "File not found, please upload CSV file"}, status="400")
+        validate_data = ValidateData()
+        _file_tag = validate_data.check_file_tag(request=request) # Check for `file` tag
+        if not _file_tag['Response']:
+            return response.Response({'Error': _file_tag['Message']}, status="400")
 
         file_obj = request.data['file']
+        _file_type = validate_data.check_file_type(filename=str(file_obj))  # Check for file type
+        if not _file_type['Response']:
+            return response.Response({'Error': _file_type['Message']}, status="400")
 
         # Converting file data into dictionary
         csv_file = csv.DictReader(codecs.iterdecode(file_obj, 'utf-8-sig'))
         csv_file = [dict(row) for row in csv_file]
+        _file_size = validate_data.check_file_size(csv_file=csv_file)  # Check file size
+        if not _file_size['Response']:
+            return response.Response({'Error': _file_size['Message']}, status="400")
+
+        _column_names = validate_data.check_column_names(column_names=list(csv_file[0].keys()))  # Check column names
+        if not _column_names['Response']:
+            return response.Response({'Error': _column_names['Message']}, status="400")
 
         for row in csv_file:
 
