@@ -13,4 +13,5 @@ urlpatterns = [
     path('add_new_data/', views.CreateDataAPIView.as_view()),
     path('get_select_options/', views.GetSelectOptions.as_view()),
     path('file_upload/', views.FileUploadAPIView.as_view()),
+    path('edit_data/<int:prime_details_id>/', views.EditDataAPIView.as_view()),
 ]

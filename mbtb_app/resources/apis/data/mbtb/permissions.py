@@ -35,6 +35,18 @@ class IsAuthenticated(permissions.BasePermission):
             # deny POST request if url is not in valid_url by default
             return False
 
+        if request.method == 'PATCH':
+            valid_url = ['edit_data']
+
+            # splitting url e.g. /edit_data/1/ to get brain_dataset for comparison
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny PATCH request if url is not in valid_url by default
+            return False
+
         return False
 
     # Check for auth_token length and pass it for decoding
