@@ -47,6 +47,18 @@ class IsAuthenticated(permissions.BasePermission):
             # deny PATCH request if url is not in valid_url by default
             return False
 
+        if request.method == 'DELETE':
+            valid_url = ['delete_data']
+
+            # splitting url e.g. /delete_data/1/ to get brain_dataset for comparison
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny DELETE request if url is not in valid_url by default
+            return False
+
         return False
 
     # Check for auth_token length and pass it for decoding

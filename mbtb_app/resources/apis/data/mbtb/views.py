@@ -272,3 +272,13 @@ class EditDataAPIView(views.APIView):
                 {'Error': 'Error in prime_details, Uploading data failed.'},
                 status="400"
             )
+
+
+class DeleteDataAPIView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, prime_details_id, format=None):
+        # Get prime_details instance with prime_details_id, return 404 if not found, then delete it
+        prime_details = get_object_or_404(PrimeDetails, prime_details_id=prime_details_id)
+        prime_details.delete()
+        return response.Response({'Response': 'Success'}, status="200")  # Return response
