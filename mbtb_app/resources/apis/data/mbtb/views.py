@@ -84,7 +84,7 @@ class CreateDataAPIView(views.APIView):
                 # TODO: log errors here related to add single data for other_details
                 # Return error response if any error in other_details data
                 return response.Response(
-                    {'Error': 'Error in other details, Inserting data failed.'},
+                    {'Error': 'Error in other_details, Inserting data failed.'},
                     status="400"
                 )
 
