@@ -280,5 +280,7 @@ class DeleteDataAPIView(views.APIView):
     def delete(self, request, prime_details_id, format=None):
         # Get prime_details instance with prime_details_id, return 404 if not found, then delete it
         prime_details = get_object_or_404(PrimeDetails, prime_details_id=prime_details_id)
+        other_details = get_object_or_404(OtherDetails, prime_details_id=prime_details_id)
+        other_details.delete()
         prime_details.delete()
         return response.Response({'Response': 'Success'}, status="200")  # Return response
