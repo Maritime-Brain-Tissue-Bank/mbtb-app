@@ -89,8 +89,10 @@ class PrimeDetailsViewTest(SetUpTestData):
 
     # get request without token
     def test_get_all_brain_dataset_invalid_request(self):
+        predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.get('/brain_dataset/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], predicted_msg)
 
     # get request for single brain_dataset with valid token and payload data
     def test_get_single_request(self):
@@ -119,25 +121,33 @@ class PrimeDetailsViewTest(SetUpTestData):
 
     # get request with invalid token header
     def test_invalid_token_header(self):
+        predicted_msg = 'Invalid token header'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
         response_invalid_header = self.client.get('/brain_dataset/')
         self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
 
     # post request with and without token
     def test_post_request(self):
+        predicted_msg = 'Method "POST" not allowed.'
+        response_without_token = self.client.post('/brain_dataset/1/')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/brain_dataset/1/')
-        response_without_token = self.client.post('/brain_dataset/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     # delete request with and without token
     def test_delete_request(self):
+        predicted_msg = 'Method "DELETE" not allowed.'
+        response_without_token = self.client.delete('/brain_dataset/1/')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.delete('/brain_dataset/1/')
-        response_without_token = self.client.delete('/brain_dataset/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
@@ -198,19 +208,25 @@ class OtherDetailsViewTest(SetUpTestData):
 
     # post request with and without token
     def test_post_request(self):
+        predicted_msg = 'Method "POST" not allowed.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/other_details/1/')
         response_without_token = self.client.post('/other_details/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     # delete request with and without token
     def test_delete_request(self):
+        predicted_msg = 'Method "DELETE" not allowed.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.delete('/other_details/1/')
         response_without_token = self.client.delete('/other_details/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
@@ -354,19 +370,25 @@ class GetSelectOptionsViewTest(SetUpTestData):
 
     # invalid post request test
     def test_post_request(self):
+        predicted_msg = 'Method "POST" not allowed.'
         response_without_token = self.client.post('/get_select_options/')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/get_select_options/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     # invalid delete request test
     def test_delete_request(self):
+        predicted_msg = 'Method "DELETE" not allowed.'
         response_without_token = self.client.delete('/get_select_options/')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.delete('/get_select_options/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
