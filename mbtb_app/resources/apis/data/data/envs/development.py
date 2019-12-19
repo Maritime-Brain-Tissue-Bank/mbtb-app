@@ -103,7 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'mbtb.permissions.IsAuthenticated',
+        'mbtb.permissions.is_admin.IsAdmin',
+        'mbtb.permissions.is_authenticated.IsAuthenticated',
     )
 }
 

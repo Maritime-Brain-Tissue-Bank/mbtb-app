@@ -426,7 +426,7 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     # post request without token
     def test_data_upload_without_token(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.post(
             '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
@@ -600,7 +600,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(other_details_model_response.duration, self.test_data['duration'])
 
     def test_edit_data_without_token(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.patch(self.url, self.test_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['detail'], predicted_msg)
@@ -707,7 +707,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.assertEqual(delete_response.data['detail'], 'Not found.')
 
     def test_request_without_token(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.delete(self.url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['detail'], predicted_msg)

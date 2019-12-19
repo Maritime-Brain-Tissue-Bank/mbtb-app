@@ -7,12 +7,13 @@ from django.shortcuts import get_object_or_404
 from .data_templates.other_details import OtherDetailsTemplate
 from .data_templates.prime_details import PrimeDetailsTemplate
 from .db_operations.get_or_create import GetOrCreate
-from .permissions import IsAuthenticated
 from .models import AutopsyTypes, PrimeDetails, OtherDetails, NeuropathologicalDiagnosis, \
     TissueTypes
 from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUploadPrimeDetailsSerializer, \
     FileUploadOtherDetailsSerializer, InsertRowPrimeDetailsSerializer
 from .validations.validate_data import ValidateData
+from .permissions.is_authenticated import IsAuthenticated
+from .permissions.is_admin import IsAdmin
 
 
 # This view class is to fetch prime_details, allowed methods: GET
@@ -32,7 +33,7 @@ class OtherDetailsAPIView(viewsets.ModelViewSet):
 
 # This view class is to add single row in prime_details, other_details, allowed methods: POST
 class CreateDataAPIView(views.APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
 
     def post(self, request):
         if not request.data:
@@ -117,7 +118,7 @@ class GetSelectOptions(views.APIView):
 # This view class is to upload data via csv file in prime_details, other_details, allowed methods: POST
 class FileUploadAPIView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
 
     def post(self, request, format=None):
         validate_data = ValidateData()
@@ -203,7 +204,7 @@ class FileUploadAPIView(views.APIView):
 
 
 class EditDataAPIView(views.APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
 
     def patch(self, request, prime_details_id, format=None):
         if not request.data:
@@ -275,7 +276,7 @@ class EditDataAPIView(views.APIView):
 
 
 class DeleteDataAPIView(views.APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
 
     def delete(self, request, prime_details_id, format=None):
         # Get prime_details instance with prime_details_id, return 404 if not found, then delete it
