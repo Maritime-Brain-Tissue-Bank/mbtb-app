@@ -557,6 +557,7 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     # invalid get request test
     def test_get_request(self):
+        predicted_msg = 'Method "GET" not allowed.'
         response_without_token = self.client.get(
             '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
@@ -564,11 +565,14 @@ class FileUploadAPIViewTest(SetUpTestData):
         response_with_token = self.client.get(
             '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     # invalid delete request test
     def test_delete_request(self):
+        predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.delete(
             '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
@@ -578,6 +582,8 @@ class FileUploadAPIViewTest(SetUpTestData):
         )
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
@@ -667,12 +673,12 @@ class EditDataAPIViewTest(SetUpTestData):
         self.client.credentials()
 
     def test_get_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg = 'Method "GET" not allowed.'
         response_without_token = self.client.get(self.url, self.changed_column_names, format='json')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.get(self.url, format='json')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
@@ -687,12 +693,12 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     def test_put_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg = 'Method "PUT" not allowed.'
         response_without_token = self.client.put(self.url, self.changed_column_names, format='json')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.put(self.url, self.test_data, format='json')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
@@ -752,12 +758,12 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.client.credentials()
 
     def test_get_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg = 'Method "GET" not allowed.'
         response_without_token = self.client.get(self.url, format='json')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.get(self.url, format='json')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 

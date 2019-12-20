@@ -1,4 +1,4 @@
-from rest_framework import permissions
+from rest_framework import permissions, exceptions
 from ..db_operations.user_or_admin import UserOrAdmin
 from .base_operations import BaseOperations
 
@@ -46,7 +46,7 @@ class IsAdmin(permissions.BasePermission):
             # deny DELETE request if url is not in valid_url by default
             return False
 
-        return False
+        raise exceptions.MethodNotAllowed(method=request.method)
 
     def authenticate(self, request):
         # Validate request first, obtain response dict containing id and email.
