@@ -124,4 +124,18 @@ module.exports.routes = {
     }
   },
 
+  'GET /file_upload': {
+    action: 'admin/get-file-upload-view',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /file_upload': {
+    action: 'admin/file-upload',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

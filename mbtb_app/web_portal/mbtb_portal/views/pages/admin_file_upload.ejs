@@ -1,0 +1,22 @@
+<title>Admin - Upload File</title>
+
+<div class="container-fluid file_upload_container">
+    <h2 class="heading_title">File Upload</h2>
+    <br>
+
+    <form id="file_upload_form" action="/file_upload" method="post" enctype="multipart/form-data" novalidate>
+
+        <label for="file">Choose File:</label>
+        <input name="upload_file" type="file" accept="text/csv">
+
+        <br>
+        <br>
+
+        <button type="submit" class="btn btn-primary" id="submit_btn">Upload</button>
+        <button class="btn btn-default" id="cancel_btn">Cancel</button>
+    </form>
+
+</div>
+
+
+
