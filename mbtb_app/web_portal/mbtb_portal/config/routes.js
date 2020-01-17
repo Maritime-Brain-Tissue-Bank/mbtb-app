@@ -152,4 +152,11 @@ module.exports.routes = {
     }
   },
 
+  'DELETE /delete_data/:id': {
+    action: 'admin/delete-data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };
