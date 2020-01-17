@@ -6,14 +6,14 @@
 
     <form id="file_upload_form" action="/file_upload" method="post" enctype="multipart/form-data" novalidate>
 
-        <label for="file">Choose File:</label>
+        <label for="file" id="choose_file_label">Choose File:</label>
         <input name="upload_file" type="file" accept="text/csv">
 
         <br>
         <br>
 
         <button type="submit" class="btn btn-primary" id="submit_btn">Upload</button>
-        <button class="btn btn-default" id="cancel_btn">Cancel</button>
+        <a href="/admin" class="btn btn-default" id="cancel_btn">Cancel</a>
     </form>
 
 </div>

@@ -138,4 +138,18 @@ module.exports.routes = {
     }
   },
 
+  'GET /edit_data/:id': {
+    action: 'admin/get-edit-data-view',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /edit_data/': {
+    action: 'admin/edit-data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };
