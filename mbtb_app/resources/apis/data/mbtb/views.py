@@ -151,11 +151,14 @@ class FileUploadAPIView(views.APIView):
             autopsy_type = GetOrCreate(model_name='AutopsyTypes').run(autopsy_type=row['autopsy_type'])
 
             # If prime_details data is validated then save it else return error response
+            _preservation_method = validate_data.check_preservation_method(
+                formalin_fixed=row['formalin_fixed'], fresh_frozen=row['fresh_frozen']
+            )
             prime_details = PrimeDetailsTemplate(
                 mbtb_code=row['mbtb_code'], sex=row['sex'], age=row['age'],
                 postmortem_interval=row['postmortem_interval'], time_in_fix=row['time_in_fix'],
                 clinical_diagnosis=row['clinical_diagnosis'], tissue_type=tissue_type.tissue_type_id,
-                preservation_method=row['preservation_method'],
+                preservation_method=_preservation_method,
                 neuro_diagnosis_id=neuro_diagnosis_id.neuro_diagnosis_id,
                 storage_year=row['storage_year']
             )

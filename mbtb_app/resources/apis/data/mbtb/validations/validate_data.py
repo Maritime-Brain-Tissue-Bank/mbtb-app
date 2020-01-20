@@ -53,3 +53,16 @@ class ValidateData(object):
                         format(difference)
                 }
         return {'Response': True}
+
+    def check_preservation_method(self, **kwargs):
+        _formalin_fixed = kwargs.get('formalin_fixed', None)
+        _fresh_frozen = kwargs.get('fresh_frozen', None)
+
+        if _formalin_fixed and _fresh_frozen:
+            return 'Both'
+        elif _formalin_fixed and not _fresh_frozen:
+            return 'Formalin-Fixed'
+        elif not _formalin_fixed and _fresh_frozen:
+            return 'Fresh Frozen'
+        else:
+            return None
