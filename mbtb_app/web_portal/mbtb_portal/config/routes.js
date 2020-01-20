@@ -159,4 +159,11 @@ module.exports.routes = {
     }
   },
 
+  'GET /data_uploading_guide': {
+    action: 'admin/data-uploading-guide',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };
