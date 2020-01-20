@@ -32,6 +32,11 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
     'time_in_fix', 'postmortem_interval', 'age'
   ];
 
+  $scope.data_mode = {
+    type: 'View',
+    value: 'admin_view_data'
+  };
+
   // Once search button is pressed, filters are called
   $scope.submit_search_fields = function(){
 
@@ -61,6 +66,13 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
       });
     });
 
+    if ($scope.data_mode.type === 'Edit'){
+      $scope.data_mode.value = 'edit_data';
+    }
+    else {
+      $scope.data_mode.value = 'admin_view_data';
+    }
+
     $scope.clear_btn = false; // enable clear button
   };
 
@@ -78,6 +90,9 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
       $scope.search_fields[item + '_min'] = null;
       $scope.search_fields[item + '_max'] = null;
     });
+
+    $scope.data_mode.type = 'View';
+    $scope.data_mode.value = 'admin_view_data';
 
     $scope.clear_btn = true; // disable clear button
   };

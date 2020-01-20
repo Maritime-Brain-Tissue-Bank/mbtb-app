@@ -28,7 +28,7 @@ module.exports = {
     // url for API
     let url = sails.config.custom.data_api_url + 'delete_data/' + id + '/';
 
-    // delete request to remove data request along with admin auth token
+    // delete request to remove data along with admin auth token
     request.delete({url: url,
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
