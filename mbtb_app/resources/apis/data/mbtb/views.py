@@ -63,7 +63,7 @@ class CreateDataAPIView(views.APIView):
         prime_details_serializer = InsertRowPrimeDetailsSerializer(data=prime_details.__dict__)
 
         if prime_details_serializer.is_valid():
-            prime_details_serializer.save()  # Saving prime_details
+            prime_serializer_instance = prime_details_serializer.save()  # Saving prime_details
 
             # If other_details data is validated then save it else return error response
             _duration = validate_data.check_is_number(value=request.data['duration'])
@@ -90,6 +90,10 @@ class CreateDataAPIView(views.APIView):
 
             else:
                 # TODO: log errors here related to add single data for other_details
+
+                # deleting instance if any error in other_details data
+                prime_serializer_instance.delete()
+
                 # Return error response if any error in other_details data
                 return response.Response(
                     {'Error': 'Error in other_details, Inserting data failed.'},
@@ -172,7 +176,7 @@ class FileUploadAPIView(views.APIView):
             prime_details_serializer = FileUploadPrimeDetailsSerializer(data=prime_details.__dict__)
 
             if prime_details_serializer.is_valid():
-                prime_details_serializer.save()  # Saving prime_details
+                prime_serializer_instance = prime_details_serializer.save()  # Saving prime_details
 
                 # If other_details data is validated then save it else return error response
                 other_details = OtherDetailsTemplate(
@@ -191,6 +195,10 @@ class FileUploadAPIView(views.APIView):
                     other_details_serializer.save()  # Saving other_details
                 else:
                     # TODO: log errors here related to file data uploading for other details
+
+                    # deleting instance if any error in other_details data
+                    prime_serializer_instance.delete()
+
                     # Return error response if any error in other_details data
                     return response.Response(
                         {'Response': 'Failure',
