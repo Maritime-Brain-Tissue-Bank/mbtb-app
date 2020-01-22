@@ -82,35 +82,23 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : add_new_data_form.postmortem_interval.$invalid && !add_new_data_form.postmortem_interval.$pristine }">
-                        <label for="postmortem_interval">Post-mortem Interval (hrs) *</label>
-                        <input name="postmortem_interval" ng-model="postmortem_interval" type="number" min="0" class="form-control" required="">
-                    </div>
-                    <div ng-show="add_new_data_form.postmortem_interval.$dirty && add_new_data_form.postmortem_interval.$error.required" class="help-block">
-                        This field is required
+                    <div class="form-group">
+                        <label for="postmortem_interval">Post-mortem Interval (hrs)</label>
+                        <input name="postmortem_interval" ng-model="postmortem_interval" type="number" min="0" class="form-control">
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="form-group"
-                     ng-class="{ 'has-error' : add_new_data_form.brain_weight.$invalid && !add_new_data_form.brain_weight.$pristine }">
-                        <label for="brain_weight">Brain Weight (g) *</label>
-                        <input name="brain_weight" ng-model="brain_weight" type="number" min="0" class="form-control" required="">
-                    </div>
-                    <div ng-show="add_new_data_form.brain_weight.$dirty && add_new_data_form.brain_weight.$error.required" class="help-block">
-                        This field is required
+                    <div class="form-group">
+                        <label for="brain_weight">Brain Weight (g)</label>
+                        <input name="brain_weight" ng-model="brain_weight" type="number" min="0" class="form-control">
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="form-group"
-                     ng-class="{ 'has-error' : add_new_data_form.time_in_fix.$invalid && !add_new_data_form.time_in_fix.$pristine }">
-                        <label for="time_in_fix">Time in Fix (days) *</label>
-                        <input name="time_in_fix" ng-model="time_in_fix" type="number" min="0" class="form-control" required="">
-                    </div>
-                    <div ng-show="add_new_data_form.time_in_fix.$dirty && add_new_data_form.time_in_fix.$error.required" class="help-block">
-                        This field is required
+                    <div class="form-group">
+                        <label for="time_in_fix">Time in Fix (days)</label>
+                        <input name="time_in_fix" ng-model="time_in_fix" type="number" min="0" class="form-control">
                     </div>
                 </div>
 

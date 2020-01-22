@@ -1,5 +1,6 @@
 import codecs
 import csv
+import json
 
 from rest_framework import viewsets, views, response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -67,8 +68,8 @@ class CreateDataAPIView(views.APIView):
             # If other_details data is validated then save it else return error response
             other_details = OtherDetailsTemplate(
                 prime_details_id=prime_details_serializer.data['prime_details_id'], race=request.data['race'],
-                duration=request.data['duration'], clinical_details=request.data['clinical_details'],
-                cause_of_death=request.data['cause_of_death'], brain_weight=request.data['brain_weight'],
+                duration=json.loads(request.data['duration']), clinical_details=request.data['clinical_details'],
+                cause_of_death=request.data['cause_of_death'], brain_weight=json.loads(request.data['brain_weight']),
                 neuropathology_summary=request.data['neuropathology_summary'],
                 neuropathology_gross=request.data['neuropathology_gross'],
                 neuropathology_microscopic=request.data['neuropathology_microscopic'], cerad=request.data['cerad'],
@@ -245,8 +246,8 @@ class EditDataAPIView(views.APIView):
             # If other_details data is validated then save it else return error response
             other_details_template_data = OtherDetailsTemplate(
                 prime_details_id=prime_details_id, race=request.data['race'],
-                duration=request.data['duration'], clinical_details=request.data['clinical_details'],
-                cause_of_death=request.data['cause_of_death'], brain_weight=request.data['brain_weight'],
+                duration=json.loads(request.data['duration']), clinical_details=request.data['clinical_details'],
+                cause_of_death=request.data['cause_of_death'], brain_weight=json.loads(request.data['brain_weight']),
                 neuropathology_summary=request.data['neuropathology_summary'],
                 neuropathology_gross=request.data['neuropathology_gross'],
                 neuropathology_microscopic=request.data['neuropathology_microscopic'], cerad=request.data['cerad'],

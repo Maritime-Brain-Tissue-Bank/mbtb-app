@@ -42,7 +42,7 @@ class OtherDetails(models.Model):
     prime_details_id = models.ForeignKey(PrimeDetails, models.DO_NOTHING, db_column="prime_details_id")
     race = models.CharField(max_length=255, blank=True, null=True)
     duration = models.IntegerField(blank=True, null=True)
-    clinical_details = models.CharField(max_length=255, blank=True, null=True)
+    clinical_details = models.TextField(blank=True, null=True)
     cause_of_death = models.CharField(max_length=255, blank=True, null=True)
     brain_weight = models.IntegerField(blank=True, null=True)
     neuropathology_summary = models.TextField(blank=True, null=True)

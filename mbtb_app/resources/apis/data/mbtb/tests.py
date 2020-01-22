@@ -402,6 +402,7 @@ class FileUploadAPIViewTest(SetUpTestData):
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
         cls.file_upload_data = cls.test_data.copy()
+        del cls.file_upload_data['preservation_method']
         cls.file_upload_data['mbtb_code'] = 'BB99-103'
 
         # prime_details and other_details data with error in datatype
@@ -443,7 +444,7 @@ class FileUploadAPIViewTest(SetUpTestData):
         set_file_upload_data = set(self.file_upload_data)
         set_prime_details = set(serializer_response_prime_details.data)
         set_other_details = set(serializer_response_other_details.data)
-        self.assertEqual(len(set_prime_details.intersection(set_file_upload_data)), 9)
+        self.assertEqual(len(set_prime_details.intersection(set_file_upload_data)), 8)
         self.assertEqual(len(set_other_details.intersection(set_file_upload_data)), 15)
 
     # post request without token
