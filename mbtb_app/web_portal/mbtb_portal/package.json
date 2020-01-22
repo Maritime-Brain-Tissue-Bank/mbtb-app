@@ -10,6 +10,8 @@
     "@sailshq/socket.io-redis": "^5.2.0",
     "generate-password": "^1.4.2",
     "grunt": "1.0.4",
+    "jasmine": "^3.5.0",
+    "protractor": "^5.4.2",
     "request": "^2.88.0",
     "sails": "^1.2.3",
     "sails-hook-email": "^0.12.1",
@@ -24,7 +26,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
-    "test": "node ./node_modules/mocha/bin/mocha test/lifecycle.test.js test/**/*.test.js --exit --timeout 10000",
+    "test": "node ./node_modules/mocha/bin/mocha test/lifecycle.test.js test/admin/*.test.js test/user/*.test.js --exit --timeout 10000",
     "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
   },

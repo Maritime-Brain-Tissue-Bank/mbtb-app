@@ -7,7 +7,7 @@
 
 <div ng-app="view_data_table_app" ng-controller="view_data_table_controller" grid-actions="filtered_data"
      class="container-fluid view_data_table_container">
-    <h2 class="heading_title">View Data</h2>
+    <h2 class="heading_title">{{data_mode.type}} Data</h2>
     <br>
 
     <script>
@@ -18,7 +18,16 @@
     <form name="search_fields_form" ng-submit="submit_search_fields()" novalidate>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <label for="data_mode">Data Mode</label>
+                <select id="data_mode" class="form-control"
+                        ng-model="data_mode.type">
+                    <option value="View">View</option>
+                    <option value="Edit">Edit</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="clinical_diagnosis">Clinical Diagnosis</label>
                     <select id="clinical_diagnosis" class="form-control"
@@ -31,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="neuropathological_diagnosis">Neuropathological Diagnosis</label>
                     <select id="neuropathological_diagnosis" class="form-control"
@@ -44,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="tissue_type">Tissue Type</label>
                     <select id="tissue_type" class="form-control"
@@ -145,7 +154,7 @@
         <br>
 
         <div class="row button_holder">
-            <button class="btn btn-primary export_button">Search</button>
+            <button class="btn btn-primary export_button" id="search_btn">Search</button>
             <button class="btn btn-info export_button btn_space" ng-disabled="clear_btn" ng-click="clear_filter()">Clear</button>
         </div>
 
@@ -202,7 +211,7 @@
                             <tr grid-item>
                                 <td ng-init="elem_index = $index">{{elem_index+1}}</td>
                                 <td>
-                                    <a ng-bind="item.mbtb_code" ng-href="/admin_view_data/{{item.prime_details_id}}"></a>
+                                    <a ng-bind="item.mbtb_code" ng-href="/{{data_mode.value}}/{{item.prime_details_id}}"></a>
                                 </td>
 
                                 <td ng-bind="item.sex"></td>

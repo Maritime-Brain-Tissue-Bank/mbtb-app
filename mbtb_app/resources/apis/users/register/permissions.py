@@ -11,18 +11,39 @@ class IsAuthenticated(permissions.BasePermission):
     def has_permission(self, request, view):
         # only allow admin's GET request via authorized token
         if request.method == 'GET':
-            admin = self.authenticate(request)
-            return admin
+            valid_url = ['list_new_users']
+
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny GET request if url is not in valid_url by default
+            return False
 
         # allow patch request via authorized token to update user request
         if request.method == 'PATCH':
-            admin = self.authenticate(request)
-            return admin
+            valid_url = ['list_new_users']
+
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny PATCH request if url is not in valid_url by default
+            return False
 
         # allow delete request via authorized token to deny user request
         if request.method == 'DELETE':
-            admin = self.authenticate(request)
-            return admin
+            valid_url = ['list_new_users']
+
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny DELETE request if url is not in valid_url by default
+            return False
 
         return False
 

@@ -124,4 +124,46 @@ module.exports.routes = {
     }
   },
 
+  'GET /file_upload': {
+    action: 'admin/get-file-upload-view',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /file_upload': {
+    action: 'admin/file-upload',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /edit_data/:id': {
+    action: 'admin/get-edit-data-view',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /edit_data/': {
+    action: 'admin/edit-data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'DELETE /delete_data/:id': {
+    action: 'admin/delete-data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /data_uploading_guide': {
+    action: 'admin/data-uploading-guide',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

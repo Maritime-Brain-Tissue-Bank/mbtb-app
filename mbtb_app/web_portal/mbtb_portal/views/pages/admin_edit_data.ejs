@@ -1,0 +1,219 @@
+<title>Admin - Edit Data</title>
+
+<div class="container-fluid add_new_data_container">
+    <h2 class="heading_title">Edit Data</h2>
+    <br>
+
+    <script>
+        // binding data received from sails controller to JS variable to pass it to angular
+        var mbtb_detailed_data = <%- JSON.stringify(detailed_data) %>;
+
+    </script>
+
+    <div ng-app="admin_edit_data_app" ng-controller="admin_edit_data_controller" ng-cloak="">
+        <form name="edit_data_form" action="/edit_data/" method="post">
+            <div class="row">
+
+                <input type="hidden" name="prime_details_id" ng-model="details.prime_details_id" value="{{details.prime_details_id}}">
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{'has-error': edit_data_form.details.mbtb_code.$invalid && !edit_data_form.details.mbtb_code.$pristine }">
+                        <label for="mbtb_code">MBTB Code *</label>
+                        <input name="mbtb_code" ng-model="details.mbtb_code" type="text" class="form-control" required="">
+                    </div>
+                    <div ng-show="edit_data_form.details.mbtb_code.$dirty && edit_data_form.details.mbtb_code.$error.required" class="help-block">
+                        This field is required
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.sex.$invalid && !edit_data_form.details.sex.$pristine }">
+                        <label for="sex">Sex *</label>
+                        <select name="sex" ng-model="details.sex" class="form-control" required="">
+                            <% for(var i=0; i < sex.length; i++) { %>
+                                <option><%= sex[i] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.age.$invalid && !edit_data_form.details.age.$pristine }">
+                        <label for="age">Age *</label>
+                        <input name="age" ng-model="details.age" type="number" min="0" class="form-control" required="">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="race">Race</label>
+                        <input name="race" ng-model="details.race" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.clinical_diagnosis.$invalid && !edit_data_form.details.clinical_diagnosis.$pristine }">
+                        <label for="clinical_diagnosis">Clinical Diagnosis *</label>
+                        <input name="clinical_diagnosis" ng-model="details.clinical_diagnosis" type="text" class="form-control" required="">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="duration">Duration of Disease (Years)</label>
+                        <input name="duration" ng-model="details.duration" type="number" min="0" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.clinical_details.$invalid && !edit_data_form.details.clinical_details.$pristine }">
+                        <label for="clinical_details">Clinical Details *</label>
+                        <textarea name="clinical_details" ng-model="details.clinical_details" rows="5" class="form-control" required=""></textarea>
+                    </div>
+                    <div ng-show="edit_data_form.details.clinical_details.$dirty && edit_data_form.details.clinical_details.$error.required" class="help-block">
+                        This field is required
+                    </div>
+                </div>
+
+                <!--id to be determined-->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="cause_of_death">Cause of Death</label>
+                        <input name="cause_of_death" ng-model="details.cause_of_death" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="postmortem_interval">Post-mortem Interval (hrs)</label>
+                        <input name="postmortem_interval" ng-model="details.postmortem_interval" type="number" min="0" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="brain_weight">Brain Weight (g)</label>
+                        <input name="brain_weight" ng-model="details.brain_weight" type="number" min="0" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="time_in_fix">Time in Fix (days)</label>
+                        <input name="time_in_fix" ng-model="details.time_in_fix" type="number" min="0" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.neuropathology_diagnosis.$invalid && !edit_data_form.details.neuropathology_diagnosis.$pristine }">
+                        <label for="neuropathology_diagnosis">Neuropathological Diagnosis *</label>
+                        <select name="neuropathology_diagnosis" ng-model="details.neuropathology_diagnosis" class="form-control" required="">
+                            <% for(var diagnosis_item=0; diagnosis_item < neuropathology_diagnosis.length; diagnosis_item++) { %>
+                                <option><%= neuropathology_diagnosis[diagnosis_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="neuropathology_summary">Neuropathology Summary </label>
+                        <textarea name="neuropathology_summary" ng-model="details.neuropathology_summary" id="neuropathology_summary" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="neuropathology_gross">Gross Neuropathological Information </label>
+                        <textarea name="neuropathology_gross" ng-model="details.neuropathology_gross" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="neuropathology_microscopic">Microscopic Neuropathological Information </label>
+                        <textarea name="neuropathology_microscopic" ng-model="details.neuropathology_microscopic" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="cerad">CERAD </label>
+                        <input name="cerad" ng-model="details.cerad" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="braak_stage">BRAAK Stage </label>
+                        <input name="braak_stage" ng-model="details.braak_stage" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="khachaturian">KHACHATURIAN </label>
+                        <input name="khachaturian" ng-model="details.khachaturian" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="abc">ABC </label>
+                        <input name="abc" ng-model="details.abc" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.autopsy_type.$invalid && !edit_data_form.details.autopsy_type.$pristine }">
+                        <label for="autopsy_type">Type of Autopsy *</label>
+                        <select name="autopsy_type" ng-model="details.autopsy_type" class="form-control" required="">
+                            <% for(var autopsy_item=0; autopsy_item < autopsy_type.length; autopsy_item++) { %>
+                                <option><%= autopsy_type[autopsy_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.tissue_type.$invalid && !edit_data_form.details.tissue_type.$pristine }">
+                        <label for="tissue_type">Tissue Type *</label>
+                        <select name="tissue_type" ng-model="details.tissue_type" class="form-control" required="">
+                            <% for(var tissue_item=0; tissue_item < tissue_type.length; tissue_item++) { %>
+                                <option><%= tissue_type[tissue_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : edit_data_form.details.preservation_method.$invalid && !edit_data_form.details.preservation_method.$pristine }">
+                        <label for="preservation_method">Storage method *</label>
+                        <select name="preservation_method" ng-model="details.preservation_method" class="form-control" required="">
+                            <% for(var preservation_item=0; preservation_item < preservation_method.length; preservation_item++) { %>
+                                <option><%= preservation_method[preservation_item] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="form-group button_holder">
+                <div class="col" id="cancel_btn">
+                    <button class="btn btn-primary" id="submit_btn" ng-disabled="edit_data_form.$invalid">Update</button>
+                    <a href="/admin" class="btn btn_space">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

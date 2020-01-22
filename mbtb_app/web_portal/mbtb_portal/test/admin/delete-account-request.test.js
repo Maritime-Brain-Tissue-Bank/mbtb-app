@@ -2,8 +2,6 @@ const Browser = require('zombie');
 Browser.localhost('localhost', 1337);
 
 
-
-
 // This test login in admin portal and delete test user requests
 describe('Admin Delete - Registration Requests', function() {
 

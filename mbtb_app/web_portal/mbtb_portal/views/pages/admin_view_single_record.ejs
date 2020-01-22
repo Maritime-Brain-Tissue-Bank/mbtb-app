@@ -1,0 +1,172 @@
+<title>View Record</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://angular-data-grid.github.io/dist/JSONToCSVConvertor.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+<div ng-app="view_single_record_app" ng-controller="view_single_record_controller"
+     class="container-fluid single_record_container">
+
+    <h2 class="heading_title">View Record</h2>
+    <br>
+
+    <script>
+        // binding data recieved from sails controller to JS variable to pass it to angular
+        var mbtb_detailed_data = <%- JSON.stringify(detailed_data) %>;
+    </script>
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <thead>
+                <tr class="detailed_data_header">
+                    <th>Parameter</th>
+                    <th>Detail</th>
+                </tr>
+                </thead>
+
+                <tbody >
+                <tr>
+                    <td scope="row" class="col-md-3">MBTB Code</td>
+                    <td>{{details.mbtb_code}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Sex</td>
+                    <td>{{details.sex}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Age</td>
+                    <td>{{details.age}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Clinical Diagnosis</td>
+                    <td>{{details.clinical_diagnosis}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Clinical Details</td>
+                    <td>{{details.clinical_details}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Duration of Disease (Years)</td>
+                    <td>{{details.duration}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Cause of Death</td>
+                    <td>{{details.cause_of_death}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Postmortem Interval (hrs)</td>
+                    <td>{{details.postmortem_interval}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Brain Weight (g)</td>
+                    <td>{{details.brain_weight}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Time in Fix (Days)</td>
+                    <td>{{details.time_in_fix}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Neuropathology</td>
+                    <td>{{details.neuropathology_diagnosis}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Neuropathology Summary</td>
+                    <td>{{details.neuropathology_summary}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Gross Neuropathological Information</td>
+                    <td>{{details.neuropathology_gross}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Microscopic Neuropathological Information</td>
+                    <td>{{details.neuropathology_microscopic}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">CERAD</td>
+                    <td>{{details.cerad}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Braak Stage</td>
+                    <td>{{details.braak_stage}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">KHACHATURIAN</td>
+                    <td>{{details.khachaturian}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">ABC</td>
+                    <td>{{details.abc}}</td>
+                </tr>
+
+                <tr>
+                    <td>Tissue Type</td>
+                    <td>{{details.tissue_type}}</td>
+                </tr>
+
+                <tr>
+                    <td>Formalin Fixed</td>
+                    <td>{{details.formalin_fixed}}</td>
+                </tr>
+
+                <tr>
+                    <td>Fresh Frozen</td>
+                    <td>{{details.fresh_frozen}}</td>
+                </tr>
+
+            </table>
+        </div>
+
+
+        <div>
+            <div class="col-md-4">
+                <h4 class="heading_title">Neuropathology Slide Images</h4>
+                <div class="thumbnail">
+                    <div class="zoom">
+                        <img src="/images/sample1.jpeg" alt="sample image 1">
+                        <div class="image_caption">Side View</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <div class="zoom">
+                        <img src="/images/sample2.jpg" alt="sample image 2">
+                        <div class="image_caption">Top View</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="row container-fluid button_holder">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <a href="/edit_data/{{details.prime_details_id}}/" class="btn btn-primary" id="edit_btn">Edit</a>
+            <button ng-click="delete_button()" class="btn btn-primary" id="delete_btn">Delete</button>
+        </div>
+
+
+    </div>
+
+</div>
+
