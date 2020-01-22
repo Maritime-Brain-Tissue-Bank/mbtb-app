@@ -5,6 +5,9 @@
 
     <p>
         <%= msg_body %>
+        <% if(view_data_url){%>
+            You can view it here: <a href="../<%= view_data_url%>">Link</a>
+        <% }%>
     </p>
 
 </div>

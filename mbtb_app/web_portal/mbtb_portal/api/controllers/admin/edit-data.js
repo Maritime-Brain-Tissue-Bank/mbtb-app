@@ -131,7 +131,7 @@ module.exports = {
   exits: {
     return_view: {
       responseType: 'view',
-      viewTemplatePath: 'pages/message',
+      viewTemplatePath: 'pages/admin_message_response',
       description: 'return view to display msg'
     }
   },
@@ -211,8 +211,9 @@ module.exports = {
               return exits.return_view({'msg_title': 'Error', 'msg_body': msg}) // display error msg
             }
             else if (response.Response){
-              msg = 'Cheers, Your data is updated';
-              return exits.return_view({'msg_title': 'Confirmation', 'msg_body': msg});
+              let view_data_url = 'admin_view_data/' + inputs.prime_details_id + '/' ;
+              msg = 'Cheers, Your data is updated.';
+              return exits.return_view({'msg_title': 'Confirmation', 'msg_body': msg, view_data_url: view_data_url});
             }
           }
           catch (e) {
