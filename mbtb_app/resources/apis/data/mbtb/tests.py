@@ -33,8 +33,8 @@ class SetUpTestData(APITestCase):
             'mbtb_code': 'BB99-102', 'sex': 'Male', 'age': '70', 'postmortem_interval': '12',
             'time_in_fix': 'Not known', 'tissue_type': 'Brain', 'preservation_method': 'Fresh Frozen',
             'autopsy_type': 'Brain', 'neuropathology_diagnosis': "Mixed AD VAD", 'race': '',
-            'clinical_diagnosis': 'AD', 'duration': 0, 'clinical_details': 'AD', 'cause_of_death': '',
-            'brain_weight': 1080, 'neuropathology_summary': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
+            'clinical_diagnosis': 'AD', 'duration': "10", 'clinical_details': 'AD', 'cause_of_death': '',
+            'brain_weight': "1080", 'neuropathology_summary': 'AD SEVERE WITH ATROPHY, NEURONAL LOSS AND GLIOSIS',
             'neuropathology_gross': '', 'neuropathology_microscopic': '', 'cerad': '', 'braak_stage': '',
             'khachaturian': '30', 'abc': '', 'formalin_fixed': 'True', 'fresh_frozen': 'True',
             'storage_year': '2018-06-06 03:03:03'
@@ -238,12 +238,15 @@ class CreateDataAPIViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
+        cls.test_data['duration'] = "123"
         cls.changed_column_names = cls.test_data.copy()
         cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
         cls.prime_details_error = cls.test_data.copy()
         cls.other_details_error = cls.test_data.copy()
+        cls.is_number_check_error = cls.test_data.copy()
         cls.prime_details_error['mbtb_code'] = None
-        cls.other_details_error['duration'] = 'test'
+        cls.other_details_error['khachaturian'] = False
+        cls.is_number_check_error['duration'] = 'test'
 
     # valid post request with token to insert data
     def test_insert_data_(self):
@@ -316,6 +319,15 @@ class CreateDataAPIViewTest(SetUpTestData):
         response_changed_names = self.client.post('/add_new_data/', self.changed_column_names, format='json')
         self.assertEqual(response_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response_changed_names.data['Error'], predicted_msg)
+        self.client.credentials()
+
+    def test_is_number_check(self):
+        self.is_number_check_error['mbtb_code'] = 'test'
+        predicted_msg = 'Expecting value, received text.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_is_number_check_error = self.client.post('/add_new_data/', self.is_number_check_error, format='json')
+        self.assertEqual(response_is_number_check_error.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_is_number_check_error.data['Error'], predicted_msg)
         self.client.credentials()
 
     def tearDown(cls):
@@ -608,14 +620,16 @@ class EditDataAPIViewTest(SetUpTestData):
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
         cls.test_data['sex'] = 'Female'
-        cls.test_data['duration'] = 123
+        cls.test_data['duration'] = "123"
         cls.url = '/edit_data/{}/'.format(cls.prime_details_1.prime_details_id)
         cls.changed_column_names = cls.test_data.copy()
         cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
         cls.prime_details_error = cls.test_data.copy()
         cls.other_details_error = cls.test_data.copy()
+        cls.is_number_check_error = cls.test_data.copy()
         cls.prime_details_error['mbtb_code'] = None
-        cls.other_details_error['duration'] = "test"
+        cls.other_details_error['khachaturian'] = False
+        cls.is_number_check_error['duration'] = 'test'
 
     def test_edit_data(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -626,7 +640,7 @@ class EditDataAPIViewTest(SetUpTestData):
         prime_details_model_response = PrimeDetails.objects.get(prime_details_id=self.prime_details_1.prime_details_id)
         other_details_model_response = OtherDetails.objects.get(prime_details_id=self.prime_details_1.prime_details_id)
         self.assertEqual(prime_details_model_response.sex, self.test_data['sex'])
-        self.assertEqual(other_details_model_response.duration, self.test_data['duration'])
+        self.assertEqual(str(other_details_model_response.duration), self.test_data['duration'])
 
     def test_edit_data_without_token(self):
         predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
@@ -702,6 +716,15 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
+
+    def test_is_number_check(self):
+        self.is_number_check_error['mbtb_code'] = 'test'
+        predicted_msg = 'Expecting value, received text.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_is_number_check_error = self.client.patch(self.url, self.is_number_check_error, format='json')
+        self.assertEqual(response_is_number_check_error.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_is_number_check_error.data['Error'], predicted_msg)
+        self.client.credentials()
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()

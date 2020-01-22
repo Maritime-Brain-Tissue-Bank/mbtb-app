@@ -66,10 +66,16 @@ class CreateDataAPIView(views.APIView):
             prime_details_serializer.save()  # Saving prime_details
 
             # If other_details data is validated then save it else return error response
+            _duration = validate_data.check_is_number(value=request.data['duration'])
+            _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
+
+            if (not _duration['Response']) or (not _brain_weight['Response']):
+                return response.Response({'Error': 'Expecting value, received text.'}, status="400")
+
             other_details = OtherDetailsTemplate(
                 prime_details_id=prime_details_serializer.data['prime_details_id'], race=request.data['race'],
-                duration=json.loads(request.data['duration']), clinical_details=request.data['clinical_details'],
-                cause_of_death=request.data['cause_of_death'], brain_weight=json.loads(request.data['brain_weight']),
+                duration=_duration['Value'], clinical_details=request.data['clinical_details'],
+                cause_of_death=request.data['cause_of_death'], brain_weight=_brain_weight['Value'],
                 neuropathology_summary=request.data['neuropathology_summary'],
                 neuropathology_gross=request.data['neuropathology_gross'],
                 neuropathology_microscopic=request.data['neuropathology_microscopic'], cerad=request.data['cerad'],
@@ -244,10 +250,16 @@ class EditDataAPIView(views.APIView):
             prime_details_serializer.save()  # Saving prime_details
 
             # If other_details data is validated then save it else return error response
+            _duration = validate_data.check_is_number(value=request.data['duration'])
+            _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
+
+            if (not _duration['Response']) or (not _brain_weight['Response']):
+                return response.Response({'Error': 'Expecting value, received text.'}, status="400")
+
             other_details_template_data = OtherDetailsTemplate(
                 prime_details_id=prime_details_id, race=request.data['race'],
-                duration=json.loads(request.data['duration']), clinical_details=request.data['clinical_details'],
-                cause_of_death=request.data['cause_of_death'], brain_weight=json.loads(request.data['brain_weight']),
+                duration=_duration['Value'], clinical_details=request.data['clinical_details'],
+                cause_of_death=request.data['cause_of_death'], brain_weight=_brain_weight['Value'],
                 neuropathology_summary=request.data['neuropathology_summary'],
                 neuropathology_gross=request.data['neuropathology_gross'],
                 neuropathology_microscopic=request.data['neuropathology_microscopic'], cerad=request.data['cerad'],

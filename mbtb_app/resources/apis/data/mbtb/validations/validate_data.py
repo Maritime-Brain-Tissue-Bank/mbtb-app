@@ -1,3 +1,6 @@
+import json
+
+
 class ValidateData(object):
 
     # Check if received file is of type CSV; return true if it is else false
@@ -66,3 +69,19 @@ class ValidateData(object):
             return 'Fresh Frozen'
         else:
             return None
+
+    def check_is_number(self, **kwargs):
+        _value = kwargs.get('value', None)
+
+        try:
+            _value = json.loads(_value)
+
+        except json.JSONDecodeError:
+            return {
+                'Response': False,
+            }
+
+        return {
+            'Response': True,
+            'Value': _value
+        }
