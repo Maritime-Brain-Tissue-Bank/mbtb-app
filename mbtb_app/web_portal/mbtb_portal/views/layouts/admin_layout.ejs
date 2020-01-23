@@ -36,7 +36,13 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dataset<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/add_new_data">Add New Data</a></li>
+                            <li class="dropdown-submenu">
+                                <a class="test" href="#">Add New Data <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="/add_new_data">Insert Single Row</a></li>
+                                    <li><a tabindex="-1" href="/file_upload">File Upload</a></li>
+                                </ul>
+                            </li>
                             <li><a href="/admin_view_data">View Data</a></li>
                         </ul>
                     </li>
@@ -81,6 +87,8 @@
 
 <!--SCRIPTS-->
 <script src="/js/admin_add_new_data.js"></script>
+<script src="/js/admin_edit_data.js"></script>
+<script src="/js/admin_homepage.js"></script>
 <script src="/js/admin_register_requests.js"></script>
 <script src="/js/user_login.js"></script>
 <script src="/js/user_registration.js"></script>

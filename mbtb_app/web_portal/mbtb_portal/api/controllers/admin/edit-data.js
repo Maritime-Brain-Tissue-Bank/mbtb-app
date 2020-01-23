@@ -3,13 +3,18 @@ const request = require('request');
 module.exports = {
 
 
-  friendlyName: 'Insert single row data',
+  friendlyName: 'Edit data',
 
 
-  description: 'Fetch data from add_new_data.ejs form and perform post request to data api',
+  description: '',
 
 
   inputs: {
+    prime_details_id:{
+      type: 'string',
+      required: true
+    },
+
     mbtb_code: {
       type: 'string',
       required: true
@@ -126,11 +131,10 @@ module.exports = {
   exits: {
     return_view: {
       responseType: 'view',
-      viewTemplatePath: 'pages/message',
+      viewTemplatePath: 'pages/admin_message_response',
       description: 'return view to display msg'
     }
   },
-
 
   fn: async function (inputs, exits) {
 
@@ -183,17 +187,18 @@ module.exports = {
       fresh_frozen: fresh_frozen
     };
 
-    let url = sails.config.custom.data_api_url + 'add_new_data/';
+    let url = sails.config.custom.data_api_url + 'edit_data/' + inputs.prime_details_id + '/' ;
     var msg_ = '';
-    // post request to insert single row in db via api with admin auth token
-    request.post({
+
+    // patch request to update single row in db via api with admin auth token
+    request.patch({
         url: url,
         formData: payload,
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
           'content-type': 'application/json',
-          }
-          },
+        }
+      },
       function optionalCallback(err, httpResponse, body) {
         if (err) {
           console.log('Error: insert single row data ' + err); // log error to server console
@@ -206,8 +211,9 @@ module.exports = {
               return exits.return_view({'msg_title': 'Error', 'msg_body': msg}) // display error msg
             }
             else if (response.Response){
-              msg = 'Cheers, Your data is uploaded';
-              return exits.return_view({'msg_title': 'Confirmation', 'msg_body': msg});
+              let view_data_url = 'admin_view_data/' + inputs.prime_details_id + '/' ;
+              msg = 'Cheers, Your data is updated.';
+              return exits.return_view({'msg_title': 'Confirmation', 'msg_body': msg, view_data_url: view_data_url});
             }
           }
           catch (e) {
@@ -219,6 +225,5 @@ module.exports = {
       });
 
   }
-
 
 };

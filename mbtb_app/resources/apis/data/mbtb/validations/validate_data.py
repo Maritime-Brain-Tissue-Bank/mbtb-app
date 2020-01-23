@@ -1,3 +1,6 @@
+import json
+
+
 class ValidateData(object):
 
     # Check if received file is of type CSV; return true if it is else false
@@ -22,7 +25,7 @@ class ValidateData(object):
         _csv_file = kwargs.get('csv_file', None)
         if len(_csv_file) != 0:
             for row in _csv_file:
-                if len(row) != 25:
+                if len(row) != 24:
                     return {'Response': False, 'Message': 'Not enough elements are present in single row.'}
             return {'Response': True}
         return {'Response': False, 'Message': 'Error in file size, please upload valid file.'}
@@ -32,7 +35,7 @@ class ValidateData(object):
         _received_column_names = kwargs.get('column_names', None)
         _actual_column_names = [
             'mbtb_code', 'sex', 'age', 'postmortem_interval', 'time_in_fix', 'clinical_diagnosis',
-            'preservation_method', 'storage_year', 'tissue_type', 'neuropathology_diagnosis', 'race', 'duration',
+            'storage_year', 'tissue_type', 'neuropathology_diagnosis', 'race', 'duration',
             'clinical_details', 'cause_of_death', 'brain_weight', 'neuropathology_summary', 'neuropathology_gross',
             'neuropathology_microscopic', 'cerad', 'braak_stage', 'khachaturian', 'abc', 'formalin_fixed',
             'fresh_frozen', 'autopsy_type'
@@ -53,3 +56,32 @@ class ValidateData(object):
                         format(difference)
                 }
         return {'Response': True}
+
+    def check_preservation_method(self, **kwargs):
+        _formalin_fixed = kwargs.get('formalin_fixed', None)
+        _fresh_frozen = kwargs.get('fresh_frozen', None)
+
+        if _formalin_fixed and _fresh_frozen:
+            return 'Both'
+        elif _formalin_fixed and not _fresh_frozen:
+            return 'Formalin-Fixed'
+        elif not _formalin_fixed and _fresh_frozen:
+            return 'Fresh Frozen'
+        else:
+            return None
+
+    def check_is_number(self, **kwargs):
+        _value = kwargs.get('value', None)
+
+        try:
+            _value = json.loads(_value)
+
+        except json.JSONDecodeError:
+            return {
+                'Response': False,
+            }
+
+        return {
+            'Response': True,
+            'Value': _value
+        }

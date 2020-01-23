@@ -1,5 +1,6 @@
 import codecs
 import csv
+import json
 
 from rest_framework import viewsets, views, response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -62,13 +63,19 @@ class CreateDataAPIView(views.APIView):
         prime_details_serializer = InsertRowPrimeDetailsSerializer(data=prime_details.__dict__)
 
         if prime_details_serializer.is_valid():
-            prime_details_serializer.save()  # Saving prime_details
+            prime_serializer_instance = prime_details_serializer.save()  # Saving prime_details
 
             # If other_details data is validated then save it else return error response
+            _duration = validate_data.check_is_number(value=request.data['duration'])
+            _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
+
+            if (not _duration['Response']) or (not _brain_weight['Response']):
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+
             other_details = OtherDetailsTemplate(
                 prime_details_id=prime_details_serializer.data['prime_details_id'], race=request.data['race'],
-                duration=request.data['duration'], clinical_details=request.data['clinical_details'],
-                cause_of_death=request.data['cause_of_death'], brain_weight=request.data['brain_weight'],
+                duration=_duration['Value'], clinical_details=request.data['clinical_details'],
+                cause_of_death=request.data['cause_of_death'], brain_weight=_brain_weight['Value'],
                 neuropathology_summary=request.data['neuropathology_summary'],
                 neuropathology_gross=request.data['neuropathology_gross'],
                 neuropathology_microscopic=request.data['neuropathology_microscopic'], cerad=request.data['cerad'],
@@ -83,6 +90,10 @@ class CreateDataAPIView(views.APIView):
 
             else:
                 # TODO: log errors here related to add single data for other_details
+
+                # deleting instance if any error in other_details data
+                prime_serializer_instance.delete()
+
                 # Return error response if any error in other_details data
                 return response.Response(
                     {'Error': 'Error in other_details, Inserting data failed.'},
@@ -151,24 +162,34 @@ class FileUploadAPIView(views.APIView):
             autopsy_type = GetOrCreate(model_name='AutopsyTypes').run(autopsy_type=row['autopsy_type'])
 
             # If prime_details data is validated then save it else return error response
+            _preservation_method = validate_data.check_preservation_method(
+                formalin_fixed=row['formalin_fixed'], fresh_frozen=row['fresh_frozen']
+            )
             prime_details = PrimeDetailsTemplate(
                 mbtb_code=row['mbtb_code'], sex=row['sex'], age=row['age'],
                 postmortem_interval=row['postmortem_interval'], time_in_fix=row['time_in_fix'],
                 clinical_diagnosis=row['clinical_diagnosis'], tissue_type=tissue_type.tissue_type_id,
-                preservation_method=row['preservation_method'],
+                preservation_method=_preservation_method,
                 neuro_diagnosis_id=neuro_diagnosis_id.neuro_diagnosis_id,
                 storage_year=row['storage_year']
             )
             prime_details_serializer = FileUploadPrimeDetailsSerializer(data=prime_details.__dict__)
 
             if prime_details_serializer.is_valid():
-                prime_details_serializer.save()  # Saving prime_details
+                prime_serializer_instance = prime_details_serializer.save()  # Saving prime_details
+
+                # If other_details data is validated then save it else return error response
+                _duration = validate_data.check_is_number(value=row['duration'])
+                _brain_weight = validate_data.check_is_number(value=row['brain_weight'])
+
+                if (not _duration['Response']) or (not _brain_weight['Response']):
+                    return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
 
                 # If other_details data is validated then save it else return error response
                 other_details = OtherDetailsTemplate(
                     prime_details_id=prime_details_serializer.data['prime_details_id'], race=row['race'],
-                    duration=row['duration'], clinical_details=row['clinical_details'],
-                    cause_of_death=row['cause_of_death'], brain_weight=row['brain_weight'],
+                    duration=_duration['Value'], clinical_details=row['clinical_details'],
+                    cause_of_death=row['cause_of_death'], brain_weight=_brain_weight['Value'],
                     neuropathology_summary=row['neuropathology_summary'],
                     neuropathology_gross=row['neuropathology_gross'],
                     neuropathology_microscopic=row['neuropathology_microscopic'], cerad=row['cerad'],
@@ -181,6 +202,10 @@ class FileUploadAPIView(views.APIView):
                     other_details_serializer.save()  # Saving other_details
                 else:
                     # TODO: log errors here related to file data uploading for other details
+
+                    # deleting instance if any error in other_details data
+                    prime_serializer_instance.delete()
+
                     # Return error response if any error in other_details data
                     return response.Response(
                         {'Response': 'Failure',
@@ -240,10 +265,16 @@ class EditDataAPIView(views.APIView):
             prime_details_serializer.save()  # Saving prime_details
 
             # If other_details data is validated then save it else return error response
+            _duration = validate_data.check_is_number(value=request.data['duration'])
+            _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
+
+            if (not _duration['Response']) or (not _brain_weight['Response']):
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+
             other_details_template_data = OtherDetailsTemplate(
                 prime_details_id=prime_details_id, race=request.data['race'],
-                duration=request.data['duration'], clinical_details=request.data['clinical_details'],
-                cause_of_death=request.data['cause_of_death'], brain_weight=request.data['brain_weight'],
+                duration=_duration['Value'], clinical_details=request.data['clinical_details'],
+                cause_of_death=request.data['cause_of_death'], brain_weight=_brain_weight['Value'],
                 neuropathology_summary=request.data['neuropathology_summary'],
                 neuropathology_gross=request.data['neuropathology_gross'],
                 neuropathology_microscopic=request.data['neuropathology_microscopic'], cerad=request.data['cerad'],

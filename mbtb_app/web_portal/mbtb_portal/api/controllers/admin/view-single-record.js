@@ -23,7 +23,7 @@ module.exports = {
   exits: {
 
     success: {
-      viewTemplatePath: 'pages/view_single_record',
+      viewTemplatePath: 'pages/admin_view_single_record',
       description: 'On sucess, return to `view_single_record` template',
       locals: {
         layout: 'layouts/admin_layout'
