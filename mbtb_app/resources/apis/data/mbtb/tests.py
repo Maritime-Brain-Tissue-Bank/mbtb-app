@@ -323,7 +323,7 @@ class CreateDataAPIViewTest(SetUpTestData):
 
     def test_is_number_check(self):
         self.is_number_check_error['mbtb_code'] = 'test'
-        predicted_msg = 'Expecting value, received text.'
+        predicted_msg = 'Expecting value, received text for duration and/or brain_weight.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_is_number_check_error = self.client.post('/add_new_data/', self.is_number_check_error, format='json')
         self.assertEqual(response_is_number_check_error.status_code, status.HTTP_400_BAD_REQUEST)
@@ -422,10 +422,12 @@ class FileUploadAPIViewTest(SetUpTestData):
         cls.other_details_error = cls.file_upload_data.copy()
         cls.missing_fields_error = cls.file_upload_data.copy()
         cls.changed_column_names = cls.file_upload_data.copy()
+        cls.is_number_check_error = cls.file_upload_data.copy()
         cls.prime_details_error['storage_year'] = ''
-        cls.other_details_error['duration'] = None
+        cls.other_details_error['khachaturian'] = str(400 ** 99)
         del cls.missing_fields_error['duration']
         cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
+        cls.is_number_check_error['duration'] = 'test'
 
         # Creating csv files for FileUploadAPIViewTest
         cls.dict_to_csv_file('file_upload_test.csv', cls.file_upload_data)
@@ -435,6 +437,7 @@ class FileUploadAPIViewTest(SetUpTestData):
         cls.dict_to_csv_file('empty_file.csv', {})
         cls.dict_to_csv_file('missing_fields.csv', cls.missing_fields_error)
         cls.dict_to_csv_file('changed_column_names.csv', cls.changed_column_names)
+        cls.dict_to_csv_file('is_number_check_error.csv', cls.is_number_check_error)
 
     def test_data_upload(self):
         # Upload data and check status code and response
@@ -598,6 +601,17 @@ class FileUploadAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
+    def test_is_number_check(self):
+        self.is_number_check_error['mbtb_code'] = 'test'
+        predicted_msg = 'Expecting value, received text for duration and/or brain_weight.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_changed_names = self.client.post(
+            '/file_upload/', {'file': open('is_number_check_error.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_changed_names.data['Error'], predicted_msg)
+        self.client.credentials()
+
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
         os.remove('file_upload_test.csv')  # Removing csv files
@@ -607,10 +621,12 @@ class FileUploadAPIViewTest(SetUpTestData):
         os.remove('empty_file.csv')
         os.remove('missing_fields.csv')
         os.remove('changed_column_names.csv')
+        os.remove('is_number_check_error.csv')
         del cls.prime_details_error
         del cls.other_details_error
         del cls.changed_column_names
         del cls.missing_fields_error
+        del cls.is_number_check_error
 
 
 # This class is to test EditDataAPIView: all request
@@ -719,7 +735,7 @@ class EditDataAPIViewTest(SetUpTestData):
 
     def test_is_number_check(self):
         self.is_number_check_error['mbtb_code'] = 'test'
-        predicted_msg = 'Expecting value, received text.'
+        predicted_msg = 'Expecting value, received text for duration and/or brain_weight.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_is_number_check_error = self.client.patch(self.url, self.is_number_check_error, format='json')
         self.assertEqual(response_is_number_check_error.status_code, status.HTTP_400_BAD_REQUEST)

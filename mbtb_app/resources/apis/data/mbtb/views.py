@@ -70,7 +70,7 @@ class CreateDataAPIView(views.APIView):
             _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
 
             if (not _duration['Response']) or (not _brain_weight['Response']):
-                return response.Response({'Error': 'Expecting value, received text.'}, status="400")
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
 
             other_details = OtherDetailsTemplate(
                 prime_details_id=prime_details_serializer.data['prime_details_id'], race=request.data['race'],
@@ -179,10 +179,17 @@ class FileUploadAPIView(views.APIView):
                 prime_serializer_instance = prime_details_serializer.save()  # Saving prime_details
 
                 # If other_details data is validated then save it else return error response
+                _duration = validate_data.check_is_number(value=row['duration'])
+                _brain_weight = validate_data.check_is_number(value=row['brain_weight'])
+
+                if (not _duration['Response']) or (not _brain_weight['Response']):
+                    return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+
+                # If other_details data is validated then save it else return error response
                 other_details = OtherDetailsTemplate(
                     prime_details_id=prime_details_serializer.data['prime_details_id'], race=row['race'],
-                    duration=row['duration'], clinical_details=row['clinical_details'],
-                    cause_of_death=row['cause_of_death'], brain_weight=row['brain_weight'],
+                    duration=_duration['Value'], clinical_details=row['clinical_details'],
+                    cause_of_death=row['cause_of_death'], brain_weight=_brain_weight['Value'],
                     neuropathology_summary=row['neuropathology_summary'],
                     neuropathology_gross=row['neuropathology_gross'],
                     neuropathology_microscopic=row['neuropathology_microscopic'], cerad=row['cerad'],
@@ -262,7 +269,7 @@ class EditDataAPIView(views.APIView):
             _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
 
             if (not _duration['Response']) or (not _brain_weight['Response']):
-                return response.Response({'Error': 'Expecting value, received text.'}, status="400")
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
 
             other_details_template_data = OtherDetailsTemplate(
                 prime_details_id=prime_details_id, race=request.data['race'],
