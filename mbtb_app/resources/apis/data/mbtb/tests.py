@@ -602,8 +602,7 @@ class FileUploadAPIViewTest(SetUpTestData):
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
     def test_is_number_check(self):
-        self.is_number_check_error['mbtb_code'] = 'test'
-        predicted_msg = 'Expecting value, received text for duration and/or brain_weight.'
+        predicted_msg = 'Expecting value, received text for duration and/or brain_weight at mbtb_code: BB99-103.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         resposne_changed_names = self.client.post(
             '/file_upload/', {'file': open('is_number_check_error.csv', 'rb')}, headers={'Content-Type': 'text/csv'}

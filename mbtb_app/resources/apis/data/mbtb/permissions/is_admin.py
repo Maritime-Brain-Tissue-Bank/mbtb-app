@@ -23,7 +23,7 @@ class IsAdmin(permissions.BasePermission):
             return False
 
         if request.method == 'PATCH':
-            valid_url = ['edit_data']
+            valid_url = ['edit_data', 'file_upload']
 
             # splitting url e.g. /edit_data/1/ to get brain_dataset for comparison
             url_path = request.path.split('/')
