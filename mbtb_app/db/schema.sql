@@ -87,7 +87,7 @@ INSERT INTO tissue_types(tissue_type) VALUES
 
 CREATE TABLE prime_details(
     prime_details_id int unsigned NOT NULL AUTO_INCREMENT,
-    mbtb_code varchar(255) NOT NULL,
+    mbtb_code varchar(255) NOT NULL UNIQUE,
     sex enum('Male', 'Female') DEFAULT NULL,
     age varchar(50) DEFAULT NULL,
     postmortem_interval varchar(255) DEFAULT NULL,

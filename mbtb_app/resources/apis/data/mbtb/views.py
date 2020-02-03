@@ -183,7 +183,9 @@ class FileUploadAPIView(views.APIView):
                 _brain_weight = validate_data.check_is_number(value=row['brain_weight'])
 
                 if (not _duration['Response']) or (not _brain_weight['Response']):
-                    return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+                    return response.Response(
+                        {'Error': 'Expecting value, received text for duration and/or brain_weight.'
+                         }, status="400")
 
                 # If other_details data is validated then save it else return error response
                 other_details = OtherDetailsTemplate(
