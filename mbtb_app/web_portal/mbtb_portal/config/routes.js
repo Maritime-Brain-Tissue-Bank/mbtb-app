@@ -125,14 +125,14 @@ module.exports.routes = {
   },
 
   'GET /file_upload': {
-    action: 'admin/get-file-upload-view',
+    action: 'admin/get-file-upload-add-data-view',
     locals: {
       layout: 'layouts/admin_layout'
     }
   },
 
   'POST /file_upload': {
-    action: 'admin/file-upload',
+    action: 'admin/file-upload-add-data',
     locals: {
       layout: 'layouts/admin_layout'
     }
@@ -161,6 +161,20 @@ module.exports.routes = {
 
   'GET /data_uploading_guide': {
     action: 'admin/data-uploading-guide',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /edit_file_upload': {
+    action: 'admin/get-file-upload-edit-data-view',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /edit_file_upload': {
+    action: 'admin/file-upload-edit-data',
     locals: {
       layout: 'layouts/admin_layout'
     }

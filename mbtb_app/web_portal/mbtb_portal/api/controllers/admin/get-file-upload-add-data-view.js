@@ -24,8 +24,9 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    return exits.success();
+    let data_mode = 'Add New Data';
+    let url = 'file_upload/';
+    return exits.success({data_mode: data_mode, url: url});
 
   }
 

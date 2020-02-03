@@ -1,10 +1,10 @@
-<title>Admin - Upload File</title>
+<title>Admin - Upload File - <%= data_mode %></title>
 
 <div class="container-fluid file_upload_container">
-    <h2 class="heading_title">File Upload</h2>
+    <h2 class="heading_title">File Upload - <%= data_mode %></h2>
     <br>
 
-    <form id="file_upload_form" action="/file_upload" method="post" enctype="multipart/form-data" novalidate>
+    <form id="file_upload_form" action="<%= url %>" method="post" enctype="multipart/form-data" novalidate>
 
         <label for="file" id="choose_file_label">Choose File:</label>
         <input name="upload_file" type="file" accept="text/csv">
