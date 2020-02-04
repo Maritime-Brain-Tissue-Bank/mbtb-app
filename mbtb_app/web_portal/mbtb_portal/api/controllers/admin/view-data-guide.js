@@ -1,7 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Data uploading guide',
+  friendlyName: 'Admin - View Data Guide',
 
 
   description: '',
@@ -14,8 +14,8 @@ module.exports = {
 
   exits: {
     success:{
-      viewTemplatePath: 'pages/admin_data_uploading_guide',
-      description: 'return view for displaying data uploading guide',
+      viewTemplatePath: 'pages/view_data_guide',
+      description: 'return view for displaying view data guide',
       locals: {
         layout: 'layouts/admin_layout'
       }

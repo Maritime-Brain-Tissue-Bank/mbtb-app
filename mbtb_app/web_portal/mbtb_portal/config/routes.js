@@ -31,6 +31,7 @@ module.exports.routes = {
   'GET /logout': { action: 'user/logout'},
   'GET /view_data/:id': {action: 'user/view-single-record'},
   'GET /tissue_requests': {action: 'user/user-tissue-requests'},
+  'GET /view_data_guide': {action: 'user/view-data-guide'},
 
   // admin views
   'GET /admin': {
@@ -175,6 +176,13 @@ module.exports.routes = {
 
   'POST /edit_file_upload': {
     action: 'admin/file-upload-edit-data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /admin_view_data_guide': {
+    action: 'admin/view-data-guide',
     locals: {
       layout: 'layouts/admin_layout'
     }
