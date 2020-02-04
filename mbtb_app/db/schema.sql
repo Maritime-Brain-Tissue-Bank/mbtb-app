@@ -15,7 +15,7 @@ CREATE TABLE users(
     province varchar(255) DEFAULT NULL,
     country varchar(255) DEFAULT NULL,
     postal_code varchar(255) DEFAULT NULL,
-    comments varchar(255) DEFAULT NULL,
+    comments text DEFAULT NULL,
     active_since date DEFAULT NULL,
     pending_approval enum('Y','N') DEFAULT 'Y',
     PRIMARY KEY (id),
@@ -152,4 +152,24 @@ CREATE TABLE other_details(
     FOREIGN KEY (autopsy_type_id)
         REFERENCES autopsy_types(autopsy_type_id)
         ON DELETE no action
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE tissue_requests(
+    tissue_requests_id int unsigned NOT NULL AUTO_INCREMENT,
+    title varchar(10) DEFAULT NULL,
+    first_name varchar(255) DEFAULT NULL,
+    last_name varchar(255) DEFAULT NULL,
+    email varchar(255) NOT NULL DEFAULT '',
+    institution varchar(255) DEFAULT NULL,
+    department_name varchar(255) DEFAULT NULL,
+    city varchar(255) DEFAULT NULL,
+    province varchar(255) DEFAULT NULL,
+    postal_code varchar(255) DEFAULT NULL,
+    phone_number varchar(255) DEFAULT NULL,
+    fax_number varchar(255) DEFAULT NULL,
+    project_title text DEFAULT NULL,
+    source_of_funding text DEFAULT NULL,
+    abstract text DEFAULT NULL,
+    pending_approval enum('Y','N') DEFAULT 'Y',
+    PRIMARY KEY (tissue_requests_id),
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
