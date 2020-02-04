@@ -171,5 +171,5 @@ CREATE TABLE tissue_requests(
     source_of_funding text DEFAULT NULL,
     abstract text DEFAULT NULL,
     pending_approval enum('Y','N') DEFAULT 'Y',
-    PRIMARY KEY (tissue_requests_id),
+    PRIMARY KEY (tissue_requests_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;

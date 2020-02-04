@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'User tissue requests',
+  friendlyName: 'Get tissue requests terms',
 
 
-  description: 'It redirects users to message page',
+  description: 'It redirects users to tissue requests terms page',
 
 
   inputs: {
@@ -15,7 +15,7 @@ module.exports = {
   exits: {
     success:{
       responseType: 'view',
-      viewTemplatePath: 'pages/tissue_request_terms',
+      viewTemplatePath: 'pages/tissue_requests_terms',
       description: 'return view for displaying under construction msg'
     }
   },

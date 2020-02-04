@@ -30,8 +30,10 @@ module.exports.routes = {
   'GET /view_data': { action: 'user/view-data-table' },
   'GET /logout': { action: 'user/logout'},
   'GET /view_data/:id': {action: 'user/view-single-record'},
-  'GET /tissue_requests': {action: 'user/user-tissue-requests'},
   'GET /view_data_guide': {action: 'user/view-data-guide'},
+  'GET /tissue_requests_terms': {action: 'user/tissue-requests-terms'},
+  'GET /tissue_requests_form': { action: 'user/get-tissue-requests-form'},
+  'POST /tissue_requests_form': { action: 'user/tissue-requests-form'},
 
   // admin views
   'GET /admin': {
