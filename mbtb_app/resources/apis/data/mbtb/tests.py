@@ -129,12 +129,12 @@ class PrimeDetailsViewTest(SetUpTestData):
 
     # post request with and without token
     def test_post_request(self):
-        predicted_msg = 'Method "POST" not allowed.'
+        predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.post('/brain_dataset/1/')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/brain_dataset/1/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
@@ -208,12 +208,12 @@ class OtherDetailsViewTest(SetUpTestData):
 
     # post request with and without token
     def test_post_request(self):
-        predicted_msg = 'Method "POST" not allowed.'
+        predicted_msg = 'Authentication credentials were not provided.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/other_details/1/')
         response_without_token = self.client.post('/other_details/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
@@ -382,12 +382,12 @@ class GetSelectOptionsViewTest(SetUpTestData):
 
     # invalid post request test
     def test_post_request(self):
-        predicted_msg = 'Method "POST" not allowed.'
+        predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.post('/get_select_options/')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.post('/get_select_options/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
@@ -573,7 +573,7 @@ class FileUploadAPIViewTest(SetUpTestData):
 
     # invalid get request test
     def test_get_request(self):
-        predicted_msg = 'Method "GET" not allowed.'
+        predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.get(
             '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
@@ -581,8 +581,8 @@ class FileUploadAPIViewTest(SetUpTestData):
         response_with_token = self.client.get(
             '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
@@ -703,12 +703,12 @@ class EditDataAPIViewTest(SetUpTestData):
         self.client.credentials()
 
     def test_get_request(self):
-        predicted_msg = 'Method "GET" not allowed.'
+        predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.get(self.url, self.changed_column_names, format='json')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.get(self.url, format='json')
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
@@ -797,12 +797,12 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.client.credentials()
 
     def test_get_request(self):
-        predicted_msg = 'Method "GET" not allowed.'
+        predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.get(self.url, format='json')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.get(self.url, format='json')
-        self.assertEqual(response_with_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response_without_token.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 

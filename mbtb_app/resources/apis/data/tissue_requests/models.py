@@ -22,3 +22,6 @@ class TissueRequests(models.Model):
     class Meta:
         managed = False
         db_table = 'tissue_requests'
+
+    def __str__(self):
+        return self.tissue_requests_id
