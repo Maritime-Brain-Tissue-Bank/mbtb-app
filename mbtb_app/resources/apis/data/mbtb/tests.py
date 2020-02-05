@@ -407,9 +407,9 @@ class GetSelectOptionsViewTest(SetUpTestData):
         del cls.valid_response
 
 
-# This class is to test FileUploadAPIView: all request
-# Default: only post request is allowed with auth_token, remaining requests are blocked
-class FileUploadAPIViewTest(SetUpTestData):
+# This class is to test FileUploadAPIView: POST request (add new data via file upload)
+# Default: only post, patch request is allowed with auth_token, remaining requests are blocked
+class AddDataFileUploadAPIViewTest(SetUpTestData):
 
     def setUp(cls):
         super(SetUpTestData, cls).setUpClass()
@@ -424,12 +424,12 @@ class FileUploadAPIViewTest(SetUpTestData):
         cls.changed_column_names = cls.file_upload_data.copy()
         cls.is_number_check_error = cls.file_upload_data.copy()
         cls.prime_details_error['storage_year'] = ''
-        cls.other_details_error['khachaturian'] = str(400 ** 99)
+        cls.other_details_error['khachaturian'] = str(400 ** 99)  # Overflowing varchar(255) limit
         del cls.missing_fields_error['duration']
         cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
         cls.is_number_check_error['duration'] = 'test'
 
-        # Creating csv files for FileUploadAPIViewTest
+        # Creating csv files for AddDataFileUploadAPIViewTest
         cls.dict_to_csv_file('file_upload_test.csv', cls.file_upload_data)
         cls.dict_to_csv_file('file_upload_test.txt', cls.file_upload_data)
         cls.dict_to_csv_file('prime_details_error.csv', cls.prime_details_error)
@@ -439,6 +439,7 @@ class FileUploadAPIViewTest(SetUpTestData):
         cls.dict_to_csv_file('changed_column_names.csv', cls.changed_column_names)
         cls.dict_to_csv_file('is_number_check_error.csv', cls.is_number_check_error)
 
+    # Valid new data upload
     def test_data_upload(self):
         # Upload data and check status code and response
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -523,18 +524,19 @@ class FileUploadAPIViewTest(SetUpTestData):
         predicted_msg_1 = "File not found, please upload CSV file"
         predicted_msg_2 = "File can't be empty, Please upload again."
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        resposne_no_file_tag = self.client.post(
+        response_no_file_tag = self.client.post(
             '/file_upload/', {'no_file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
         response_empty_file_tag = self.client.post(
             '/file_upload/', {'file': ''}, headers={'Content-Type': 'text/csv'}
         )
-        self.assertEqual(resposne_no_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_no_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response_empty_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(resposne_no_file_tag.data['Error'], predicted_msg_1)
+        self.assertEqual(response_no_file_tag.data['Error'], predicted_msg_1)
         self.assertEqual(response_empty_file_tag.data['Error'], predicted_msg_2)
         self.client.credentials()
 
+    # test: uploading invalid format (.txt) file
     def test_file_type(self):
         predicted_msg = 'Wrong file type, please upload CSV file'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -545,22 +547,24 @@ class FileUploadAPIViewTest(SetUpTestData):
         self.assertEqual(resposne_no_file_extension.data['Error'], predicted_msg)
         self.client.credentials()
 
+    # test: uploading empty file
     def test_file_size(self):
         predicted_msg_1 = 'Error in file size, please upload valid file.'
         predicted_msg_2 = 'Not enough elements are present in single row.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        resposne_empty_file = self.client.post(
+        response_empty_file = self.client.post(
             '/file_upload/', {'file': open('empty_file.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
         response_missing_data = self.client.post(
             '/file_upload/', {'file': open('missing_fields.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
-        self.assertEqual(resposne_empty_file.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_empty_file.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response_missing_data.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(resposne_empty_file.data['Error'], predicted_msg_1)
+        self.assertEqual(response_empty_file.data['Error'], predicted_msg_1)
         self.assertEqual(response_missing_data.data['Error'], predicted_msg_2)
         self.client.credentials()
 
+    # test: checking column names with wrong names
     def test_column_names(self):
         predicted_msg = "Column names don't match with following: ['duration'], Please try again with valid names."
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -601,14 +605,222 @@ class FileUploadAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
+    # test: checking with text values for duration and brain_weight fields
     def test_is_number_check(self):
         predicted_msg = 'Expecting value, received text for duration and/or brain_weight at mbtb_code: BB99-103.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        resposne_changed_names = self.client.post(
+        response_changed_names = self.client.post(
             '/file_upload/', {'file': open('is_number_check_error.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_changed_names.data['Error'], predicted_msg)
+        self.client.credentials()
+
+    def tearDown(cls):
+        super(SetUpTestData, cls).tearDownClass()
+        os.remove('file_upload_test.csv')  # Removing csv files
+        os.remove('prime_details_error.csv')
+        os.remove('other_details_error.csv')
+        os.remove('file_upload_test.txt')
+        os.remove('empty_file.csv')
+        os.remove('missing_fields.csv')
+        os.remove('changed_column_names.csv')
+        os.remove('is_number_check_error.csv')
+        del cls.prime_details_error
+        del cls.other_details_error
+        del cls.changed_column_names
+        del cls.missing_fields_error
+        del cls.is_number_check_error
+
+
+# This class is to test FileUploadAPIView: PATCH request (edit data via file upload)
+# Default: only post, patch request is allowed with auth_token, remaining requests are blocked
+class EditDataFileUploadAPIViewTest(SetUpTestData):
+
+    def setUp(cls):
+        super(SetUpTestData, cls).setUpClass()
+        cls.file_upload_data = cls.test_data.copy()
+        del cls.file_upload_data['preservation_method']
+        cls.file_upload_data['mbtb_code'] = 'BB99-101'
+
+        # prime_details and other_details data with error in datatype
+        cls.prime_details_error = cls.file_upload_data.copy()
+        cls.other_details_error = cls.file_upload_data.copy()
+        cls.missing_fields_error = cls.file_upload_data.copy()
+        cls.changed_column_names = cls.file_upload_data.copy()
+        cls.is_number_check_error = cls.file_upload_data.copy()
+
+        cls.prime_details_error['storage_year'] = ''
+        cls.other_details_error['khachaturian'] = str(400 ** 99)  # Overflowing varchar(255) limit
+        del cls.missing_fields_error['duration']
+        cls.changed_column_names['durations'] = cls.changed_column_names.pop('duration')
+        cls.is_number_check_error['duration'] = 'test'
+
+        # Creating csv files for EditDataFileUploadAPIViewTest
+        cls.dict_to_csv_file('file_upload_test.csv', cls.file_upload_data)
+        cls.dict_to_csv_file('file_upload_test.txt', cls.file_upload_data)
+        cls.dict_to_csv_file('prime_details_error.csv', cls.prime_details_error)
+        cls.dict_to_csv_file('other_details_error.csv', cls.other_details_error)
+        cls.dict_to_csv_file('empty_file.csv', {})
+        cls.dict_to_csv_file('missing_fields.csv', cls.missing_fields_error)
+        cls.dict_to_csv_file('changed_column_names.csv', cls.changed_column_names)
+        cls.dict_to_csv_file('is_number_check_error.csv', cls.is_number_check_error)
+
+    # Valid edit data with file upload
+    def test_edit_data_upload(self):
+        # Upload data and check status code and response
+        before_model_response_prime_details = PrimeDetails.objects.get(mbtb_code='BB99-101')
+        before_model_response_other_details = OtherDetails.objects.get(
+            prime_details_id=before_model_response_prime_details.prime_details_id
+        )
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.patch(
+            '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['Response'], 'Success')
+        self.client.credentials()
+
+        # Now compare before and after elements from model, after elements from model with test_data
+        after_model_response_prime_details = PrimeDetails.objects.get(mbtb_code='BB99-101')
+        after_model_response_other_details = OtherDetails.objects.get(
+            prime_details_id=after_model_response_prime_details.prime_details_id
+        )
+        self.assertNotEqual(before_model_response_prime_details.sex, after_model_response_prime_details.sex)
+        self.assertNotEqual(before_model_response_prime_details.age, after_model_response_prime_details.age)
+        self.assertNotEqual(before_model_response_other_details.duration, after_model_response_other_details.duration)
+        self.assertNotEqual(
+            before_model_response_other_details.neuropathology_summary,
+            after_model_response_other_details.neuropathology_summary
+        )
+        self.assertEqual(after_model_response_prime_details.sex, self.test_data['sex'])
+        self.assertEqual(after_model_response_prime_details.age, self.test_data['age'])
+        self.assertEqual(after_model_response_other_details.duration, int(self.test_data['duration']))
+        self.assertEqual(
+            after_model_response_other_details.neuropathology_summary, self.test_data['neuropathology_summary']
+        )
+
+    # patch request without token
+    def test_upload_without_token(self):
+        predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
+        response = self.client.patch(
+            '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], predicted_msg)
+        self.client.credentials()
+
+    # patch request with invalid token header
+    def test_invalid_token_header(self):
+        predicted_msg = 'Invalid token header'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with invalid token')
+        response_invalid_header = self.client.patch(
+            '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
+
+    # patch request with empty token
+    def test_request_with_empty_token(self):
+        predicted_msg = 'Invalid token header. No credentials provided.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.client.patch(
+            '/file_upload/', {'file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg)
+
+    # invalid data test with error in prime details
+    def test_prime_details_error(self):
+        predicted_msg = 'Error in prime details, Data uploading failed at mbtb_code: BB99-101'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_prime_details_error = self.client.patch(
+            '/file_upload/', {'file': open('prime_details_error.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_prime_details_error.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_prime_details_error.data['Response'], 'Failure')
+        self.assertEqual(response_prime_details_error.data['Message'], predicted_msg)
+        self.assertGreater(len(response_prime_details_error.data['Error']), 0)
+        self.client.credentials()
+
+    # invalid data test with error in other details
+    def test_other_details_error(self):
+        predicted_msg = 'Error in other details, Data uploading failed at mbtb_code: BB99-101'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_other_details_error = self.client.patch(
+            '/file_upload/', {'file': open('other_details_error.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_other_details_error.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_other_details_error.data['Response'], 'Failure')
+        self.assertEqual(response_other_details_error.data['Message'], predicted_msg)
+        self.assertGreater(len(response_other_details_error.data['Error']), 0)
+        self.client.credentials()
+
+    # test: without `file` tag or empty `file` tag
+    def test_file_not_found(self):
+        predicted_msg_1 = "File not found, please upload CSV file"
+        predicted_msg_2 = "File can't be empty, Please upload again."
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_no_file_tag = self.client.patch(
+            '/file_upload/', {'no_file': open('file_upload_test.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        response_empty_file_tag = self.client.patch(
+            '/file_upload/', {'file': ''}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_no_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_empty_file_tag.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_no_file_tag.data['Error'], predicted_msg_1)
+        self.assertEqual(response_empty_file_tag.data['Error'], predicted_msg_2)
+        self.client.credentials()
+
+    # test: uploading invalid format (.txt) file
+    def test_file_type(self):
+        predicted_msg = 'Wrong file type, please upload CSV file'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_no_file_extension = self.client.patch(
+            '/file_upload/', {'file': open('file_upload_test.txt', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(resposne_no_file_extension.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(resposne_no_file_extension.data['Error'], predicted_msg)
+        self.client.credentials()
+
+    # test: uploading empty file
+    def test_file_size(self):
+        predicted_msg_1 = 'Error in file size, please upload valid file.'
+        predicted_msg_2 = 'Not enough elements are present in single row.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_empty_file = self.client.patch(
+            '/file_upload/', {'file': open('empty_file.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        response_missing_data = self.client.patch(
+            '/file_upload/', {'file': open('missing_fields.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_empty_file.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_missing_data.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_empty_file.data['Error'], predicted_msg_1)
+        self.assertEqual(response_missing_data.data['Error'], predicted_msg_2)
+        self.client.credentials()
+
+    # test: checking column names with wrong names
+    def test_column_names(self):
+        predicted_msg = "Column names don't match with following: ['duration'], Please try again with valid names."
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        resposne_changed_names = self.client.patch(
+            '/file_upload/', {'file': open('changed_column_names.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
         )
         self.assertEqual(resposne_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(resposne_changed_names.data['Error'], predicted_msg)
+        self.client.credentials()
+
+    # test: checking with text values for duration and brain_weight fields
+    def test_is_number_check(self):
+        predicted_msg = 'Expecting value, received text for duration and/or brain_weight at mbtb_code: BB99-101.'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_changed_names = self.client.patch(
+            '/file_upload/', {'file': open('is_number_check_error.csv', 'rb')}, headers={'Content-Type': 'text/csv'}
+        )
+        self.assertEqual(response_changed_names.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_changed_names.data['Error'], predicted_msg)
         self.client.credentials()
 
     def tearDown(cls):
@@ -646,6 +858,7 @@ class EditDataAPIViewTest(SetUpTestData):
         cls.other_details_error['khachaturian'] = False
         cls.is_number_check_error['duration'] = 'test'
 
+    # test: valid edit data for a single row
     def test_edit_data(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.patch(self.url, self.test_data, format='json')
@@ -657,6 +870,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(prime_details_model_response.sex, self.test_data['sex'])
         self.assertEqual(str(other_details_model_response.duration), self.test_data['duration'])
 
+    # post request without token
     def test_edit_data_without_token(self):
         predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.patch(self.url, self.test_data, format='json')
@@ -664,6 +878,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response.data['detail'], predicted_msg)
         self.client.credentials()
 
+    # invalid data test with error in prime details
     def test_prime_details_error(self):
         predicted_msg = 'Error in prime_details, Uploading data failed.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -672,6 +887,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_prime_details_error.data['Error'], predicted_msg)
         self.client.credentials()
 
+    # invalid data test with error in other details
     def test_other_details_error(self):
         predicted_msg = 'Error in other details, Uploading data failed.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -680,6 +896,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_other_details_error.data['Error'], predicted_msg)
         self.client.credentials()
 
+    # post request with invalid token
     def test_invalid_token_header(self):
         predicted_msg = 'Invalid token header'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with invalid token')
@@ -687,6 +904,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
 
+    # post request with empty token
     def test_request_with_empty_token(self):
         predicted_msg = 'Invalid token header. No credentials provided.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
@@ -694,6 +912,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
 
+    # test: checking column names with wrong names
     def test_column_names(self):
         predicted_msg = "Column names don't match with following: ['duration'], Please try again with valid names."
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -702,6 +921,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_changed_names.data['Error'], predicted_msg)
         self.client.credentials()
 
+    # invalid get request test
     def test_get_request(self):
         predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.get(self.url, self.changed_column_names, format='json')
@@ -712,6 +932,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
+    # invalid post request test
     def test_post_request(self):
         predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.post(self.url, self.changed_column_names, format='json')
@@ -722,6 +943,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
+    # invalid put request test
     def test_put_request(self):
         predicted_msg = 'Method "PUT" not allowed.'
         response_without_token = self.client.put(self.url, self.changed_column_names, format='json')
@@ -732,6 +954,7 @@ class EditDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
+    # test: checking with text values for duration and brain_weight fields
     def test_is_number_check(self):
         self.is_number_check_error['mbtb_code'] = 'test'
         predicted_msg = 'Expecting value, received text for duration and/or brain_weight.'
@@ -757,6 +980,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         super(SetUpTestData, cls).setUpClass()
         cls.url = '/delete_data/{}/'.format(cls.prime_details_1.prime_details_id)
 
+    # valid delete request
     def test_delete_request(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         delete_response = self.client.delete(self.url, format='json')
@@ -766,6 +990,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         model_response = PrimeDetails.objects.all().values_list()
         self.assertEqual(len(model_response), 0)
 
+    # invalid delete request
     def test_invalid_delete_request(self):
         _url = '/delete_data/101/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -773,6 +998,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.assertEqual(delete_response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(delete_response.data['detail'], 'Not found.')
 
+    # test: request without token
     def test_request_without_token(self):
         predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.delete(self.url, format='json')
@@ -780,6 +1006,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.assertEqual(response.data['detail'], predicted_msg)
         self.client.credentials()
 
+    # test: request with empty token
     def test_request_with_empty_token(self):
         predicted_msg = 'Invalid token header. No credentials provided.'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
@@ -788,6 +1015,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.client.credentials()
 
+    # test: request without token header
     def test_invalid_token_header(self):
         predicted_msg = 'Invalid token header'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with invalid token')
@@ -796,6 +1024,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
         self.client.credentials()
 
+    # invalid get request test
     def test_get_request(self):
         predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.get(self.url, format='json')
@@ -806,6 +1035,7 @@ class DeleteDataAPIViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
+    # invalid post request test
     def test_post_request(self):
         predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.post(self.url, format='json')
