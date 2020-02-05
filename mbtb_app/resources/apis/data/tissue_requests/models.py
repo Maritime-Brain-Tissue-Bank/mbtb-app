@@ -23,5 +23,5 @@ class TissueRequests(models.Model):
         managed = False
         db_table = 'tissue_requests'
 
-    def __str__(self):
+    def __int__(self):
         return self.tissue_requests_id

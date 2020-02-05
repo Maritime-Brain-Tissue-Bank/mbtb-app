@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, force_authenticate, APIClient
-from .models import PrimeDetails, NeuropathologicalDiagnosis, TissueTypes, AutopsyTypes, OtherDetails
-from .models import AdminAccount
+from .models import PrimeDetails, NeuropathologicalDiagnosis, TissueTypes, AutopsyTypes, OtherDetails, AdminAccount
 from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUploadPrimeDetailsSerializer, \
     FileUploadOtherDetailsSerializer, InsertRowPrimeDetailsSerializer
 import jwt
