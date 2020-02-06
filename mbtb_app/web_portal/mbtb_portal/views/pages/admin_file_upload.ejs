@@ -4,10 +4,12 @@
     <h2 class="heading_title">File Upload - <%= data_mode %></h2>
     <br>
 
-    <form id="file_upload_form" action="<%= url %>" method="post" enctype="multipart/form-data" novalidate>
+    <form id="file_upload_form" name="file_upload_form" action="<%= url %>" method="post" enctype="multipart/form-data">
 
-        <label for="file" id="choose_file_label">Choose File:</label>
-        <input name="upload_file" type="file" accept="text/csv" required>
+        <div>
+            <label for="upload_file" id="choose_file_label">Choose File:</label>
+            <input name="upload_file" id="upload_file" type="file" accept="text/csv" required>
+        </div>
 
         <br>
         <br>
