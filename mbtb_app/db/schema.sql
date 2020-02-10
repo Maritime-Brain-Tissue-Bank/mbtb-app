@@ -171,5 +171,9 @@ CREATE TABLE tissue_requests(
     source_of_funding text DEFAULT NULL,
     abstract text DEFAULT NULL,
     pending_approval enum('Y','N') DEFAULT 'Y',
+    received_date date DEFAULT NULL,
+    approval_date date DEFAULT NULL,
+    archived_date date DEFAULT NULL,
+    tissue_request_number varchar(255) DEFAULT NULL,
     PRIMARY KEY (tissue_requests_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
