@@ -190,14 +190,15 @@ class GetNewTissueRequestsViewTest(SetUpTestData):
 
     # Test: invalid delete request
     def test_delete_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg_1 = 'Not found.'
+        predicted_msg_2 = 'Invalid input. Only `Token` tag is allowed.'
         response_without_token = self.admin_client.delete('/get_new_tissue_requests/1/')
         self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token.decode('utf-8'))
         response_with_token = self.admin_client.delete('/get_new_tissue_requests/1/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], predicted_msg)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg_1)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg_2)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
@@ -273,14 +274,15 @@ class GetArchiveTissueRequestsViewTest(SetUpTestData):
 
     # Test: delete request
     def test_delete_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
+        predicted_msg_1 = 'Not found.'
+        predicted_msg_2 = 'Invalid input. Only `Token` tag is allowed.'
         response_without_token = self.admin_client.delete('/get_archive_tissue_requests/1/')
         self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token.decode('utf-8'))
         response_with_token = self.admin_client.delete('/get_archive_tissue_requests/1/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], predicted_msg)
+        self.assertEqual(response_with_token.data['detail'], predicted_msg_1)
+        self.assertEqual(response_without_token.data['detail'], predicted_msg_2)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
