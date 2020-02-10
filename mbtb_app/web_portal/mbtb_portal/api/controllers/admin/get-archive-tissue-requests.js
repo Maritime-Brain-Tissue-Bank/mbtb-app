@@ -46,7 +46,7 @@ module.exports = {
             'error_controller': 'admin/get-archive-tissue-requests',
             'error_msg': err
           }); // log error to server console
-          return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg})
+          return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg});
         }
         else {
           const response = JSON.parse(body);

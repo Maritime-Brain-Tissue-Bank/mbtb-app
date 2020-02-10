@@ -204,4 +204,11 @@ module.exports.routes = {
     }
   },
 
+  'POST /approve_tissue_requests': {
+    action: 'admin/approve-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };
