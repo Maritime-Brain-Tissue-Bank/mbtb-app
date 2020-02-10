@@ -190,8 +190,15 @@ module.exports.routes = {
     }
   },
 
-  'GET /get_tissue_requests': {
+  'GET /get_new_tissue_requests': {
     action: 'admin/get-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /get_archive_tissue_requests': {
+    action: 'admin/get-archive-tissue-requests',
     locals: {
       layout: 'layouts/admin_layout'
     }

@@ -3,10 +3,10 @@ const request = require('request');
 module.exports = {
 
 
-  friendlyName: 'Admin - Get new tissue requests',
+  friendlyName: 'Admin - Get archive tissue requests',
 
 
-  description: 'This controller is to fetch new tissue requests and display it.',
+  description: 'This controller is to fetch archived tissue requests and display it.',
 
 
   inputs: {
@@ -16,8 +16,8 @@ module.exports = {
 
   exits: {
     success: {
-      viewTemplatePath: 'pages/admin_new_tissue_requests',
-      description: 'On success, redirect admin to `admin_new_tissue_requests` template',
+      viewTemplatePath: 'pages/admin_archive_tissue_requests',
+      description: 'On success, redirect admin to `admin_arhive_tissue_requests` template',
       locals: {
         layout: 'layouts/admin_layout'
       }
@@ -33,7 +33,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    let url = sails.config.custom.data_api_url + 'get_new_tissue_requests/';
+    let url = sails.config.custom.data_api_url + 'get_archive_tissue_requests/';
 
     // get request to retrieve registration requests from api with admin auth token
     request.get(url, {
@@ -43,7 +43,7 @@ module.exports = {
       function optionalCallback(err, httpResponse, body) {
         if (err) {
           console.log({
-            'error_controller': 'admin/get-tissue-requests',
+            'error_controller': 'admin/get-archive-tissue-requests',
             'error_msg': err
           }); // log error to server console
           return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg})
