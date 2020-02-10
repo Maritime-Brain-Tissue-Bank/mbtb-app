@@ -1,7 +1,7 @@
 <title>Tissue Requests</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<div class="container-fluid requests_container">
+<div class="container-fluid archive_tissue_requests_container">
     <div class="col-md-12">
         <h2 class="heading_title">Archived Tissue Requests</h2>
         <br>
@@ -12,7 +12,7 @@
                 var mbtb_data = <%- JSON.stringify(data) %>;
             </script>
 
-            <table id="user_requests_table" class="table table-bordered">
+            <table id="archive_tissue_requests_table" class="table table-bordered">
                 <thead>
                 <tr>
                     <th><input type="checkbox" onClick="toggle_all(this.checked)" id="select_all"></th>
@@ -55,8 +55,13 @@
             </table>
         </form>
 
-        <div class="text-right">
-            <button class="btn btn-danger" id="deny_tissue_request_btn"> Delete</button>
+        <br>
+        <br>
+        <div class="form-group button_holder">
+            <div class="col" id="cancel_btn">
+                <button class="btn btn-primary" id="revert_tissue_request_btn">Revert</button>
+                <button class="btn btn-primary" id="delete_tissue_request_btn">Delete</button>
+            </div>
         </div>
 
         <div id="temp_msg"></div>
