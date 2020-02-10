@@ -3,10 +3,10 @@ const request = require('request');
 module.exports = {
 
 
-  friendlyName: 'Approve new tissue requests',
+  friendlyName: 'Revert archive tissue requests to new requests',
 
 
-  description: `It approves new tissue requests from admin side`,
+  description: `It reverts state of archive tissue requests to new tissue requests.`,
 
 
   inputs: {
@@ -31,9 +31,9 @@ module.exports = {
     for (i=0; i<requests_ids.length; i++){
 
       // url for API
-      let url = sails.config.custom.data_api_url + 'get_new_tissue_requests/' + requests_ids[i] + '/';
+      let url = sails.config.custom.data_api_url + 'get_archive_tissue_requests/' + requests_ids[i] + '/';
       let payload = {
-        pending_approval: "N",
+        pending_approval: "Y",
       };
 
       // patch request for updating following fields: `pending_approval`
@@ -47,14 +47,14 @@ module.exports = {
         function optionalCallback(err, httpResponse, body) {
           if (err) {
             console.log({
-              'error_controller': 'admin/approve-tissue-requests',
+              'error_controller': 'admin/revert-archive-tissue-requests',
               'error_msg': err
             }); // log error to server console
             return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg});
           }
           else {
             // log approved request IDs
-            console.log("New tissue request approved, ID: ", requests_ids[i-1]);
+            console.log("Archived tissue request reverted, ID: ", requests_ids[i-1]);
           }
         });
 

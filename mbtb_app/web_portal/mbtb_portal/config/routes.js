@@ -211,4 +211,11 @@ module.exports.routes = {
     }
   },
 
+  'POST /revert_archive_tissue_requests': {
+    action: 'admin/revert-archive-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

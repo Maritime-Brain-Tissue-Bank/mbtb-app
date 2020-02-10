@@ -188,7 +188,7 @@ class GetNewTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg)
         self.assertEqual(response_without_token.data['detail'], predicted_msg)
 
-    # Test: invalid delete request
+    # Test: valid delete request
     def test_delete_request(self):
         predicted_msg_1 = 'Not found.'
         predicted_msg_2 = 'Invalid input. Only `Token` tag is allowed.'
@@ -200,6 +200,8 @@ class GetNewTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg_1)
         self.assertEqual(response_without_token.data['detail'], predicted_msg_2)
 
+    # ToDo: write tests for patch request
+    
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
 
@@ -283,6 +285,8 @@ class GetArchiveTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], predicted_msg_1)
         self.assertEqual(response_without_token.data['detail'], predicted_msg_2)
+
+    # ToDo: write tests for patch request
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()

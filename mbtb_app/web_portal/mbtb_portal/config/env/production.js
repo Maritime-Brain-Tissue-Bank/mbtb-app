@@ -375,6 +375,7 @@ module.exports = {
     internalEmailAddress: 'support@example.com',
     user_api_url: 'https://mbtb-users.herokuapp.com/',
     data_api_url: 'https://mbtb-data.herokuapp.com/',
+    api_down_error_msg: 'Servers are down, please contact site admin for the help.', // apis are down error message
 
     // mailgunDomain: 'mg.example.com',
     // mailgunSecret: 'key-prod_fake_bd32301385130a0bafe030c',
