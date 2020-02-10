@@ -190,4 +190,11 @@ module.exports.routes = {
     }
   },
 
+  'GET /get_tissue_requests': {
+    action: 'admin/get-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

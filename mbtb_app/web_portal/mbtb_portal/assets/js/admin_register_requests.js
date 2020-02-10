@@ -88,7 +88,7 @@ function get_email_data(requests_ids) {
   return email_data;
 }
 
-// For gettings mbtb_data ids from seleted checkbox
+// For getting mbtb_data ids from selected checkbox
 // return it as array
 function get_checkbox_values() {
   var requests_ids = [];

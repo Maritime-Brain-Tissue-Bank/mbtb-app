@@ -49,8 +49,11 @@ module.exports = {
     request.post({url: url, formData: credentials},
       function optionalCallback(err, httpResponse, body) {
         if (err) {
-          let msg_body = 'Servers are down, please contact site admin for the help.';
-          return exits.error_response({'msg_title': 'Error', 'msg_body': msg_body})
+          console.log({
+            'error_controller': 'admin/login',
+            'error_msg': err
+          }); // log error to server console
+          return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg})
         }
         else {
           try {
