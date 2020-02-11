@@ -37,7 +37,7 @@
                     <tr>
                         <td><input type="checkbox" name="checkbox<%- i %>" id="checkbox<%- i %>" value="<%= data[i].tissue_requests_id %>")></td>
                         <td data-field="title"><%= data[i].title %></td>
-                        <td data-field="first_name"><%= data[i].first_name %></td>
+                        <td data-field="first_name"><a href="/view_single_tissue_request/<%= data[i].tissue_requests_id %>"><%= data[i].first_name %></a></td>
                         <td data-field="last_name"><%= data[i].last_name %></td>
                         <td data-field="email"><%= data[i].email %></td>
                         <td data-field="institution"><%= data[i].institution %></td>
