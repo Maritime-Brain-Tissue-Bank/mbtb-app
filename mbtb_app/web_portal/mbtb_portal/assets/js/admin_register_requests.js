@@ -9,7 +9,7 @@ $('#accept_request_btn').click(function(e){
   // patch request for sending request_ids, email_data to controller
   let post_request = $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'approved'){
-      // display alert on suceess and reload window
+      // display alert on success and reload window
       alert("Your selected requests are approved.");
       location.reload();
     }
@@ -38,7 +38,7 @@ $('#deny_request_btn').click(function(e){
   // patch request for sending request_ids, email_data to controller
   var delete_request = $.post( "/deny_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'completed'){
-      // display alert on suceess and reload window
+      // display alert on success and reload window
       alert("Your selected requests are denied.");
       location.reload();
     }

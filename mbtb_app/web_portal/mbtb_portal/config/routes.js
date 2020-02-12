@@ -232,4 +232,18 @@ module.exports.routes = {
     }
   },
 
+  'POST /delete_tissue_requests': {
+    action: 'admin/delete-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /delete_archive_tissue_requests': {
+    action: 'admin/delete-archive-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

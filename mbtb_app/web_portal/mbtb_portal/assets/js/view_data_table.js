@@ -11,7 +11,7 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
   // data binding to angular variable
   $scope.gridOptions.data = $window.mbtb_data;
 
-  // for finding unique elemenets in array
+  // for finding unique elements in array
   let unique = (value, index, self) => {
     return self.indexOf(value) === index
   };
