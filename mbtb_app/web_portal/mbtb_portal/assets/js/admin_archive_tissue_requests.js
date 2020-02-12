@@ -7,7 +7,7 @@ $('#revert_tissue_request_btn').click(function(e){
   let post_request = $.post( "/revert_archive_tissue_requests", {requests_ids: requests_ids}, function(data, status) {
     if (data === 'approved'){
       // display alert on suceess and reload window
-      alert("Your selected requested are reverted.");
+      alert("Your selected requests are reverted.");
       location.reload();
     }
     else {

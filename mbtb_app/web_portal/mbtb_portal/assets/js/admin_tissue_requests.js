@@ -7,7 +7,7 @@ $('#accept_tissue_request_btn').click(function(e){
   let post_request = $.post( "/approve_tissue_requests", {requests_ids: requests_ids}, function(data, status) {
     if (data === 'approved'){
       // display alert on suceess and reload window
-      alert("Your selected requested are approved.");
+      alert("Your selected requests are approved.");
       location.reload();
     }
     else {

@@ -225,4 +225,11 @@ module.exports.routes = {
     }
   },
 
+  'GET /view_single_archive_tissue_request/:id': {
+    action: 'admin/view-single-archive-tissue-request',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

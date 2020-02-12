@@ -10,7 +10,7 @@ $('#accept_request_btn').click(function(e){
   let post_request = $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'approved'){
       // display alert on suceess and reload window
-      alert("Your selected requested are approved.");
+      alert("Your selected requests are approved.");
       location.reload();
     }
     else {
@@ -39,7 +39,7 @@ $('#deny_request_btn').click(function(e){
   var delete_request = $.post( "/deny_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'completed'){
       // display alert on suceess and reload window
-      alert("Your selected requested are denied.");
+      alert("Your selected requests are denied.");
       location.reload();
     }
     else {

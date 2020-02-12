@@ -1,0 +1,116 @@
+<title>View Archived Tissue Request</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://angular-data-grid.github.io/dist/JSONToCSVConvertor.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+<div ng-app="view_single_archive_tissue_request_app" ng-controller="view_single_archive_tissue_request_controller"
+     class="container-fluid single_record_container">
+
+    <h2 class="heading_title">View Archived Tissue Request</h2>
+    <br>
+
+    <script>
+        // binding data received from sails controller to JS variable to pass it to angular
+        var archive_tissue_request_data = <%- JSON.stringify(detailed_data) %>;
+    </script>
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <thead>
+                <tr class="detailed_data_header">
+                    <th>Parameter</th>
+                    <th>Detail</th>
+                </tr>
+                </thead>
+
+                <tbody >
+                <tr>
+                    <td scope="row" class="col-md-3">Title</td>
+                    <td>{{details.title}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">First Name</td>
+                    <td>{{details.first_name}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Last Name</td>
+                    <td>{{details.last_name}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Email</td>
+                    <td>{{details.email}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Institution</td>
+                    <td>{{details.institution}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Department</td>
+                    <td>{{details.department_name}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">City</td>
+                    <td>{{details.city}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Province</td>
+                    <td>{{details.province}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Postal/Zip Code</td>
+                    <td>{{details.postal_code}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Phone</td>
+                    <td>{{details.phone_number}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Fax</td>
+                    <td>{{details.fax_number}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Project Title</td>
+                    <td>{{details.project_title}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Source of Funding</td>
+                    <td>{{details.source_of_funding}}</td>
+                </tr>
+
+                <tr>
+                    <td scope="row">Abstract</td>
+                    <td>{{details.abstract}}</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+    <br>
+    <div class="row container-fluid button_holder">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <button ng-click="revert_single_tissue_req_button()" class="btn btn-primary" id="edit_btn">Revert</button>
+            <button class="btn btn-primary" id="delete_btn">Delete</button>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+

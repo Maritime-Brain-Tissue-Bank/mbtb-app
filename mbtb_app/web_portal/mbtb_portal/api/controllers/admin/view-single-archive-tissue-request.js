@@ -3,10 +3,10 @@ const request = require('request');
 module.exports = {
 
 
-  friendlyName: 'View single tissue request',
+  friendlyName: 'View single archived tissue request',
 
 
-  description: 'Retrieve single tissue request from api',
+  description: 'Retrieve single archived tissue request from api',
 
 
   inputs: {
@@ -23,8 +23,8 @@ module.exports = {
   exits: {
 
     success: {
-      viewTemplatePath: 'pages/admin_view_single_tissue_request',
-      description: 'On success, return to `admin_view_single_tissue_request` template',
+      viewTemplatePath: 'pages/admin_view_single_archive_tissue_request',
+      description: 'On success, return to `admin_view_single_archive_tissue_request` template',
       locals: {
         layout: 'layouts/admin_layout'
       }
@@ -42,7 +42,7 @@ module.exports = {
   fn: async function ({id}, exits) {
 
     // get request to retrieve detailed mbtb data for single id from api with admin auth token
-    let url = sails.config.custom.data_api_url + 'get_new_tissue_requests/' + id + '/';
+    let url = sails.config.custom.data_api_url + 'get_archive_tissue_requests/' + id + '/';
     request.get(url, {
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
@@ -50,7 +50,7 @@ module.exports = {
       function optionalCallback(err, httpResponse, body) {
         if (err) {
           console.log({
-            'error_controller': 'admin/view-single-tissue-request',
+            'error_controller': 'admin/view-single-archive-tissue-request',
             'error_msg': err
           }); // log error to server console
           return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg});

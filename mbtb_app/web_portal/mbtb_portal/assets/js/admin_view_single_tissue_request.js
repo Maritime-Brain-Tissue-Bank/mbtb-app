@@ -18,6 +18,8 @@ view_single_tissue_request.controller("view_single_tissue_request_controller", [
       data: {requests_ids: requests_ids},
     }).then(function successCallback(response) {
       if (response.data === 'approved'){
+        // display alert on success and reload window
+        alert("Your selected request is approved.");
         $window.location.href = '/get_new_tissue_requests';
       }
       else {
