@@ -30,6 +30,7 @@
                     <th data-field="project_title">Project Title</th>
                     <th data-field="source_of_funding">Source of Funding</th>
                     <th data-field="abstract">Abstract</th>
+                    <th data-field="received_date">Received Date</th>
                 </tr>
                 </thead>
 
@@ -44,12 +45,13 @@
                         <td data-field="department_name"><%= data[i].department_name %></td>
                         <td data-field="city"><%= data[i].city %></td>
                         <td data-field="province"><%= data[i].province %></td>
-                        <td data-field="country"><%= data[i].postal_code %></td>
-                        <td data-field="comments"><%= data[i].phone_number %></td>
-                        <td data-field="position_title"><%= data[i].fax_number %></td>
-                        <td data-field="address_line_1"><%= data[i].project_title %></td>
-                        <td data-field="address_line_2"><%= data[i].source_of_funding %></td>
-                        <td data-field="address_line_2"><%= data[i].abstract %></td>
+                        <td data-field="postal_code"><%= data[i].postal_code %></td>
+                        <td data-field="phone_number"><%= data[i].phone_number %></td>
+                        <td data-field="fax_number"><%= data[i].fax_number %></td>
+                        <td data-field="project_title"><%= data[i].project_title %></td>
+                        <td data-field="source_of_funding"><%= data[i].source_of_funding %></td>
+                        <td data-field="abstract"><%= data[i].abstract %></td>
+                        <td data-field="received_date"><%= data[i].received_date %></td>
                     </tr>
                 <% } %>
             </table>

@@ -12,12 +12,16 @@ class TissueRequests(models.Model):
     city = models.CharField(max_length=30)
     province = models.CharField(max_length=30)
     postal_code = models.CharField(max_length=10)
-    phone_number = models.CharField(max_length=20, blank=True)
-    fax_number = models.CharField(max_length=20, blank=True)
+    phone_number = models.CharField(max_length=20, null=True)
+    fax_number = models.CharField(max_length=20, null=True)
     project_title = models.TextField()
     source_of_funding = models.TextField()
     abstract = models.TextField()
     pending_approval = models.CharField(max_length=1, default='Y')
+    received_date = models.DateField(null=True)
+    approval_date = models.DateField(null=True)
+    reverted_date = models.DateField(null=True)
+    tissue_request_number = models.CharField(max_length=15, null=True)
 
     class Meta:
         managed = False

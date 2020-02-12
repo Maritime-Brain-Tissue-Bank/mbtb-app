@@ -1,4 +1,5 @@
 const request = require('request');
+const moment = require('moment');
 
 module.exports = {
 
@@ -34,6 +35,7 @@ module.exports = {
       let url = sails.config.custom.data_api_url + 'get_archive_tissue_requests/' + requests_ids[i] + '/';
       let payload = {
         pending_approval: "Y",
+        reverted_date: moment().format('YYYY-MM-DD')
       };
 
       // patch request for updating following fields: `pending_approval`
