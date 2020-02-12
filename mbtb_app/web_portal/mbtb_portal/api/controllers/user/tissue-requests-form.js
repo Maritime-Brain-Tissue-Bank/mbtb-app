@@ -137,10 +137,9 @@ module.exports = {
         }
         else {
           const response = JSON.parse(body);
-          let tissue_request_number = moment().format('YYYYMMDD-') + String(response.tissue_requests_id).padStart(4, '0');
           message_title = "Confirmation";
           message_body = "Your data is received, kindly note down following tissue request number for reference: " +
-            tissue_request_number + ". " +
+            response.tissue_request_number + ". " +
             "Also, please email following documents: CV, ethics, tissue request template in order to process your request";
           return exits.success({'msg_title': message_title, 'msg_body': message_body});
         }

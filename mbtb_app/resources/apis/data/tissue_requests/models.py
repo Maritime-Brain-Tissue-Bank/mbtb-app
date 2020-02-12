@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 
@@ -21,7 +22,7 @@ class TissueRequests(models.Model):
     received_date = models.DateField(null=True)
     approval_date = models.DateField(null=True)
     reverted_date = models.DateField(null=True)
-    tissue_request_number = models.CharField(max_length=15, null=True)
+    tissue_request_number = models.CharField(max_length=15, unique=True, default=uuid.uuid4)
 
     class Meta:
         managed = False
