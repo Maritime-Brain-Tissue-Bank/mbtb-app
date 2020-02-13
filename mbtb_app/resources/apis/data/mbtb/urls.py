@@ -15,4 +15,5 @@ urlpatterns = [
     path('file_upload/', views.FileUploadAPIView.as_view()),
     path('edit_data/<int:prime_details_id>/', views.EditDataAPIView.as_view()),
     path('delete_data/<int:prime_details_id>/', views.DeleteDataAPIView.as_view()),
+    path('download_data/', views.DownloadDataAPIView.as_view())
 ]

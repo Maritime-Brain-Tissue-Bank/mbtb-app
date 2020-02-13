@@ -70,7 +70,8 @@ class CreateDataAPIView(views.APIView):
             _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
 
             if (not _duration['Response']) or (not _brain_weight['Response']):
-                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'},
+                                         status="400")
 
             other_details = OtherDetailsTemplate(
                 prime_details_id=prime_details_serializer.data['prime_details_id'], race=request.data['race'],
@@ -126,7 +127,7 @@ class GetSelectOptions(views.APIView):
         })
 
 
-# This view class is to upload and edit data via csv file in prime_details, other_details, allowed methods: POST
+# This view class is to upload and edit data via csv file in prime_details, other_details, allowed methods: POST, PATCH
 class FileUploadAPIView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAdmin]
@@ -289,7 +290,7 @@ class FileUploadAPIView(views.APIView):
                 _brain_weight = validate_data.check_is_number(value=row['brain_weight'])
 
                 if (not _duration['Response']) or (not _brain_weight['Response']):
-                    _error = 'Expecting value, received text for duration and/or brain_weight at mbtb_code: {}.'\
+                    _error = 'Expecting value, received text for duration and/or brain_weight at mbtb_code: {}.' \
                         .format(row['mbtb_code'])
                     return response.Response({'Error': _error}, status="400")
 
@@ -335,6 +336,7 @@ class FileUploadAPIView(views.APIView):
         return response.Response({'Response': 'Success'}, status="201")
 
 
+# This view class allows us to edit single row of mbtb_data: prime_details, other_details, allowed methods: PATCH
 class EditDataAPIView(views.APIView):
     permission_classes = [IsAdmin]
 
@@ -376,7 +378,8 @@ class EditDataAPIView(views.APIView):
             _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
 
             if (not _duration['Response']) or (not _brain_weight['Response']):
-                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'},
+                                         status="400")
 
             other_details_template_data = OtherDetailsTemplate(
                 prime_details_id=prime_details_id, race=request.data['race'],
@@ -413,6 +416,7 @@ class EditDataAPIView(views.APIView):
             )
 
 
+# This view class allows us to delete data from mbtb_data: prime_details, other_details, allowed_methods: DELETE
 class DeleteDataAPIView(views.APIView):
     permission_classes = [IsAdmin]
 
@@ -423,3 +427,34 @@ class DeleteDataAPIView(views.APIView):
         other_details.delete()
         prime_details.delete()
         return response.Response({'Response': 'Success'}, status="200")  # Return response
+
+
+# This view class fetches mbtb_data based on given multiple mbtb_code values in input, allowed_methods: POST
+class DownloadDataAPIView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        # validate request data for 'download_data' tag
+        if not ("download_data" in request.data):
+            return response.Response({'Error': "Please provide data with 'download_data' tag"}, status="400")
+
+        _received_input = request.data["download_data"]
+        _output_data = []
+
+        # Converting list of dict i.e _received_input to list containing received keys
+        # For checking 'mbtb_code' is present or not.
+        # Finally, validating with 'mbtb_code' tag and its length, return error if any of it doesn't follow.
+        _received_keys = list(set().union(*(i.keys() for i in _received_input)))
+        if not('mbtb_code' in _received_keys) or not(len(_received_keys) is 1):
+            return response.Response(
+                {'Error': "'mbtb_code' not found, Please provide values with it."}, status="400"
+            )
+
+        # Fetching data for each 'mbtb_code' value and adding it to _output_data list.
+        for elem in _received_input:
+            model_response = get_object_or_404(
+                OtherDetails.objects.values(), prime_details_id__mbtb_code=elem["mbtb_code"]
+            )
+            _output_data.append(model_response)  # adding dict to the output list
+
+        return response.Response(_output_data, status="200")
