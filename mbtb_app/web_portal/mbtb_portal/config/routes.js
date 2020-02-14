@@ -246,4 +246,8 @@ module.exports.routes = {
     }
   },
 
+  'POST /download_data': {
+    action: 'common/download-mbtb-data',
+  },
+
 };
