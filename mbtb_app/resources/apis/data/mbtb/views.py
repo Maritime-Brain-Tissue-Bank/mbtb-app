@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 from .data_templates.other_details import OtherDetailsTemplate
 from .data_templates.prime_details import PrimeDetailsTemplate
 from .db_operations.get_or_create import GetOrCreate
+from .db_operations.download_all_data import DownloadAllData
+from .db_operations.download_filtered_data import DownloadFilteredData
 from .models import AutopsyTypes, PrimeDetails, OtherDetails, NeuropathologicalDiagnosis, \
     TissueTypes
 from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUploadPrimeDetailsSerializer, \
@@ -434,27 +436,47 @@ class DownloadDataAPIView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
-        # validate request data for 'download_data' tag
-        if not ("download_data" in request.data):
-            return response.Response({'Error': "Please provide data with 'download_data' tag"}, status="400")
+        # validate request data for 'download_mode' tag
+        if not ("download_mode" in request.data):
+            return response.Response({"Error": "Please provide data with 'download_mdoe' tag"}, status="400")
 
-        _received_input = request.data["download_data"]
-        _output_data = []
+        _download_mode = request.data["download_mode"]
 
-        # Converting list of dict i.e _received_input to list containing received keys
-        # For checking 'mbtb_code' is present or not.
-        # Finally, validating with 'mbtb_code' tag and its length, return error if any of it doesn't follow.
-        _received_keys = list(set().union(*(i.keys() for i in _received_input)))
-        if not('mbtb_code' in _received_keys) or not(len(_received_keys) is 1):
-            return response.Response(
-                {'Error': "'mbtb_code' not found, Please provide values with it."}, status="400"
-            )
+        if _download_mode == "all":
+            download_all_data = DownloadAllData()
+            _response = download_all_data.run()
 
-        # Fetching data for each 'mbtb_code' value and adding it to _output_data list.
-        for elem in _received_input:
-            model_response = get_object_or_404(
-                OtherDetails.objects.values(), prime_details_id__mbtb_code=elem["mbtb_code"]
-            )
-            _output_data.append(model_response)  # adding dict to the output list
+            if not _response['response']:
+                return response.Response({
+                    "Error": "Something went wrong, please try again!"}, status="400")
 
-        return response.Response(_output_data, status="200")
+            return response.Response(_response["data"], status="200")
+
+        elif _download_mode == "filtered":
+            # validate request data for 'download_data' tag
+            if not ("download_data" in request.data):
+                return response.Response({'Error': "Please provide data with 'download_data' tag"}, status="400")
+
+            _received_input = request.data["download_data"]
+
+            # Converting list of dict i.e _received_input to list containing received keys
+            # For checking 'mbtb_code' is present or not.
+            # Finally, validating with 'mbtb_code' tag and its length, return error if any of it doesn't follow.
+            _received_keys = list(set().union(*(i.keys() for i in _received_input)))
+            if not ('mbtb_code' in _received_keys) or not (len(_received_keys) is 1):
+                return response.Response(
+                    {'Error': "'mbtb_code' not found, Please provide values with it."}, status="400"
+                )
+            _mbtb_code_list = [elem['mbtb_code'] for elem in _received_input]
+            download_filtered_data = DownloadFilteredData()
+            _response = download_filtered_data.run(input_mbtb_codes=_mbtb_code_list)
+
+            if not _response['response']:
+                return response.Response({
+                    "Error": "Invalid mbtb_code present, data not found"}, status="400")
+
+            return response.Response(_response["data"], status="200")
+
+        else:
+            return response.Response({
+                "Error": "Invalid download_mode option, allowed options are 'all', 'filtered'."}, status="400")
