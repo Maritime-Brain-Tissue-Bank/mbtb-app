@@ -1,0 +1,182 @@
+<title>Tissue Requests</title>
+
+<div class="container-fluid tissue_request_form_container">
+
+    <div class="row">
+        <div class="col-md-auto">
+            <h2 class="h2_heading">Tissue Requests</h2>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div ng-app="tissue_requests_app" ng-cloak="">
+        <form class="form-horizontal" name="tissue_requests_form" action="/tissue_requests_form" method="post" novalidate>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Title</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="title" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.first_name.$invalid && !tissue_requests_form.first_name.$pristine }">
+                <label class="col-sm-4 control-label">* First Name</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="first_name" type="text" ng-model="first_name" required="">
+                </div>
+                <div ng-show="tissue_requests_form.first_name.$dirty && tissue_requests_form.first_name.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.last_name.$invalid && !tissue_requests_form.last_name.$pristine }">
+                <label class="col-sm-4 control-label">* Last Name</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="last_name" type="text" ng-model="last_name" required="">
+                </div>
+                <div ng-show="tissue_requests_form.last_name.$dirty && tissue_requests_form.last_name.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.email.$invalid && !tissue_requests_form.email.$pristine }">
+                <label class="col-sm-4 control-label">* Email</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="email" type="email" ng-model="email" required="" ng-pattern = "/^.+@.+\..+$/">
+                </div>
+                <div class="error_msg help-block"
+                     ng-show="tissue_requests_form.email.$dirty && tissue_requests_form.email.$invalid">
+                    <div ng-message-exp="['required', 'pattern']">
+                        Your email must be between 10 and 100 characters long and look like an e-mail address.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.institution.$invalid && !tissue_requests_form.institution.$pristine }">
+                <label class="col-sm-4 control-label">* Institution</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="institution" type="text" ng-model="institution" required="">
+                </div>
+                <div ng-show="tissue_requests_form.institution.$dirty && tissue_requests_form.institution.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.department_name.$invalid && !tissue_requests_form.department_name.$pristine }">
+                <label class="col-sm-4 control-label">* Department</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="department_name" type="text" ng-model="department_name" required="">
+                </div>
+                <div ng-show="tissue_requests_form.department_name.$dirty && tissue_requests_form.department_name.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.city.$invalid && !tissue_requests_form.city.$pristine }">
+                <label class="col-sm-4 control-label">* City</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="city" type="text" ng-model="city" required="">
+                </div>
+                <div ng-show="tissue_requests_form.city.$dirty && tissue_requests_form.city.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.province.$invalid && !tissue_requests_form.province.$pristine }">
+                <label class="col-sm-4 control-label">* Province</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="province" type="text" ng-model="province" required="">
+                </div>
+                <div ng-show="tissue_requests_form.province.$dirty && tissue_requests_form.province.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.postal_code.$invalid && !tissue_requests_form.postal_code.$pristine }">
+                <label class="col-sm-4 control-label">* Postal/Zip Code</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="postal_code" type="text" ng-model="postal_code" required="">
+                </div>
+                <div ng-show="tissue_requests_form.postal_code.$dirty && tissue_requests_form.postal_code.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Phone</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="phone_number" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 control-label">Fax</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="fax_number" type="text">
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.project_title.$invalid && !tissue_requests_form.project_title.$pristine }">
+                <label class="col-sm-4 control-label">* Project Title</label>
+                <div class="col-sm-5">
+                    <input class="form-control" name="project_title" type="text" ng-model="project_title" required="">
+                </div>
+                <div ng-show="tissue_requests_form.project_title.$dirty && tissue_requests_form.project_title.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.source_of_funding.$invalid && !tissue_requests_form.source_of_funding.$pristine }">
+                <label class="col-sm-4 control-label">* Source of Funding</label>
+                <div class="col-sm-5">
+                    <textarea class="form-control" name="source_of_funding" rows="2" ng-model="source_of_funding" required=""></textarea>
+                </div>
+                <div ng-show="tissue_requests_form.source_of_funding.$dirty && tissue_requests_form.source_of_funding.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error' : tissue_requests_form.abstract.$invalid && !tissue_requests_form.abstract.$pristine }">
+                <label class="col-sm-4 control-label">* Abstract</label>
+                <div class="col-sm-5">
+                    <textarea class="form-control" name="abstract" rows="3" ng-model="abstract" required=""></textarea>
+                </div>
+                <div ng-show="tissue_requests_form.abstract.$dirty && tissue_requests_form.abstract.$error.required" class="help-block">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4 control-label"></div>
+                <div class="col-sm-5">
+                    <input class="form-check-input" type="checkbox" id="agree_terms_checkbox" name="agree_terms_checkbox" ng-model="agree_terms_checkbox" required="true" >
+                    I have reall all terms and conditions
+                    <div ng-show="tissue_requests_form.agree_terms_checkbox.$error.required"></div>
+                </div>
+            </div>
+
+            <div class="form-group row button_holder">
+                <div class="col">
+                    <br>
+                    <button type="submit" class="btn btn-primary" id="submit_btn" ng-disabled="tissue_requests_form.$invalid">Submit</button>
+                </div>
+                <div class="col" id="cancel_btn">
+                    <br>
+                    <a href="/">Cancel</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

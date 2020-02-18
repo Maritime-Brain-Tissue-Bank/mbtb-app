@@ -1,0 +1,77 @@
+<title>Tissue Requests</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<div class="container-fluid tissue_requests_container">
+    <div class="col-md-12">
+        <h2 class="heading_title">New Tissue Requests</h2>
+        <br>
+        <form id="user_requests_form" >
+            <input type="hidden" id="data_length" value="<%= data.length %>">
+            <script>
+                // binding data recieved from sails controller to JS variable to pass it to angular
+                var mbtb_data = <%- JSON.stringify(data) %>;
+            </script>
+
+            <table id="tissue_requests_table" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" onClick="toggle_all(this.checked)" id="select_all"></th>
+                    <th data-field="title">Title</th>
+                    <th data-field="first_name">First Name</th>
+                    <th data-field="last_name">Last Name</th>
+                    <th data-field="email">Email</th>
+                    <th data-field="institution">Institution</th>
+                    <th data-field="department_name">Department</th>
+                    <th data-field="city">City</th>
+                    <th data-field="province">Province</th>
+                    <th data-field="postal_code">Postal/Zip Code</th>
+                    <th data-field="phone_number">Phone</th>
+                    <th data-field="fax_number">Fax</th>
+                    <th data-field="project_title">Project Title</th>
+                    <th data-field="source_of_funding">Source of Funding</th>
+                    <th data-field="abstract">Abstract</th>
+                    <th data-field="received_date">Received Date</th>
+                    <th data-field="tissue_request_number">Tissue Request No</th>
+                </tr>
+                </thead>
+
+                <% for(var i=0; i < data.length; i++) { %>
+                    <tr>
+                        <td><input type="checkbox" name="checkbox<%- i %>" id="checkbox<%- i %>" value="<%= data[i].tissue_requests_id %>")></td>
+                        <td data-field="title"><%= data[i].title %></td>
+                        <td data-field="first_name"><a href="/view_single_tissue_request/<%= data[i].tissue_requests_id %>"><%= data[i].first_name %></a></td>
+                        <td data-field="last_name"><%= data[i].last_name %></td>
+                        <td data-field="email"><%= data[i].email %></td>
+                        <td data-field="institution"><%= data[i].institution %></td>
+                        <td data-field="department_name"><%= data[i].department_name %></td>
+                        <td data-field="city"><%= data[i].city %></td>
+                        <td data-field="province"><%= data[i].province %></td>
+                        <td data-field="postal_code"><%= data[i].postal_code %></td>
+                        <td data-field="phone_number"><%= data[i].phone_number %></td>
+                        <td data-field="fax_number"><%= data[i].fax_number %></td>
+                        <td data-field="project_title"><%= data[i].project_title %></td>
+                        <td data-field="source_of_funding"><%= data[i].source_of_funding %></td>
+                        <td data-field="abstract"><%= data[i].abstract %></td>
+                        <td data-field="received_date"><%= data[i].received_date %></td>
+                        <td data-field="tissue_request_number"><%= data[i].tissue_request_number %></td>
+                    </tr>
+                <% } %>
+            </table>
+        </form>
+
+        <br>
+        <br>
+        <div class="form-group button_holder">
+            <div class="col" id="cancel_btn">
+                <button class="btn btn-primary" id="accept_tissue_request_btn">Approve</button>
+                <button class="btn btn-primary" id="delete_tissue_request_btn">Delete</button>
+            </div>
+        </div>
+
+        <div id="temp_msg"></div>
+
+    </div>
+</div>
+<br>
+
+

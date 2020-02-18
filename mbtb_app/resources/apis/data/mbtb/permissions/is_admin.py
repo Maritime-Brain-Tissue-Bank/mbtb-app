@@ -23,7 +23,7 @@ class IsAdmin(permissions.BasePermission):
             return False
 
         if request.method == 'PATCH':
-            valid_url = ['edit_data']
+            valid_url = ['edit_data', 'file_upload', 'get_new_tissue_requests', 'get_archive_tissue_requests']
 
             # splitting url e.g. /edit_data/1/ to get brain_dataset for comparison
             url_path = request.path.split('/')
@@ -35,7 +35,7 @@ class IsAdmin(permissions.BasePermission):
             return False
 
         if request.method == 'DELETE':
-            valid_url = ['delete_data']
+            valid_url = ['delete_data', 'get_new_tissue_requests', 'get_archive_tissue_requests']
 
             # splitting url e.g. /delete_data/1/ to get brain_dataset for comparison
             url_path = request.path.split('/')
@@ -44,6 +44,18 @@ class IsAdmin(permissions.BasePermission):
                 return admin
 
             # deny DELETE request if url is not in valid_url by default
+            return False
+
+        if request.method == 'GET':
+            valid_url = ['get_new_tissue_requests', 'get_archive_tissue_requests']
+
+            # splitting url e.g. /get_new_tissue_requests/1/ to get brain_dataset for comparison
+            url_path = request.path.split('/')
+            if max(url_path) in valid_url:
+                admin = self.authenticate(request)
+                return admin
+
+            # deny GET request if url is not in valid_url by default
             return False
 
         raise exceptions.MethodNotAllowed(method=request.method)

@@ -246,11 +246,11 @@
 
         <div class="row button_holder">
             <div class="col-md-12">
-                <button class="btn btn-primary export_button" ng-click="exportToCsv(gridOptions.data)">Export data to CSV
+                <button class="btn btn-primary export_button" ng-click="download_csv_file('all')">Export data to CSV
                     <i class="fa fa-download"></i>
                 </button>
 
-                <button class="btn btn-primary export_button" ng-click="exportToCsv(filtered_data.data)">Export filtered data to CSV
+                <button class="btn btn-primary export_button" ng-click="download_csv_file('filtered')">Export filtered data to CSV
                     <i class="fa fa-download"></i>
                 </button>
             </div>
@@ -259,3 +259,10 @@
     </div>
 
 </div>
+
+<div class="container-fluid">
+    <i>
+        Please refer to the following <a href="/view_data_guide">guide</a> for further reference.
+    </i>
+</div>
+<br><br>

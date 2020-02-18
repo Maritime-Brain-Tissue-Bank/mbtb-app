@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 from .data_templates.other_details import OtherDetailsTemplate
 from .data_templates.prime_details import PrimeDetailsTemplate
 from .db_operations.get_or_create import GetOrCreate
+from .db_operations.download_all_data import DownloadAllData
+from .db_operations.download_filtered_data import DownloadFilteredData
 from .models import AutopsyTypes, PrimeDetails, OtherDetails, NeuropathologicalDiagnosis, \
     TissueTypes
 from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUploadPrimeDetailsSerializer, \
@@ -70,7 +72,8 @@ class CreateDataAPIView(views.APIView):
             _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
 
             if (not _duration['Response']) or (not _brain_weight['Response']):
-                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'},
+                                         status="400")
 
             other_details = OtherDetailsTemplate(
                 prime_details_id=prime_details_serializer.data['prime_details_id'], race=request.data['race'],
@@ -126,11 +129,12 @@ class GetSelectOptions(views.APIView):
         })
 
 
-# This view class is to upload data via csv file in prime_details, other_details, allowed methods: POST
+# This view class is to upload and edit data via csv file in prime_details, other_details, allowed methods: POST, PATCH
 class FileUploadAPIView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAdmin]
 
+    # For `POST` request: upload data via csv file
     def post(self, request, format=None):
         validate_data = ValidateData()
         _file_tag = validate_data.check_file_tag(request=request)  # Check for `file` tag
@@ -183,7 +187,9 @@ class FileUploadAPIView(views.APIView):
                 _brain_weight = validate_data.check_is_number(value=row['brain_weight'])
 
                 if (not _duration['Response']) or (not _brain_weight['Response']):
-                    return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+                    _error = 'Expecting value, received text for duration and/or brain_weight at mbtb_code: {}.' \
+                        .format(row['mbtb_code'])
+                    return response.Response({'Error': _error}, status="400")
 
                 # If other_details data is validated then save it else return error response
                 other_details = OtherDetailsTemplate(
@@ -227,7 +233,112 @@ class FileUploadAPIView(views.APIView):
         # Return response: data is uploaded successfully
         return response.Response({'Response': 'Success'}, status="201")
 
+    # For `PATCH` request: edit data via csv file
+    def patch(self, request, format=None):
+        validate_data = ValidateData()
+        _file_tag = validate_data.check_file_tag(request=request)  # Check for `file` tag
+        if not _file_tag['Response']:
+            return response.Response({'Error': _file_tag['Message']}, status="400")
 
+        _file_obj = request.data['file']
+        _file_type = validate_data.check_file_type(filename=str(_file_obj))  # Check for file type
+        if not _file_type['Response']:
+            return response.Response({'Error': _file_type['Message']}, status="400")
+
+        # Converting file data into dictionary
+        _csv_file = csv.DictReader(codecs.iterdecode(_file_obj, 'utf-8-sig'))
+        _csv_file = [dict(row) for row in _csv_file]
+        _file_size = validate_data.check_file_size(csv_file=_csv_file)  # Check file size
+        if not _file_size['Response']:
+            return response.Response({'Error': _file_size['Message']}, status="400")
+
+        _column_names = validate_data.check_column_names(column_names=list(_csv_file[0].keys()))  # Check column names
+        if not _column_names['Response']:
+            return response.Response({'Error': _column_names['Message']}, status="400")
+
+        for row in _csv_file:
+
+            # Get prime_details, other_details based on prime_details_id or return 404 if not found
+            prime_details = get_object_or_404(PrimeDetails, mbtb_code=row['mbtb_code'])
+            other_details = get_object_or_404(OtherDetails, prime_details_id=prime_details.prime_details_id)
+
+            # Get or Create (Get value or create new if not exists) for AutopsyType, TissuType and Neuro Diagnosis
+            tissue_type = GetOrCreate(model_name='TissueTypes').run(tissue_type=row['tissue_type'])
+            neuro_diagnosis_id = GetOrCreate(model_name='NeuropathologicalDiagnosis').run(
+                neuro_diagnosis_name=row['neuropathology_diagnosis'])
+            autopsy_type = GetOrCreate(model_name='AutopsyTypes').run(autopsy_type=row['autopsy_type'])
+
+            # If prime_details data is validated then save it else return error response
+            _preservation_method = validate_data.check_preservation_method(
+                formalin_fixed=row['formalin_fixed'], fresh_frozen=row['fresh_frozen']
+            )
+            prime_details_template_data = PrimeDetailsTemplate(
+                mbtb_code=row['mbtb_code'], sex=row['sex'], age=row['age'],
+                postmortem_interval=row['postmortem_interval'], time_in_fix=row['time_in_fix'],
+                clinical_diagnosis=row['clinical_diagnosis'], tissue_type=tissue_type.tissue_type_id,
+                preservation_method=_preservation_method,
+                neuro_diagnosis_id=neuro_diagnosis_id.neuro_diagnosis_id,
+                storage_year=row['storage_year']
+            )
+            prime_details_serializer = FileUploadPrimeDetailsSerializer(
+                prime_details, data=prime_details_template_data.__dict__, partial=True
+            )
+
+            if prime_details_serializer.is_valid():
+                prime_details_serializer.save()  # Saving prime_details
+
+                # If other_details data is validated then save it else return error response
+                _duration = validate_data.check_is_number(value=row['duration'])
+                _brain_weight = validate_data.check_is_number(value=row['brain_weight'])
+
+                if (not _duration['Response']) or (not _brain_weight['Response']):
+                    _error = 'Expecting value, received text for duration and/or brain_weight at mbtb_code: {}.' \
+                        .format(row['mbtb_code'])
+                    return response.Response({'Error': _error}, status="400")
+
+                # If other_details data is validated then save it else return error response
+                other_details_template_data = OtherDetailsTemplate(
+                    prime_details_id=prime_details.prime_details_id, race=row['race'],
+                    duration=_duration['Value'], clinical_details=row['clinical_details'],
+                    cause_of_death=row['cause_of_death'], brain_weight=_brain_weight['Value'],
+                    neuropathology_summary=row['neuropathology_summary'],
+                    neuropathology_gross=row['neuropathology_gross'],
+                    neuropathology_microscopic=row['neuropathology_microscopic'], cerad=row['cerad'],
+                    braak_stage=row['braak_stage'], khachaturian=row['khachaturian'], abc=row['abc'],
+                    autopsy_type=autopsy_type.autopsy_type_id, formalin_fixed=row['formalin_fixed'],
+                    fresh_frozen=row['fresh_frozen']
+                )
+                other_details_serializer = FileUploadOtherDetailsSerializer(
+                    other_details, data=other_details_template_data.__dict__, partial=True
+                )
+                if other_details_serializer.is_valid():
+                    other_details_serializer.save()  # Saving other_details
+                else:
+                    # TODO: log errors here related to file data uploading for other details
+
+                    # Return error response if any error in other_details data
+                    return response.Response(
+                        {'Response': 'Failure',
+                         'Message': 'Error in other details, Data uploading failed at mbtb_code: {}'.format(
+                             row['mbtb_code']), 'Error': other_details_serializer.errors},
+                        status="400"
+                    )
+
+            else:
+                # TODO: log errors here related to file data uploading for prime details
+                # Return error response if any error in prime_details data
+                return response.Response(
+                    {'Response': 'Failure',
+                     'Message': 'Error in prime details, Data uploading failed at mbtb_code: {}'.format(
+                         row['mbtb_code']), 'Error': prime_details_serializer.errors},
+                    status="400"
+                )
+
+        # Return response: data is uploaded successfully
+        return response.Response({'Response': 'Success'}, status="201")
+
+
+# This view class allows us to edit single row of mbtb_data: prime_details, other_details, allowed methods: PATCH
 class EditDataAPIView(views.APIView):
     permission_classes = [IsAdmin]
 
@@ -269,7 +380,8 @@ class EditDataAPIView(views.APIView):
             _brain_weight = validate_data.check_is_number(value=request.data['brain_weight'])
 
             if (not _duration['Response']) or (not _brain_weight['Response']):
-                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'}, status="400")
+                return response.Response({'Error': 'Expecting value, received text for duration and/or brain_weight.'},
+                                         status="400")
 
             other_details_template_data = OtherDetailsTemplate(
                 prime_details_id=prime_details_id, race=request.data['race'],
@@ -306,6 +418,7 @@ class EditDataAPIView(views.APIView):
             )
 
 
+# This view class allows us to delete data from mbtb_data: prime_details, other_details, allowed_methods: DELETE
 class DeleteDataAPIView(views.APIView):
     permission_classes = [IsAdmin]
 
@@ -316,3 +429,54 @@ class DeleteDataAPIView(views.APIView):
         other_details.delete()
         prime_details.delete()
         return response.Response({'Response': 'Success'}, status="200")  # Return response
+
+
+# This view class fetches mbtb_data based on given multiple mbtb_code values in input, allowed_methods: POST
+class DownloadDataAPIView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        # validate request data for 'download_mode' tag
+        if not ("download_mode" in request.data):
+            return response.Response({"Error": "Please provide data with 'download_mdoe' tag"}, status="400")
+
+        _download_mode = request.data["download_mode"]
+
+        if _download_mode == "all":
+            download_all_data = DownloadAllData()
+            _response = download_all_data.run()
+
+            if not _response['response']:
+                return response.Response({
+                    "Error": "Something went wrong, please try again!"}, status="400")
+
+            return response.Response(_response["data"], status="200")
+
+        elif _download_mode == "filtered":
+            # validate request data for 'download_data' tag
+            if not ("download_data" in request.data):
+                return response.Response({'Error': "Please provide data with 'download_data' tag"}, status="400")
+
+            _received_input = request.data["download_data"]
+
+            # Converting list of dict i.e _received_input to list containing received keys
+            # For checking 'mbtb_code' is present or not.
+            # Finally, validating with 'mbtb_code' tag and its length, return error if any of it doesn't follow.
+            _received_keys = list(set().union(*(i.keys() for i in _received_input)))
+            if not ('mbtb_code' in _received_keys) or not (len(_received_keys) is 1):
+                return response.Response(
+                    {'Error': "'mbtb_code' not found, Please provide values with it."}, status="400"
+                )
+            _mbtb_code_list = [elem['mbtb_code'] for elem in _received_input]
+            download_filtered_data = DownloadFilteredData()
+            _response = download_filtered_data.run(input_mbtb_codes=_mbtb_code_list)
+
+            if not _response['response']:
+                return response.Response({
+                    "Error": "Invalid mbtb_code present, data not found"}, status="400")
+
+            return response.Response(_response["data"], status="200")
+
+        else:
+            return response.Response({
+                "Error": "Invalid download_mode option, allowed options are 'all', 'filtered'."}, status="400")

@@ -6,7 +6,7 @@ module.exports = {
   friendlyName: 'Admin - File upload',
 
 
-  description: 'This controller upload file to sails js and send it via post request to API',
+  description: 'This controller upload file to sails js and send it via POST request to API for add new data',
 
 
   inputs: {
