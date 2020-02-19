@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'register',
-    'admin_signin',
+    'admin_api',
     'users_signin',
 ]
 
@@ -108,8 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'register.permissions.IsAuthenticated',
-        'register.permissions.IsPostAllowed',
+        'permissions.is_admin.IsAdmin',
+        'permissions.is_authenticated.IsAuthenticated',
+        'permissions.is_post_allowed.IsPostAllowed'
     )
 }
 

@@ -15,16 +15,18 @@ class UsersAccountView(views.APIView):
         email = request.data['email']
         password_hash = request.data['password']
 
-        try:
-            user = Users.objects.get(email=email, password_hash=password_hash)
-        except Users.DoesNotExist:
+        user = Users.objects.filter(email=email, password_hash=password_hash)
+        if not user:
             return response.Response({'Error': "Invalid username/password"}, status="400")
 
-        if user:
+        elif user[0].suspend is 'Y':
+            return response.Response({'Error': 'Your account is suspended. Please contact admin.'}, status="400")
+
+        else:
             payload = {
-                'id': user.id,
-                'email': user.email,
-                'password_hash': user.password_hash
+                'id': user[0].id,
+                'email': user[0].email,
+                'password_hash': user[0].password_hash
             }
             jwt_token = jwt.encode(payload, "SECRET_KEY", algorithm='HS256')
 

@@ -20,6 +20,7 @@ class Users(models.Model):
     comments = models.TextField(blank=True)
     pending_approval = models.CharField(max_length=1, default='Y')
     active_since = models.DateField(auto_now_add=True)
+    suspend = models.CharField(max_length=1, default='N')
 
     class Meta:
         #managed = False

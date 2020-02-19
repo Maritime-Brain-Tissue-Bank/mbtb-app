@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class AdminSigninConfig(AppConfig):
-    name = 'admin_signin'
+    name = 'admin_api'
