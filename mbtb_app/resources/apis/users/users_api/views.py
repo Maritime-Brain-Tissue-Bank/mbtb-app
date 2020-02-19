@@ -1,10 +1,13 @@
 from django.http import HttpResponse
-from rest_framework import views, response
+from rest_framework import views, response, viewsets
 from rest_framework.permissions import AllowAny
-from register.models import Users
+from .models import Users
+from .serializers import UsersSerializer
+from permissions.is_post_allowed import IsPostAllowed
 import jwt
 
 
+# This view authenticate users and return auth_token, allowed request: post only
 class UsersAccountView(views.APIView):
     permission_classes = [AllowAny, ]
 
@@ -35,3 +38,10 @@ class UsersAccountView(views.APIView):
                 status=200,
                 content_type="application/json"
             )
+
+
+# For new user registration requests and only post request allowed
+class NewUsersViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsPostAllowed]
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer

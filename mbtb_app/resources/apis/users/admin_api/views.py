@@ -3,8 +3,8 @@ from rest_framework import views, response, viewsets
 from rest_framework.permissions import AllowAny
 from .models import AdminAccount
 from permissions.is_admin import IsAdmin
-from register.models import Users
-from register.serializers import UsersSerializer
+from users_api.models import Users
+from users_api.serializers import UsersSerializer
 import jwt
 
 

@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from .models import AdminAccount
-from register.models import Users
-from register.serializers import UsersSerializer
+from users_api.models import Users
+from users_api.serializers import UsersSerializer
 import jwt
 
 

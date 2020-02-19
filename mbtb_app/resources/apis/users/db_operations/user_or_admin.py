@@ -1,5 +1,5 @@
 from admin_api.models import AdminAccount
-from register.models import Users
+from users_api.models import Users
 
 
 # This class is to fetch rows from admin and user tables
