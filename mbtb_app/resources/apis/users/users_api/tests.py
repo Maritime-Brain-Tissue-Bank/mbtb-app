@@ -1,24 +1,42 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from .models import Users
+import jwt
+
+
+class SetUpTestData(APITestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.user_email = 'user@mbtb.ca'
+        cls.user_password = 'right_password'
+        Users.objects.create(email=cls.user_email, password_hash=cls.user_password)
+        user = Users.objects.get(email=cls.user_email)
+        user_auth_payload = {
+            'id': user.id,
+            'email': user.email
+        }
+        cls.token = jwt.encode(user_auth_payload, "SECRET_KEY", algorithm='HS256')  # generating jwt token
+        cls.client = APIClient(enforce_csrf_checks=True)  # Enforcing csrf checks
+
+    @classmethod
+    def tearDownClass(cls):
+        Users.objects.all().delete()
 
 
 # This class is to test admin login
-class UsersAuthenticationTestCase(APITestCase):
+class UsersAuthenticationTestCase(SetUpTestData):
 
-    def setUp(self):
-        self.email = 'user@mbtb.ca'
-        self.password = 'right_password'
-        Users.objects.create(email=self.email, password_hash=self.password)
-        self.valid_credentials = {
-            'email': self.email,
-            'password': self.password
+    def setUp(cls):
+        super(SetUpTestData, cls).setUpClass()
+        cls.valid_credentials = {
+            'email': cls.user_email,
+            'password': cls.user_password
         }
-        self.invalid_credentials = {
-            'email': self.email,
+        cls.invalid_credentials = {
+            'email': cls.user_email,
             'password': 'wrong_password'
         }
-        self.client = APIClient(enforce_csrf_checks=True)  # enforcing csrf checks
 
     # post request with valid credentials
     def test_valid_admin_login(self):
@@ -28,15 +46,25 @@ class UsersAuthenticationTestCase(APITestCase):
             format='json'
         )
         self.assertEquals(response.status_code, status.HTTP_200_OK)
+        _received_token = response._container[0].decode('utf-8')
+        _decoded_token = jwt.decode(_received_token, "SECRET_KEY")
+        _model_response = Users.objects.get(id=_decoded_token['id'], email=_decoded_token['email'])
+        self.assertEqual(_model_response.email, self.user_email)
+        self.assertEqual(_model_response.password_hash, self.user_password)
 
     # post request with invalid credentials
     def test_invalid_admin_login(self):
+        _predicted_msg = 'Invalid username/password'
         response = self.client.post(
             '/user_auth',
             self.invalid_credentials,
             format='json'
         )
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['Error'], _predicted_msg)
+
+    def tearDown(cls):
+        super(SetUpTestData, cls).tearDownClass()
 
 
 # This class is to test POST requests for new user accounts
@@ -89,12 +117,19 @@ class NewUserRequestTest(APITestCase):
             format='json'
         )
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['email'], self.valid_payload['email'])
+        self.assertEqual(response.data['first_name'], self.valid_payload['first_name'])
+        self.assertEqual(response.data['pending_approval'], 'Y')
 
     # post request with invalid data
     def test_valid_bad_new_request(self):
+        _predicted_msg = 'This field may not be blank.'
         response = self.client.post(
             '/add_new_users/',
             self.invalid_payload,
             format='json'
         )
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['email'][0], _predicted_msg)
+        self.assertEqual(response.data['first_name'][0], _predicted_msg)
+        self.assertEqual(response.data['last_name'][0], _predicted_msg)

@@ -56,12 +56,14 @@ class AdminAccountGetTokenViewTest(SetUpTestData):
 
     # post request with invalid credentials
     def test_invalid_admin_login(self):
+        _predicted_msg = 'Invalid username/password'
         response = self.client.post(
             '/admin_auth',
             self.invalid_credentials,
             format='json'
         )
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['Error'], _predicted_msg)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()
@@ -96,8 +98,10 @@ class NewUsersViewSetTest(SetUpTestData):
 
     # get request without token
     def test_get_invalid_request(self):
+        _predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.get('/list_new_users/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], _predicted_msg)
 
     # get request for single user with valid token and payload data
     def test_get_single_request(self):
@@ -112,10 +116,12 @@ class NewUsersViewSetTest(SetUpTestData):
 
     # get request for single user with valid token and invalid payload data
     def test_get_invalid_single_request(self):
+        _predicted_msg = 'Not found.'
         url = '/list_new_users/' + '25' + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'], _predicted_msg)
         self.client.credentials()
 
     # patch request with valid token and data
