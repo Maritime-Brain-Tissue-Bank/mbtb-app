@@ -11,7 +11,7 @@ class IsAdmin(permissions.BasePermission):
 
         # only allow admin's POST request via authorized token
         if request.method == 'POST':
-            valid_url = ['admin_auth']
+            valid_url = []
 
             # splitting url e.g. /brain_dataset/1/ to `get brain_dataset` for comparison
             url_path = request.path.split('/')

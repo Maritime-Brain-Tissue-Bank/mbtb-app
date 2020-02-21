@@ -65,8 +65,32 @@ class AdminAccountGetTokenViewTest(SetUpTestData):
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['Error'], _predicted_msg)
 
-    def tearDown(cls):
-        super(SetUpTestData, cls).tearDownClass()
+    def test_invalid_get_request(self):
+        response = self.client.get(
+            '/admin_auth/',
+            self.invalid_credentials,
+            format='json'
+        )
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_invalid_patch_request(self):
+        response = self.client.patch(
+            '/admin_auth/1/',
+            self.invalid_credentials,
+            format='json'
+        )
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_invalid_delete_request(self):
+        response = self.client.delete(
+            '/admin_auth/1/',
+            self.invalid_credentials,
+            format='json'
+        )
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def tearDown(self):
+        super(SetUpTestData, self).tearDownClass()
 
 
 # This class is to test GET, PATCH, requests

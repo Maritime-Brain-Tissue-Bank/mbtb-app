@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from .models import Users
+from .serializers import UsersSerializer
 import jwt
 
 
@@ -11,10 +12,10 @@ class SetUpTestData(APITestCase):
         cls.user_email = 'user@mbtb.ca'
         cls.user_password = 'right_password'
         Users.objects.create(email=cls.user_email, password_hash=cls.user_password)
-        user = Users.objects.get(email=cls.user_email)
+        cls.user = Users.objects.get(email=cls.user_email)
         user_auth_payload = {
-            'id': user.id,
-            'email': user.email
+            'id': cls.user.id,
+            'email': cls.user.email
         }
         cls.token = jwt.encode(user_auth_payload, "SECRET_KEY", algorithm='HS256')  # generating jwt token
         cls.client = APIClient(enforce_csrf_checks=True)  # Enforcing csrf checks
@@ -39,7 +40,7 @@ class UsersAuthenticationTestCase(SetUpTestData):
         }
 
     # post request with valid credentials
-    def test_valid_admin_login(self):
+    def test_valid_user_login(self):
         response = self.client.post(
             '/user_auth',
             self.valid_credentials,
@@ -53,7 +54,7 @@ class UsersAuthenticationTestCase(SetUpTestData):
         self.assertEqual(_model_response.password_hash, self.user_password)
 
     # post request with invalid credentials
-    def test_invalid_admin_login(self):
+    def test_invalid_user_login(self):
         _predicted_msg = 'Invalid username/password'
         response = self.client.post(
             '/user_auth',
@@ -62,6 +63,41 @@ class UsersAuthenticationTestCase(SetUpTestData):
         )
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['Error'], _predicted_msg)
+
+    def test_invalid_get_request(self):
+        response = self.client.get(
+            '/user_auth/',
+            self.invalid_credentials,
+            format='json'
+        )
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_invalid_patch_request(self):
+        response = self.client.patch(
+            '/user_auth/1/',
+            self.invalid_credentials,
+            format='json'
+        )
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_invalid_delete_request(self):
+        response = self.client.delete(
+            '/user_auth/1/',
+            self.invalid_credentials,
+            format='json'
+        )
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_suspended_user_login(self):
+        _suspended_msg = 'Your account is suspended. Please contact admin.'
+        Users.objects.filter(email=self.user.email).update(suspend='Y')
+        login_response = self.client.post(
+            '/user_auth',
+            self.valid_credentials,
+            format='json'
+        )
+        self.assertEquals(login_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEquals(login_response.data['Error'], _suspended_msg)
 
     def tearDown(cls):
         super(SetUpTestData, cls).tearDownClass()

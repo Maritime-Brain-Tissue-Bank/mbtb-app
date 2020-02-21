@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from rest_framework import views, response, viewsets
-from rest_framework.permissions import AllowAny
 from .models import Users
 from .serializers import UsersSerializer
 from permissions.is_post_allowed import IsPostAllowed
@@ -9,7 +8,7 @@ import jwt
 
 # This view authenticate users and return auth_token, allowed request: post only
 class UsersAccountView(views.APIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsPostAllowed, ]
 
     def post(self, request):
         if not request.data:
