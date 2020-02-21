@@ -65,6 +65,7 @@ class AdminAccountGetTokenViewTest(SetUpTestData):
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['Error'], _predicted_msg)
 
+    # Invalid get request: should not be allowed
     def test_invalid_get_request(self):
         response = self.client.get(
             '/admin_auth/',
@@ -73,6 +74,7 @@ class AdminAccountGetTokenViewTest(SetUpTestData):
         )
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    # Invalid patch request: should not be allowed
     def test_invalid_patch_request(self):
         response = self.client.patch(
             '/admin_auth/1/',
@@ -81,6 +83,7 @@ class AdminAccountGetTokenViewTest(SetUpTestData):
         )
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    # Invalid delete request: should not be allowed
     def test_invalid_delete_request(self):
         response = self.client.delete(
             '/admin_auth/1/',
@@ -198,6 +201,7 @@ class CurrentUsersViewSetTest(SetUpTestData):
             'suspend': 'Y'
         }
 
+    # Gets current users list and comparing with model data
     def test_get_current_users(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get('/current_users/')
@@ -207,6 +211,7 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
 
+    # Gets single user detail and comparing with model data.
     def test_get_single_user(self):
         url = '/current_users/' + str(self.current_user.pk) + '/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -217,12 +222,14 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
 
+    # Invalid request: no token
     def test_invalid_get_current_user(self):
         _predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
         response = self.client.get('/current_users/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['detail'], _predicted_msg)
 
+    # Invalid single user request: unknown user id
     def test_invalid_get_single_user(self):
         url = '/current_users/' + '23/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
@@ -230,12 +237,25 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.client.credentials()
 
-    # This test first suspend the user account by sending patch request
+    # This test first login with user then suspend the user account by sending patch request
     # Confirm it by comparing against received response, performing get request on same url, data fetched from model,
     # failed login attempt with suspension message.
     def test_suspend_user(self):
         _suspended_msg = 'Your account is suspended. Please contact admin.'
         _get_request_msg = 'Not found.'
+
+        # testing normal user login before suspension, verifying by receiving auth_token.
+        before_suspension_response = self.client.post(
+            '/user_auth',
+            self.valid_credentials,
+            format='json'
+        )
+        self.assertEquals(before_suspension_response.status_code, status.HTTP_200_OK)
+        _received_token = before_suspension_response._container[0].decode('utf-8')
+        _decoded_token = jwt.decode(_received_token, "SECRET_KEY")
+        _model_response = Users.objects.get(id=_decoded_token['id'], email=_decoded_token['email'])
+        self.assertEqual(_model_response.email, self.current_user.email)
+        self.assertEqual(_model_response.password_hash, self.current_user.password_hash)
 
         # Suspending user account via patch request, confirming by received response.
         self.url = '/current_users/{}/'.format(self.current_user.id)
@@ -257,14 +277,15 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(_model_response.suspend, 'Y')
 
         # Failed login attempt with suspended account's credentials
-        login_response = self.client.post(
+        after_suspension_response = self.client.post(
             '/user_auth',
             self.valid_credentials,
             format='json'
         )
-        self.assertEquals(login_response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEquals(login_response.data['Error'], _suspended_msg)
+        self.assertEquals(after_suspension_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEquals(after_suspension_response.data['Error'], _suspended_msg)
 
+    # Invalid suspend user test: unknown user id
     def test_invalid_suspend_user(self):
         _predicted_msg = 'Not found.'
         self.url = '/current_users/24/'
@@ -273,11 +294,13 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'], _predicted_msg)
 
+    # Test: request without token with only `token` tag
     def test_request_with_empty_token(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
         response_with_token = self.client.get('/current_users/')
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
 
+    # Test: request with invalid token header
     def test_invalid_token_header(self):
         predicted_msg = 'Invalid token header'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
@@ -285,6 +308,7 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
 
+    # Invalid post request: should not be allowed
     def test_invalid_post_request(self):
         _predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.post('/current_users/')
@@ -295,11 +319,162 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], _predicted_msg)
         self.assertEqual(response_without_token.data['detail'], _predicted_msg)
 
+    # Invalid delete request: should not be allowed
     def test_invalid_delete_request(self):
         _predicted_msg = 'Authentication credentials were not provided.'
         response_without_token = self.client.delete('/current_users/1/')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response_with_token = self.client.delete('/current_users/1/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.data['detail'], _predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], _predicted_msg)
+
+    def tearDown(self):
+        super(SetUpTestData, self).tearDownClass()
+
+
+class SuspendedUsersViewSetTest(SetUpTestData):
+    def setUp(self):
+        super(SetUpTestData, self).setUpClass()
+        self.current_user = Users.objects.create(
+            email='current_user@gmail.com', first_name='temp', last_name='temp', institution='temp',
+            department_name='temp', position_title='temp', city='temp', province='temp', country='temp',
+            pending_approval='N', password_hash='asdfghjkl123', suspend='Y'
+        )
+        self.valid_credentials = {
+            'email': self.current_user.email,
+            'password': self.current_user.password_hash
+        }
+        self.revert_user_payload = {
+            'suspend': 'N'
+        }
+
+    # Gets suspended users list and comparing with model data
+    def test_get_current_users(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.get('/suspended_users/')
+        model_response = Users.objects.all()
+        serializer_response = UsersSerializer(model_response, many=True)
+        self.assertEqual(response.data, serializer_response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.credentials()
+
+    # Gets single user detail and comparing with model data.
+    def test_get_single_user(self):
+        url = '/suspended_users/' + str(self.current_user.pk) + '/'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.get(url)
+        model_response = Users.objects.get(pk=self.current_user.pk)
+        serializer_response = UsersSerializer(model_response)
+        self.assertEqual(response.data, serializer_response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.credentials()
+
+    # Invalid request: no token
+    def test_invalid_get_current_user(self):
+        _predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
+        response = self.client.get('/suspended_users/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], _predicted_msg)
+
+    # Invalid single user request: unknown user id
+    def test_invalid_get_single_user(self):
+        url = '/suspended_users/' + '23/'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.client.credentials()
+
+    # This test first try to login with user should receive suspended message then
+    # it reverts the user account by sending patch request
+    # Confirm it by comparing against received response, performing get request on same url, data fetched from model,
+    # successful login attempt with auth token.
+    def test_suspend_user(self):
+        _suspended_msg = 'Your account is suspended. Please contact admin.'
+        _get_request_msg = 'Not found.'
+
+        # Failed login attempt with suspended account's credentials
+        after_suspension_response = self.client.post(
+            '/user_auth',
+            self.valid_credentials,
+            format='json'
+        )
+        self.assertEquals(after_suspension_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEquals(after_suspension_response.data['Error'], _suspended_msg)
+
+        # Reverting user account via patch request, confirming by received response.
+        self.url = '/suspended_users/{}/'.format(self.current_user.id)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        suspended_response = self.client.patch(self.url, self.revert_user_payload, format='json')
+        self.assertEqual(suspended_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(suspended_response.data['email'], self.current_user.email)
+        self.assertEqual(suspended_response.data['suspend'], 'N')
+
+        # Performing get request to check response i.e. should be Not Found.
+        get_request_response = self.client.get(self.url, format='json')
+        self.assertEqual(get_request_response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(get_request_response.data['detail'], _get_request_msg)
+        self.client.credentials()
+
+        # Confirming suspended account by fetching data directly from model
+        _model_response = Users.objects.get(id=self.current_user.id)
+        self.assertEqual(_model_response.email, self.current_user.email)
+        self.assertEqual(_model_response.suspend, 'N')
+
+        # testing normal user login before suspension, verifying by receiving auth_token.
+        before_suspension_response = self.client.post(
+            '/user_auth',
+            self.valid_credentials,
+            format='json'
+        )
+        self.assertEquals(before_suspension_response.status_code, status.HTTP_200_OK)
+        _received_token = before_suspension_response._container[0].decode('utf-8')
+        _decoded_token = jwt.decode(_received_token, "SECRET_KEY")
+        _model_response = Users.objects.get(id=_decoded_token['id'], email=_decoded_token['email'])
+        self.assertEqual(_model_response.email, self.current_user.email)
+        self.assertEqual(_model_response.password_hash, self.current_user.password_hash)
+
+    # Invalid suspend user test: unknown user id
+    def test_invalid_suspend_user(self):
+        _predicted_msg = 'Not found.'
+        self.url = '/suspended_users/242/'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response = self.client.patch(self.url, self.revert_user_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'], _predicted_msg)
+
+    # Test: request without token with only `token` tag
+    def test_request_with_empty_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.client.get('/suspended_users/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+
+    # Test: request with invalid token header
+    def test_invalid_token_header(self):
+        predicted_msg = 'Invalid token header'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
+        response_invalid_header = self.client.get('/suspended_users/')
+        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
+
+    # Invalid post request: should not be allowed
+    def test_invalid_post_request(self):
+        _predicted_msg = 'Authentication credentials were not provided.'
+        response_without_token = self.client.post('/suspended_users/')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_with_token = self.client.post('/suspended_users/')
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.data['detail'], _predicted_msg)
+        self.assertEqual(response_without_token.data['detail'], _predicted_msg)
+
+    # Invalid delete request: should not be allowed
+    def test_invalid_delete_request(self):
+        _predicted_msg = 'Authentication credentials were not provided.'
+        response_without_token = self.client.delete('/suspended_users/1/')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_with_token = self.client.delete('/suspended_users/1/')
         self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response_with_token.data['detail'], _predicted_msg)
