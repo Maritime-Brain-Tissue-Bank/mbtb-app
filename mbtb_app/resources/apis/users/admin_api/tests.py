@@ -195,6 +195,7 @@ class NewUsersViewSetTest(SetUpTestData):
 
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
+        del self.common_tests
 
 
 class CurrentUsersViewSetTest(SetUpTestData):
@@ -330,6 +331,7 @@ class CurrentUsersViewSetTest(SetUpTestData):
 
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
+        del self.common_tests
 
 
 class SuspendedUsersViewSetTest(SetUpTestData):

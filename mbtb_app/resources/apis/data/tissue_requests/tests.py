@@ -100,21 +100,21 @@ class PostNewTissueRequestsViewTest(SetUpTestData):
         self.assertEquals(self.common_tests.invalid_request_with_error_msg(
             request_type="get", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
 
-        # Invalid get request
+        # Invalid patch request
         self.assertEquals(self.common_tests.invalid_request_with_error_msg(
             request_type="patch", predicted_msg="not_allowed", response_tag="detail", http_response="405",
             data=self.test_data_1), True)
 
-        # Test: with empty token for get, patch requests
+        # Test: with empty token for post request
         self.assertEquals(self.common_tests.request_with_empty_token(
             request_type="post", predicted_msg="empty_token", response_tag="detail", data=self.test_data_1), True)
 
-        # Test: with invalid token header for get, patch requests
+        # Test: with invalid token header for post request
         self.assertEquals(self.common_tests.invalid_token_header(
             request_type="post", predicted_msg="invalid_token_header", response_tag="detail", data=self.test_data_1),
             True)
 
-        # Test: without token for get, patch requests
+        # Test: without token for post request
         self.assertEquals(self.common_tests.request_without_token(
             request_type="post", predicted_msg="invalid_token_header", response_tag="detail", data=self.test_data_1),
             True)
@@ -202,6 +202,7 @@ class GetNewTissueRequestsViewTest(SetUpTestData):
     
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
+        del self.common_tests
 
 
 # This class is to test GetArchiveTissueRequestsView as an admin.
@@ -282,3 +283,4 @@ class GetArchiveTissueRequestsViewTest(SetUpTestData):
 
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
+        del self.common_tests
