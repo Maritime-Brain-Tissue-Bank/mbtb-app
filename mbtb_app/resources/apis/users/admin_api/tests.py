@@ -473,6 +473,7 @@ class SuspendedUsersViewSetTest(SetUpTestData):
 
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
+        del self.common_tests
 
 
 # This class perform common tests in order to avoid writing same code
