@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from rest_framework import views, response, viewsets
 from .models import Users
 from .serializers import UsersSerializer
-from permissions.is_post_allowed import IsPostAllowed
+from resources.permissions.is_post_allowed import IsPostAllowed
 import jwt
 
 

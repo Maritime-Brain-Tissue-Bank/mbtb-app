@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from rest_framework import views, response, viewsets
 from rest_framework.permissions import AllowAny
 from .models import AdminAccount
-from permissions.is_admin import IsAdmin
-from permissions.is_post_allowed import IsPostAllowed
+from resources.permissions.is_admin import IsAdmin
+from resources.permissions.is_post_allowed import IsPostAllowed
 from users_api.models import Users
 from users_api.serializers import UsersSerializer
 import jwt

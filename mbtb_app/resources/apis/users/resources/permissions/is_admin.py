@@ -1,5 +1,5 @@
 from rest_framework import permissions, exceptions
-from db_operations.user_or_admin import UserOrAdmin
+from resources.db_operations.user_or_admin import UserOrAdmin
 from .base_operations import BaseOperations
 
 
