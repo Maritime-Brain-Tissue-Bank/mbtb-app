@@ -112,6 +112,7 @@ class NewUsersViewSetTest(SetUpTestData):
             'email': '',
             'first_name': ''
         }
+        self.common_tests = CommonTests(token=self.token, url='/list_new_users/')
 
     # get request with valid token
     def test_get_all_new_users_request(self):
@@ -122,13 +123,6 @@ class NewUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.data, new_users_serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
-
-    # get request without token
-    def test_get_invalid_request(self):
-        _predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
-        response = self.client.get('/list_new_users/')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], _predicted_msg)
 
     # get request for single user with valid token and payload data
     def test_get_single_request(self):
@@ -172,13 +166,32 @@ class NewUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.data['first_name'][0], _predicted_msg)
         self.client.credentials()
 
-    # patch request without token
-    def test_patch_invalid_request(self):
-        _predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
-        url = '/list_new_users/' + str(self.test_1.pk) + '/'
-        response = self.client.patch(url, data=self.valid_payload, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], _predicted_msg)
+    def test_common_tests(self):
+        # Invalid post request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="post", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
+
+        # Invalid delete request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="delete", predicted_msg="not_allowed", response_tag="detail", http_response="405"), True)
+
+        # Test: with empty token for get, patch requests
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="get", predicted_msg="empty_token", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="patch", predicted_msg="empty_token", response_tag="detail"), True)
+
+        # Test: with invalid token header for get, patch requests
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail"), True)
+
+        # Test: without token for get, patch requests
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail"), True)
 
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
@@ -200,6 +213,7 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.suspend_user_payload = {
             'suspend': 'Y'
         }
+        self.common_tests = CommonTests(token=self.token, url='/current_users/')
 
     # Gets current users list and comparing with model data
     def test_get_current_users(self):
@@ -221,13 +235,6 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.data, serializer_response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.credentials()
-
-    # Invalid request: no token
-    def test_invalid_get_current_user(self):
-        _predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
-        response = self.client.get('/current_users/')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], _predicted_msg)
 
     # Invalid single user request: unknown user id
     def test_invalid_get_single_user(self):
@@ -294,47 +301,39 @@ class CurrentUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'], _predicted_msg)
 
-    # Test: request without token with only `token` tag
-    def test_request_with_empty_token(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
-        response_with_token = self.client.get('/current_users/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+    def test_common_tests(self):
+        # Invalid post request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="post", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
 
-    # Test: request with invalid token header
-    def test_invalid_token_header(self):
-        predicted_msg = 'Invalid token header'
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
-        response_invalid_header = self.client.get('/current_users/')
-        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
+        # Invalid delete request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="delete", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
 
-    # Invalid post request: should not be allowed
-    def test_invalid_post_request(self):
-        _predicted_msg = 'Authentication credentials were not provided.'
-        response_without_token = self.client.post('/current_users/')
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        response_with_token = self.client.post('/current_users/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], _predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], _predicted_msg)
+        # Test: with empty token for get, patch requests
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="get", predicted_msg="empty_token", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="patch", predicted_msg="empty_token", response_tag="detail"), True)
 
-    # Invalid delete request: should not be allowed
-    def test_invalid_delete_request(self):
-        _predicted_msg = 'Authentication credentials were not provided.'
-        response_without_token = self.client.delete('/current_users/1/')
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        response_with_token = self.client.delete('/current_users/1/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], _predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], _predicted_msg)
+        # Test: with invalid token header for get, patch requests
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail"), True)
+
+        # Test: without token for get, patch requests
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail"), True)
 
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
 
 
 class SuspendedUsersViewSetTest(SetUpTestData):
+
     def setUp(self):
         super(SetUpTestData, self).setUpClass()
         self.current_user = Users.objects.create(
@@ -349,6 +348,7 @@ class SuspendedUsersViewSetTest(SetUpTestData):
         self.revert_user_payload = {
             'suspend': 'N'
         }
+        self.common_tests = CommonTests(token=self.token, url='/suspended_users/')
 
     # Gets suspended users list and comparing with model data
     def test_get_current_users(self):
@@ -380,7 +380,7 @@ class SuspendedUsersViewSetTest(SetUpTestData):
 
     # Invalid single user request: unknown user id
     def test_invalid_get_single_user(self):
-        url = '/suspended_users/' + '23/'
+        url = '/suspended_users/' + '232/'
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -444,41 +444,119 @@ class SuspendedUsersViewSetTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'], _predicted_msg)
 
-    # Test: request without token with only `token` tag
-    def test_request_with_empty_token(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + '')
-        response_with_token = self.client.get('/suspended_users/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+    def test_common_tests(self):
+        # Invalid delete request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="delete", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
 
-    # Test: request with invalid token header
-    def test_invalid_token_header(self):
-        predicted_msg = 'Invalid token header'
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
-        response_invalid_header = self.client.get('/suspended_users/')
-        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
+        # Invalid post request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="post", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
 
-    # Invalid post request: should not be allowed
-    def test_invalid_post_request(self):
-        _predicted_msg = 'Authentication credentials were not provided.'
-        response_without_token = self.client.post('/suspended_users/')
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        response_with_token = self.client.post('/suspended_users/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], _predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], _predicted_msg)
+        # Test: with empty token for get, patch requests
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="get", predicted_msg="empty_token", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="patch", predicted_msg="empty_token", response_tag="detail"), True)
 
-    # Invalid delete request: should not be allowed
-    def test_invalid_delete_request(self):
-        _predicted_msg = 'Authentication credentials were not provided.'
-        response_without_token = self.client.delete('/suspended_users/1/')
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
-        response_with_token = self.client.delete('/suspended_users/1/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], _predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], _predicted_msg)
+        # Test: with invalid token header for get, patch requests
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail"), True)
+
+        # Test: without token for get, patch requests
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail"), True)
 
     def tearDown(self):
         super(SetUpTestData, self).tearDownClass()
+
+
+# This class perform common tests in order to avoid writing same code
+class CommonTests(APITestCase):
+
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.common_client = APIClient(enforce_csrf_checks=True)
+        self.predicted_msg = {
+            'authorization': 'Authentication credentials were not provided.',
+            'invalid_token_header': 'Invalid token header',
+            'not_found': 'Not found.',
+            'account_suspended': 'Your account is suspended. Please contact admin.',
+            'no_token': 'Invalid input. Only `Token` tag is allowed.',
+            'blank_field': 'This field may not be blank.',
+            'empty_token': 'Invalid token header. No credentials provided.',
+            'not_allowed': 'Method "{}" not allowed.'.format(kwargs.get('request_type', None))
+        }
+        self.http_response = {
+            '403': status.HTTP_403_FORBIDDEN,
+            '404': status.HTTP_404_NOT_FOUND,
+            '405': status.HTTP_405_METHOD_NOT_ALLOWED
+        }
+        self.token = kwargs.get('token', None)
+        self.url = kwargs.get('url', None)
+
+    def invalid_request_with_error_msg(self, **kwargs):
+        _predicted_msg = kwargs.get('predicted_msg', None)
+        _request_type = kwargs.get('request_type', None)
+        _data = kwargs.get('data', None)
+        _response_check_tag = kwargs.get('response_tag', None)
+        _http_response = kwargs.get('http_response', None)
+
+        # Adding not allowed msg in predicted_msg dict.
+        self.predicted_msg['not_allowed'] = 'Method "{}" not allowed.'.format(_request_type.upper())
+
+        # generic requests with and without tokens
+        response_without_token = self.common_client.generic(
+            method=_request_type, path=self.url, data=_data, content_type='json'
+        )
+        self.common_client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.decode('utf-8'))
+        response_with_token = self.common_client.generic(
+            method=_request_type, path=self.url, data=_data, content_type='json'
+        )
+        self.assertEqual(response_with_token.status_code, self.http_response[_http_response])
+        self.assertEqual(response_without_token.status_code, self.http_response[_http_response])
+        self.assertEqual(response_with_token.data[_response_check_tag], self.predicted_msg[_predicted_msg])
+        self.assertEqual(response_without_token.data[_response_check_tag], self.predicted_msg[_predicted_msg])
+        return True
+
+    def request_with_empty_token(self, **kwargs):
+        _predicted_msg = kwargs.get('predicted_msg', None)
+        _request_type = kwargs.get('request_type', None)
+        _data = kwargs.get('data', None)
+        _response_check_tag = kwargs.get('response_tag', None)
+        self.common_client.credentials(HTTP_AUTHORIZATION='Token ' + '')
+        response_with_token = self.common_client.generic(
+            method=_request_type, path=self.url, data=_data, content_type='json'
+        )
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.data[_response_check_tag], self.predicted_msg[_predicted_msg])
+        return True
+
+    def invalid_token_header(self, **kwargs):
+        _predicted_msg = kwargs.get('predicted_msg', None)
+        _request_type = kwargs.get('request_type', None)
+        _data = kwargs.get('data', None)
+        _response_check_tag = kwargs.get('response_tag', None)
+        self.common_client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
+        response_with_token = self.common_client.generic(
+            method=_request_type, path=self.url, data=_data, content_type='json'
+        )
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.data[_response_check_tag], self.predicted_msg[_predicted_msg])
+        return True
+
+    def request_without_token(self, **kwargs):
+        _predicted_msg = kwargs.get('predicted_msg', None)
+        _request_type = kwargs.get('request_type', None)
+        _data = kwargs.get('data', None)
+        _response_check_tag = kwargs.get('response_tag', None)
+        response_with_token = self.common_client.generic(
+            method=_request_type, path=self.url, data=_data, content_type='json'
+        )
+        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_with_token.data[_response_check_tag], self.predicted_msg[_predicted_msg])
+        return True
