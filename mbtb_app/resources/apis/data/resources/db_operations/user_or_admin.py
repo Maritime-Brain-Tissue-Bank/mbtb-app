@@ -1,4 +1,4 @@
-from ..models import AdminAccount, UserAccount
+from mbtb.models import AdminAccount, UserAccount
 
 
 # This class is to fetch rows from admin and user tables

@@ -1,4 +1,4 @@
-from ..models import AutopsyTypes, TissueTypes, NeuropathologicalDiagnosis
+from mbtb.models import AutopsyTypes, TissueTypes, NeuropathologicalDiagnosis
 
 
 # This class get result from models or insert new data if it doesn't found anything

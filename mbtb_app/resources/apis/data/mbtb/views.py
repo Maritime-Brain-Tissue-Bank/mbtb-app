@@ -5,18 +5,18 @@ import json
 from rest_framework import viewsets, views, response
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
-from .data_templates.other_details import OtherDetailsTemplate
-from .data_templates.prime_details import PrimeDetailsTemplate
-from .db_operations.get_or_create import GetOrCreate
-from .db_operations.download_all_data import DownloadAllData
-from .db_operations.download_filtered_data import DownloadFilteredData
+from resources.data_templates.other_details import OtherDetailsTemplate
+from resources.data_templates.prime_details import PrimeDetailsTemplate
+from resources.db_operations.get_or_create import GetOrCreate
+from resources.db_operations.download_all_data import DownloadAllData
+from resources.db_operations.download_filtered_data import DownloadFilteredData
 from .models import AutopsyTypes, PrimeDetails, OtherDetails, NeuropathologicalDiagnosis, \
     TissueTypes
 from .serializers import PrimeDetailsSerializer, OtherDetailsSerializer, FileUploadPrimeDetailsSerializer, \
     FileUploadOtherDetailsSerializer, InsertRowPrimeDetailsSerializer
-from .validations.validate_data import ValidateData
-from .permissions.is_authenticated import IsAuthenticated
-from .permissions.is_admin import IsAdmin
+from resources.validations.validate_data import ValidateData
+from resources.permissions.is_authenticated import IsAuthenticated
+from resources.permissions.is_admin import IsAdmin
 
 
 # This view class is to fetch prime_details, allowed methods: GET

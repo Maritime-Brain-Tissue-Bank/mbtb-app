@@ -1,5 +1,5 @@
-from ..models import OtherDetails
-from ..serializers import OtherDetailsSerializer
+from mbtb.models import OtherDetails
+from mbtb.serializers import OtherDetailsSerializer
 
 
 # This class is download filtered mbtb data based on given mbtb_code as a list of dict.

@@ -1,5 +1,5 @@
-from ..models import OtherDetails
-from ..serializers import OtherDetailsSerializer
+from mbtb.models import OtherDetails
+from mbtb.serializers import OtherDetailsSerializer
 
 
 # This class is to download all mbtb data without prime_details_id, other_details_id as a list of dict

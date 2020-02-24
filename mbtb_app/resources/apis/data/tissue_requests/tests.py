@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase, force_authenticate, APIClient
 from .models import TissueRequests
 from mbtb.models import AdminAccount, UserAccount
 from .serializers import TissueRequestsSerializer
-from common.tests.common_tests import CommonTests
+from resources.tests.common_tests import CommonTests
 import jwt
 
 
