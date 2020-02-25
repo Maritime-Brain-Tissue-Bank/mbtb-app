@@ -2,7 +2,7 @@ var view_single_record = angular.module("view_single_record_app", []);
 
 view_single_record.controller("view_single_record_controller", ['$scope', '$window', '$http', function ($scope, $window, $http) {
 
-    // binding data to angular varible from ejs view
+    // binding data to angular variable from ejs view
     $scope.details = $window.mbtb_detailed_data;
 
     // on-click for delete button

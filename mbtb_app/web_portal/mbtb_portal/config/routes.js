@@ -30,7 +30,10 @@ module.exports.routes = {
   'GET /view_data': { action: 'user/view-data-table' },
   'GET /logout': { action: 'user/logout'},
   'GET /view_data/:id': {action: 'user/view-single-record'},
-  'GET /tissue_requests': {action: 'user/user-tissue-requests'},
+  'GET /view_data_guide': {action: 'user/view-data-guide'},
+  'GET /tissue_requests_terms': {action: 'user/tissue-requests-terms'},
+  'GET /tissue_requests_form': { action: 'user/get-tissue-requests-form'},
+  'POST /tissue_requests_form': { action: 'user/tissue-requests-form'},
 
   // admin views
   'GET /admin': {
@@ -125,14 +128,14 @@ module.exports.routes = {
   },
 
   'GET /file_upload': {
-    action: 'admin/get-file-upload-view',
+    action: 'admin/get-file-upload-add-data-view',
     locals: {
       layout: 'layouts/admin_layout'
     }
   },
 
   'POST /file_upload': {
-    action: 'admin/file-upload',
+    action: 'admin/file-upload-add-data',
     locals: {
       layout: 'layouts/admin_layout'
     }
@@ -161,6 +164,115 @@ module.exports.routes = {
 
   'GET /data_uploading_guide': {
     action: 'admin/data-uploading-guide',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /edit_file_upload': {
+    action: 'admin/get-file-upload-edit-data-view',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /edit_file_upload': {
+    action: 'admin/file-upload-edit-data',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /admin_view_data_guide': {
+    action: 'admin/view-data-guide',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /get_new_tissue_requests': {
+    action: 'admin/get-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /get_archive_tissue_requests': {
+    action: 'admin/get-archive-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /approve_tissue_requests': {
+    action: 'admin/approve-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /revert_archive_tissue_requests': {
+    action: 'admin/revert-archive-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /view_single_tissue_request/:id': {
+    action: 'admin/view-single-tissue-request',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /view_single_archive_tissue_request/:id': {
+    action: 'admin/view-single-archive-tissue-request',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /delete_tissue_requests': {
+    action: 'admin/delete-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /delete_archive_tissue_requests': {
+    action: 'admin/delete-archive-tissue-requests',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /download_data': {
+    action: 'common/download-mbtb-data',
+  },
+
+  'GET /view_current_users': {
+    action: 'admin/current-users',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /suspend_single_user': {
+    action: 'admin/suspend-single-user',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /view_suspended_users': {
+    action: 'admin/suspended-users',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /revert_suspended_user': {
+    action: 'admin/revert-suspended-user',
     locals: {
       layout: 'layouts/admin_layout'
     }

@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('config/development/secret_key.cnf') as sk:
+with open('resources/config/development/secret_key.cnf') as sk:
     SECRET_KEY = sk.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -41,9 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'register',
-    'admin_signin',
-    'users_signin',
+    'admin_api',
+    'users_api',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +82,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(BASE_DIR, '../config/development/test_db.cnf'),
+            'read_default_file': os.path.join(BASE_DIR, '../resources/config/development/test_db.cnf'),
         }
     }
 }
@@ -108,8 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'register.permissions.IsAuthenticated',
-        'register.permissions.IsPostAllowed',
+        'resources.permissions.is_admin.IsAdmin',
+        'resources.permissions.is_authenticated.IsAuthenticated',
+        'resources.permissions.is_post_allowed.IsPostAllowed'
     )
 }
 

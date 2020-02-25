@@ -16,7 +16,7 @@ class AutopsyTypes(models.Model):
 
 class PrimeDetails(models.Model):
     prime_details_id = models.AutoField(primary_key=True)
-    mbtb_code = models.CharField(max_length=50)
+    mbtb_code = models.CharField(max_length=50, unique=True)
     sex = models.CharField(max_length=6, blank=True, null=True)
     age = models.CharField(max_length=50, blank=True, null=True)
     postmortem_interval = models.CharField(max_length=255, blank=True, null=True)

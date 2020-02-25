@@ -1,6 +1,6 @@
-var myApp = angular.module('view_data_table_app', ['dataGrid', 'pagination']);
+var view_data_table_app = angular.module('view_data_table_app', ['dataGrid', 'pagination']);
 
-myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', function ($scope, $filter, $window) {
+view_data_table_app.controller('view_data_table_controller', ['$scope', '$filter', '$window', '$http', function ($scope, $filter, $window, $http) {
 
   $scope.gridOptions = {
     data: [],
@@ -11,7 +11,7 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
   // data binding to angular variable
   $scope.gridOptions.data = $window.mbtb_data;
 
-  // for finding unique elemenets in array
+  // for finding unique elements in array
   let unique = (value, index, self) => {
     return self.indexOf(value) === index
   };
@@ -97,29 +97,67 @@ myApp.controller('view_data_table_controller', ['$scope', '$filter', '$window', 
     $scope.clear_btn = true; // disable clear button
   };
 
-  // exporting data or filtered data to csv
-  $scope.exportToCsv = function (currentData) {
-    var export_data = [];
-    currentData.forEach(function (item) {
-      export_data.push({
-        'MBTB Code': item.mbtb_code,
-        'Sex': item.sex,
-        'Age': item.age,
-        'Postmortem Interval': item.postmortem_interval,
-        'Time in Fix': item.time_in_fix,
-        'Neuropathological Diagnosis': item.neuro_diagnosis_id,
-        'Tissue Type': item.tissue_type,
-        'Preservation Method': item.preservation_method,
-        'Clinical Diagnosis': item.clinical_diagnosis,
-        'Storage Date': item.storage_year
+
+  // Download csv file function
+  $scope.download_csv_file = function (download_mode){
+
+    let url = '/download_data/';
+    let export_data = [];
+    let payload = [];
+    let filename = 'MBTB Data';
+
+    // post request to sails controller
+    let post_request = function (url, payload, filename) {
+      $http({
+        method: 'POST',
+        url: url,
+        data: payload,
+      }).then(function successCallback(response) {
+        if (response.data.operation === 'completed') {
+
+          // user prompt to download the csv file, here received data is in json
+          JSONToCSVConvertor(response.data.data, filename, true);
+        } else {
+          alert("Something went wrong, Please try again.");
+        }
       });
-    });
-    JSONToCSVConvertor(export_data, 'Export', true);
-  }
+    };
+
+    // validating download mode
+    if (download_mode === 'all'){
+      payload = {
+        download_mode: download_mode
+      };
+      post_request(url, payload, filename);
+    }
+    else if (download_mode === 'filtered'){
+
+      // pushing filtered mbtb_code values in export_data
+      $scope.filtered_data.data.forEach(function (item) {
+        export_data.push({
+          'mbtb_code': item.mbtb_code,
+        });
+      });
+
+      // preparing payload data
+      payload = {
+        download_mode: download_mode,
+        input_mbtb_codes: export_data
+      };
+
+      filename = 'Filtered MBTB data';
+      post_request(url, payload, filename);
+    }
+    else {
+      alert("Something went wrong, please try again.??");
+      $window.location.reload();
+    }
+
+  };
 }]);
 
 // custom filter to find values between range
-myApp.filter('range_filter', function () {
+view_data_table_app.filter('range_filter', function () {
   return function (data, options) {
     // default min and max values are 0 and 1000
     let min_value = parseInt(options.min_value) || 0 ;
