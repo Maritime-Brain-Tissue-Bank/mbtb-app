@@ -1,0 +1,13 @@
+<title><%= msg_title %></title>
+<div class="container-fluid message_container" >
+    <h2 class="heading_title" id="message_title"><%= msg_title %></h2>
+    <br>
+
+    <p>
+        <%= msg_body %>
+        <% if(view_data_url){%>
+            You can view it here: <a href="../<%= view_data_url%>">Link</a>
+        <% }%>
+    </p>
+
+</div>

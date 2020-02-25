@@ -1,0 +1,28 @@
+<title>Admin - Upload File - <%= data_mode %></title>
+
+<div class="container-fluid file_upload_container">
+    <h2 class="heading_title">File Upload - <%= data_mode %></h2>
+    <br>
+
+    <form id="file_upload_form" name="file_upload_form" action="<%= url %>" method="post" enctype="multipart/form-data">
+
+        <div>
+            <label for="upload_file" id="choose_file_label">Choose File:</label>
+            <input name="upload_file" id="upload_file" type="file" accept="text/csv" required>
+        </div>
+
+        <br>
+        <br>
+
+        <button type="submit" class="btn btn-primary" id="submit_btn">Upload</button>
+        <a href="/admin" class="btn btn-default" id="cancel_btn">Cancel</a>
+    </form>
+
+    <br>
+    <br>
+    <i>
+        Please refer to the following <a href="/data_uploading_guide">guide</a> for data uploading.
+    </i>
+
+</div>
+

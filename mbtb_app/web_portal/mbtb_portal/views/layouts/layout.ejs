@@ -33,7 +33,7 @@
             <ul class="nav navbar-nav">
               <li><a href="/">Home</a></li>
               <li><a href="/view_data">Dataset</a></li>
-              <li><a href="/tissue_requests">Tissue Requests</a></li>
+              <li><a href="/tissue_requests_terms">Tissue Requests</a></li>
               <li><a href="/faq">FAQ</a></li>
             </ul>
 
@@ -45,7 +45,7 @@
               </ul>
             <% } else if(req.session.auth_token !== undefined && req.session.auth_token.length > 0){%>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                <li><a href="/logout" id="user_logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
               </ul>
             <% }%>
 
@@ -70,7 +70,16 @@
 
     <!--SCRIPTS-->
     <script src="/js/admin_add_new_data.js"></script>
+    <script src="/js/admin_archive_tissue_requests.js"></script>
+    <script src="/js/admin_current_users.js"></script>
+    <script src="/js/admin_edit_data.js"></script>
+    <script src="/js/admin_homepage.js"></script>
     <script src="/js/admin_register_requests.js"></script>
+    <script src="/js/admin_suspended_users.js"></script>
+    <script src="/js/admin_tissue_requests.js"></script>
+    <script src="/js/admin_view_single_archive_tissue_request.js"></script>
+    <script src="/js/admin_view_single_tissue_request.js"></script>
+    <script src="/js/tissue_requests_form.js"></script>
     <script src="/js/user_login.js"></script>
     <script src="/js/user_registration.js"></script>
     <script src="/js/view_data_table.js"></script>

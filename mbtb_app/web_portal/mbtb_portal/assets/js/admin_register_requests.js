@@ -1,16 +1,16 @@
 // To get id from selected checkbox and send a patch request to approve status
 $('#accept_request_btn').click(function(e){
   // fetching selected checkbox's id from view
-  var requests_ids = get_checkbox_values();
+  let requests_ids = get_checkbox_values();
 
   // fetching email data: first_name, last_name, email from selected checkbox
-  var email_data = get_email_data(requests_ids);
+  let email_data = get_email_data(requests_ids);
 
   // patch request for sending request_ids, email_data to controller
-  var post_request = $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
+  let post_request = $.post( "/approve_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'approved'){
-      // display alert on suceess and reload window
-      alert("Your selected requested are approved.");
+      // display alert on success and reload window
+      alert("Your selected requests are approved.");
       location.reload();
     }
     else {
@@ -38,8 +38,8 @@ $('#deny_request_btn').click(function(e){
   // patch request for sending request_ids, email_data to controller
   var delete_request = $.post( "/deny_user_requests", {requests_ids: requests_ids, email_data: email_data}, function(data, status) {
     if (data === 'completed'){
-      // display alert on suceess and reload window
-      alert("Your selected requested are denied.");
+      // display alert on success and reload window
+      alert("Your selected requests are denied.");
       location.reload();
     }
     else {
@@ -88,15 +88,15 @@ function get_email_data(requests_ids) {
   return email_data;
 }
 
-// For gettings mbtb_data ids from seleted checkbox
+// For getting mbtb_data ids from selected checkbox
 // return it as array
 function get_checkbox_values() {
   var requests_ids = [];
   var data_length = document.getElementById('data_length').value;
 
   for ( var j = 0; j < data_length; j++) {
-    var check=$('input:checkbox[name=checkbox'+j+']').is(':checked');
-    if(check==true)
+    var check = $('input:checkbox[name=checkbox'+j+']').is(':checked');
+    if(check===true)
       requests_ids.push($('input:checkbox[name=checkbox'+j+']').val());
   }
 

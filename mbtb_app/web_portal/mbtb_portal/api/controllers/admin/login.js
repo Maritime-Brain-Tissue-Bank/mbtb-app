@@ -24,6 +24,12 @@ module.exports = {
       responseType: 'view',
       viewTemplatePath: 'pages/admin_login',
       description: 'return view for password mismatch, display error msg'
+    },
+
+    error_response: {
+      responseType: 'view',
+      viewTemplatePath: 'pages/message',
+      description: 'return view if APIs are down.'
     }
   },
 
@@ -42,8 +48,12 @@ module.exports = {
     // post request for retrieving auth token from api, with credentials as payload
     request.post({url: url, formData: credentials},
       function optionalCallback(err, httpResponse, body) {
-        if (err && httpResponse.statusCode !== 200) {
-          return exits.bad_combo({'error_msg': err}) // display error msg if something goes wrong with request
+        if (err) {
+          console.log({
+            'error_controller': 'admin/login',
+            'error_msg': err
+          }); // log error to server console
+          return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg});
         }
         else {
           try {

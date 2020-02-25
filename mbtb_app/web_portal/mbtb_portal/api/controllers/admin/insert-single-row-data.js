@@ -36,7 +36,7 @@ module.exports = {
     },
 
     duration: {
-      type: 'string',
+      type: 'json',
       required: false
     },
 
@@ -52,17 +52,17 @@ module.exports = {
 
     postmortem_interval: {
       type: 'string',
-      required: true
+      required: false
     },
 
     brain_weight: {
-      type: 'number',
-      required: true
+      type: 'json',
+      required: false
     },
 
     time_in_fix: {
       type: 'string',
-      required: true
+      required: false
     },
 
     neuropathology_diagnosis: {
@@ -137,7 +137,8 @@ module.exports = {
     let formalin_fixed = '';
     let fresh_frozen = '';
     let preservation_method = inputs.preservation_method;
-    let duration = inputs.duration;
+    let duration = (inputs.duration === '') ? 'null' : parseInt(inputs.duration);
+    let brain_weight = (inputs.brain_weight === '') ? 'null' : parseInt(inputs.brain_weight);
 
     switch (preservation_method) {
       case 'Formalin-Fixed':
@@ -152,13 +153,6 @@ module.exports = {
         formalin_fixed = 'True';
         fresh_frozen = 'True';
         break;
-    }
-
-    if (duration === ''){
-      duration = 0;
-    }
-    else {
-      duration = parseInt(duration);
     }
 
 
@@ -177,7 +171,7 @@ module.exports = {
       duration: duration,
       clinical_details: inputs.clinical_details,
       cause_of_death: inputs.cause_of_death,
-      brain_weight: inputs.brain_weight,
+      brain_weight: brain_weight,
       neuropathology_summary: inputs.neuropathology_summary,
       neuropathology_gross: inputs.neuropathology_gross,
       neuropathology_microscopic: inputs.neuropathology_microscopic,
@@ -197,6 +191,7 @@ module.exports = {
         formData: payload,
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
+          'content-type': 'application/json',
           }
           },
       function optionalCallback(err, httpResponse, body) {

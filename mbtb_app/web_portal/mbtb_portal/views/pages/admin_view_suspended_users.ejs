@@ -1,0 +1,79 @@
+<title>Admin - Suspended Users</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<div class="container-fluid suspended_users_container">
+    <div class="col-md-12">
+        <h2 class="heading_title">Suspended Users</h2>
+        <br>
+        <form id="suspended_users_form" >
+            <input type="hidden" id="data_length" value="<%= data.length %>">
+            <script>
+                // binding data recieved from sails controller to JS variable to pass it to angular
+                var mbtb_data = <%- JSON.stringify(data) %>;
+            </script>
+
+            <table id="suspended_users_table" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" onClick="toggle_all(this.checked)" id="select_all"></th>
+                    <th>Title</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Institution</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
+                    <th>City</th>
+                    <th>Province</th>
+                    <th>Country</th>
+                    <th>Postal/Zip Code</th>
+                    <th>Comments</th>
+                    <th>Active Since</th>
+                </tr>
+                </thead>
+
+                <% for(var i=0; i < data.length; i++) { %>
+                    <tr>
+                        <td><input type="checkbox" name="checkbox<%- i %>" id="checkbox<%- i %>" value="<%= data[i].id %>")></td>
+                        <td><%= data[i].title %></td>
+                        <td>
+                            <a href="/view_current_users/<%= data[i].id %>">
+                                <%= data[i].first_name %>
+                            </a>
+                        </td>
+                        <td><%= data[i].middle_name %></td>
+                        <td><%= data[i].last_name %></td>
+                        <td><%= data[i].email %></td>
+                        <td><%= data[i].institution %></td>
+                        <td><%= data[i].department_name %></td>
+                        <td><%= data[i].position_title %></td>
+                        <td><%= data[i].address_line_1 %></td>
+                        <td><%= data[i].address_line_2 %></td>
+                        <td><%= data[i].city %></td>
+                        <td><%= data[i].province %></td>
+                        <td><%= data[i].country %></td>
+                        <td><%= data[i].postal_code %></td>
+                        <td><%= data[i].comments %></td>
+                        <td><%= data[i].active_since %></td>
+                    </tr>
+                <% } %>
+            </table>
+        </form>
+
+        <br>
+        <br>
+        <div class="form-group button_holder">
+            <div class="col" id="cancel_btn">
+                <button class="btn btn-primary" id="revert_suspended_user_btn">Revert</button>
+                <a href="/admin" class="btn btn_space">Cancel</a>
+            </div>
+        </div>
+
+        <div id="temp_msg"></div>
+
+    </div>
+</div>
+<br>
