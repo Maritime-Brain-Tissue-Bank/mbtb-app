@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from .models import TissueRequests
 from .serializers import TissueRequestsSerializer
-from mbtb.permissions.is_authenticated import IsAuthenticated
-from mbtb.permissions.is_admin import IsAdmin
+from resources.permissions.is_authenticated import IsAuthenticated
+from resources.permissions.is_admin import IsAdmin
 
 
 # This class is to add a new tissue request, permission user only

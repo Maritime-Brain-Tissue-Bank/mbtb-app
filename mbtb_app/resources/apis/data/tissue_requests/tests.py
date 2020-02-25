@@ -3,6 +3,7 @@ from rest_framework.test import APITestCase, force_authenticate, APIClient
 from .models import TissueRequests
 from mbtb.models import AdminAccount, UserAccount
 from .serializers import TissueRequestsSerializer
+from resources.tests.common_tests import CommonTests
 import jwt
 
 
@@ -64,10 +65,11 @@ class SetUpTestData(APITestCase):
 # Default: post request is allowed, and rest of them are blocked.
 class PostNewTissueRequestsViewTest(SetUpTestData):
 
-    def setUp(cls):
-        super(SetUpTestData, cls).setUpClass()
-        cls.invalid_payload = cls.test_data_1.copy()
-        cls.invalid_payload['email'] = None
+    def setUp(self):
+        super(SetUpTestData, self).setUpClass()
+        self.invalid_payload = self.test_data_1.copy()
+        self.invalid_payload['email'] = None
+        self.common_tests = CommonTests(token=self.user_token, url='/add_new_tissue_requests/')
 
     # Valid post request
     def test_valid_new_request(self):
@@ -89,43 +91,46 @@ class PostNewTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(len(model_response), 1)
         self.client.credentials()
 
-    # Test: invalid get request
-    def test_get_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
-        self.user_client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.decode('utf-8'))
-        response = self.user_client.get('/add_new_tissue_requests/', format='json')
-        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], predicted_msg)
-        self.client.credentials()
+    def test_common_tests(self):
+        # Invalid delete request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="delete", predicted_msg="not_allowed", response_tag="detail", http_response="405"), True)
 
-    # Test: invalid patch request
-    def test_patch_request(self):
-        predicted_msg = 'Method "PATCH" not allowed.'
-        self.user_client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.decode('utf-8'))
-        response = self.user_client.patch('/add_new_tissue_requests/', self.test_data_1, format='json')
-        self.assertEquals(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response.data['detail'], predicted_msg)
-        self.client.credentials()
+        # Invalid get request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="get", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
 
-    # Test: invalid delete request
-    def test_delete_request(self):
-        predicted_msg = 'Method "DELETE" not allowed.'
-        self.user_client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.decode('utf-8'))
-        response = self.user_client.delete('/add_new_tissue_requests/', format='json')
-        self.assertEquals(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response.data['detail'], predicted_msg)
-        self.client.credentials()
+        # Invalid patch request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="patch", predicted_msg="not_allowed", response_tag="detail", http_response="405",
+            data=self.test_data_1), True)
 
-    def tearDown(cls):
-        super(SetUpTestData, cls).tearDownClass()
+        # Test: with empty token for post request
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="post", predicted_msg="empty_token", response_tag="detail", data=self.test_data_1), True)
+
+        # Test: with invalid token header for post request
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="post", predicted_msg="invalid_token_header", response_tag="detail", data=self.test_data_1),
+            True)
+
+        # Test: without token for post request
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="post", predicted_msg="invalid_token_header", response_tag="detail", data=self.test_data_1),
+            True)
+
+    def tearDown(self):
+        super(SetUpTestData, self).tearDownClass()
+        del self.common_tests
 
 
 # This class is to test GetNewTissueRequestsView as an admin.
 # Default: get request is allowed, and rest of them are blocked.
 class GetNewTissueRequestsViewTest(SetUpTestData):
 
-    def setUp(cls):
-        super(SetUpTestData, cls).setUpClass()
+    def setUp(self):
+        super(SetUpTestData, self).setUpClass()
+        self.common_tests = CommonTests(token=self.admin_token, url='/get_new_tissue_requests/')
 
     # Valid get request to fetch all new tissue requests
     def test_get_all_new_tissue_request(self):
@@ -136,13 +141,6 @@ class GetNewTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response.data, serializer_response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.admin_client.credentials()
-
-    # Test: invalid get request
-    def test_invalid_request(self):
-        predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
-        response = self.admin_client.get('/get_new_tissue_requests/')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], predicted_msg)
 
     # Valid get request to fetch new single tissue requests
     def test_get_single_tissue_request(self):
@@ -163,31 +161,6 @@ class GetNewTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.admin_client.credentials()
 
-    # Test: request with empty token
-    def test_get_request_with_empty_token(self):
-        self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + '')
-        response_with_token = self.admin_client.get('/get_new_tissue_requests/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-
-    # Test: request with invalid token header
-    def test_get_request_with_invalid_token_header(self):
-        predicted_msg = 'Invalid token header'
-        self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
-        response_invalid_header = self.admin_client.get('/get_new_tissue_requests/')
-        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
-
-    # Test: invalid post request
-    def test_post_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
-        response_without_token = self.admin_client.post('/get_new_tissue_requests/1/')
-        self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token.decode('utf-8'))
-        response_with_token = self.admin_client.post('/get_new_tissue_requests/1/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], predicted_msg)
-
     # Test: valid delete request
     def test_delete_request(self):
         predicted_msg_1 = 'Not found.'
@@ -200,18 +173,45 @@ class GetNewTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg_1)
         self.assertEqual(response_without_token.data['detail'], predicted_msg_2)
 
-    # ToDo: write tests for patch request
+    def test_common_tests(self):
+        # ToDo: Fix common delete test here for invalid delete request
+
+        # Invalid post request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="post", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
+
+        # Test: with empty token for get, patch requests
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="get", predicted_msg="empty_token", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="patch", predicted_msg="empty_token", response_tag="detail", data=self.test_data_1), True)
+
+        # Test: with invalid token header for get, patch requests
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail",
+            data=self.test_data_1), True)
+
+        # Test: without token for get, patch requests
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail",
+            data=self.test_data_1), True)
     
-    def tearDown(cls):
-        super(SetUpTestData, cls).tearDownClass()
+    def tearDown(self):
+        super(SetUpTestData, self).tearDownClass()
+        del self.common_tests
 
 
 # This class is to test GetArchiveTissueRequestsView as an admin.
 # Default: get request is allowed, and rest of them are blocked.
 class GetArchiveTissueRequestsViewTest(SetUpTestData):
 
-    def setUp(cls):
-        super(SetUpTestData, cls).setUpClass()
+    def setUp(self):
+        super(SetUpTestData, self).setUpClass()
+        self.common_tests = CommonTests(token=self.user_token, url='/get_archive_tissue_requests/')
 
     # Valid get request
     def test_get_all_new_tissue_request(self):
@@ -222,13 +222,6 @@ class GetArchiveTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response.data, serializer_response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.admin_client.credentials()
-
-    # Test: invalid get request
-    def test_invalid_request(self):
-        predicted_msg = 'Invalid input. Only `Token` tag is allowed.'
-        response = self.admin_client.get('/get_archive_tissue_requests/')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], predicted_msg)
 
     # Test: valid get single item request
     def test_get_single_tissue_request(self):
@@ -249,31 +242,6 @@ class GetArchiveTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.admin_client.credentials()
 
-    # Test: get request with empty token
-    def test_get_request_with_empty_token(self):
-        self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + '')
-        response_with_token = self.admin_client.get('/get_archive_tissue_requests/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-
-    # Test: get request with invalid token header
-    def test_get_request_with_invalid_token_header(self):
-        predicted_msg = 'Invalid token header'
-        self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + ' get request with valid token')
-        response_invalid_header = self.admin_client.get('/get_archive_tissue_requests/')
-        self.assertEqual(response_invalid_header.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_invalid_header.data['detail'], predicted_msg)
-
-    # Test: post request
-    def test_post_request(self):
-        predicted_msg = 'Authentication credentials were not provided.'
-        response_without_token = self.admin_client.post('/get_archive_tissue_requests/1/')
-        self.admin_client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token.decode('utf-8'))
-        response_with_token = self.admin_client.post('/get_archive_tissue_requests/1/')
-        self.assertEqual(response_with_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_without_token.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_with_token.data['detail'], predicted_msg)
-        self.assertEqual(response_without_token.data['detail'], predicted_msg)
-
     # Test: delete request
     def test_delete_request(self):
         predicted_msg_1 = 'Not found.'
@@ -286,7 +254,33 @@ class GetArchiveTissueRequestsViewTest(SetUpTestData):
         self.assertEqual(response_with_token.data['detail'], predicted_msg_1)
         self.assertEqual(response_without_token.data['detail'], predicted_msg_2)
 
-    # ToDo: write tests for patch request
+    def test_common_tests(self):
+        # ToDo: Fix common delete test here for invalid delete request
 
-    def tearDown(cls):
-        super(SetUpTestData, cls).tearDownClass()
+        # Invalid post request
+        self.assertEquals(self.common_tests.invalid_request_with_error_msg(
+            request_type="post", predicted_msg="authorization", response_tag="detail", http_response="403"), True)
+
+        # Test: with empty token for get, patch requests
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="get", predicted_msg="empty_token", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_with_empty_token(
+            request_type="patch", predicted_msg="empty_token", response_tag="detail", data=self.test_data_1), True)
+
+        # Test: with invalid token header for get, patch requests
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.invalid_token_header(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail",
+            data=self.test_data_1), True)
+
+        # Test: without token for get, patch requests
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="get", predicted_msg="invalid_token_header", response_tag="detail"), True)
+        self.assertEquals(self.common_tests.request_without_token(
+            request_type="patch", predicted_msg="invalid_token_header", response_tag="detail",
+            data=self.test_data_1), True)
+
+    def tearDown(self):
+        super(SetUpTestData, self).tearDownClass()
+        del self.common_tests

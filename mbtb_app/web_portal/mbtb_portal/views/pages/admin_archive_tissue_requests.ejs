@@ -1,4 +1,4 @@
-<title>Tissue Requests</title>
+<title>Admin - Archived Tissue Requests</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <div class="container-fluid archive_tissue_requests_container">
@@ -16,23 +16,23 @@
                 <thead>
                 <tr>
                     <th><input type="checkbox" onClick="toggle_all(this.checked)" id="select_all"></th>
-                    <th data-field="title">Title</th>
-                    <th data-field="first_name">First Name</th>
-                    <th data-field="last_name">Last Name</th>
-                    <th data-field="email">Email</th>
-                    <th data-field="institution">Institution</th>
-                    <th data-field="department_name">Department</th>
-                    <th data-field="city">City</th>
-                    <th data-field="province">Province</th>
-                    <th data-field="postal_code">Postal/Zip Code</th>
-                    <th data-field="phone_number">Phone</th>
-                    <th data-field="fax_number">Fax</th>
-                    <th data-field="project_title">Project Title</th>
-                    <th data-field="source_of_funding">Source of Funding</th>
-                    <th data-field="abstract">Abstract</th>
-                    <th data-field="received_date">Received Date</th>
-                    <th data-field="approval_date">Approval Date</th>
-                    <th data-field="tissue_request_number">Tissue Request No</th>
+                    <th>Title</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Institution</th>
+                    <th>Department</th>
+                    <th>City</th>
+                    <th>Province</th>
+                    <th>Postal/Zip Code</th>
+                    <th>Phone</th>
+                    <th>Fax</th>
+                    <th>Project Title</th>
+                    <th>Source of Funding</th>
+                    <th>Abstract</th>
+                    <th>Received Date</th>
+                    <th>Approval Date</th>
+                    <th>Tissue Request No</th>
                 </tr>
                 </thead>
 
@@ -47,21 +47,21 @@
                                 <%= data[i].first_name %>
                             </a>
                         </td>
-                        <td data-field="last_name"><%= data[i].last_name %></td>
-                        <td data-field="email"><%= data[i].email %></td>
-                        <td data-field="institution"><%= data[i].institution %></td>
-                        <td data-field="department_name"><%= data[i].department_name %></td>
-                        <td data-field="city"><%= data[i].city %></td>
-                        <td data-field="province"><%= data[i].province %></td>
-                        <td data-field="country"><%= data[i].postal_code %></td>
-                        <td data-field="phone_number"><%= data[i].phone_number %></td>
-                        <td data-field="fax_number"><%= data[i].fax_number %></td>
-                        <td data-field="project_title"><%= data[i].project_title %></td>
-                        <td data-field="source_of_funding"><%= data[i].source_of_funding %></td>
-                        <td data-field="abstract"><%= data[i].abstract %></td>
-                        <td data-field="received_date"><%= data[i].received_date %></td>
-                        <td data-field="approval_date"><%= data[i].approval_date %></td>
-                        <td data-field="tissue_request_number"><%= data[i].tissue_request_number %></td>
+                        <td><%= data[i].last_name %></td>
+                        <td><%= data[i].email %></td>
+                        <td><%= data[i].institution %></td>
+                        <td><%= data[i].department_name %></td>
+                        <td><%= data[i].city %></td>
+                        <td><%= data[i].province %></td>
+                        <td><%= data[i].postal_code %></td>
+                        <td><%= data[i].phone_number %></td>
+                        <td><%= data[i].fax_number %></td>
+                        <td><%= data[i].project_title %></td>
+                        <td><%= data[i].source_of_funding %></td>
+                        <td><%= data[i].abstract %></td>
+                        <td><%= data[i].received_date %></td>
+                        <td><%= data[i].approval_date %></td>
+                        <td><%= data[i].tissue_request_number %></td>
                     </tr>
                 <% } %>
             </table>
