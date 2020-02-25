@@ -264,4 +264,18 @@ module.exports.routes = {
     }
   },
 
+  'GET /view_suspended_users': {
+    action: 'admin/suspended-users',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'POST /revert_suspended_user': {
+    action: 'admin/revert-suspended-user',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };

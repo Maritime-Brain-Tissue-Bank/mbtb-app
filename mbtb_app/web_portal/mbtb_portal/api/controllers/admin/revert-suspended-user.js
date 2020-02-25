@@ -3,10 +3,10 @@ const request = require('request');
 module.exports = {
 
 
-  friendlyName: 'Suspend users',
+  friendlyName: 'Revert suspended user',
 
 
-  description: `It suspends users from given list, Even controller's name say to suspend a single user but it can supends multiple users at once.`,
+  description: 'It reverts the status of suspended users, change back them to normal state',
 
 
   inputs: {
@@ -15,7 +15,6 @@ module.exports = {
       required: true,
       description: 'Receives selected ids from admin for patch request'
     },
-
   },
 
 
@@ -27,14 +26,14 @@ module.exports = {
   fn: async function (inputs, exits) {
     let requests_ids = inputs.requests_ids;
     let payload = {
-      suspend: "Y",
+      suspend: "N",
     };
 
     // looping through received ids for tissue requests
     for (i=0; i<requests_ids.length; i++){
 
       // url for API
-      let url = sails.config.custom.user_api_url + 'current_users/' + requests_ids[i] + '/';
+      let url = sails.config.custom.user_api_url + 'suspended_users/' + requests_ids[i] + '/';
 
       // patch request for updating following fields: `suspend`
       // along with admin auth token
@@ -47,14 +46,14 @@ module.exports = {
         function optionalCallback(err, httpResponse, body) {
           if (err) {
             console.log({
-              'error_controller': 'admin/suspend-single',
+              'error_controller': 'admin/revert-suspended-single',
               'error_msg': err
             }); // log error to server console
             return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg});
           }
           else {
             // log approved request IDs
-            console.log("User suspended with ID: ", requests_ids[i-1]);
+            console.log("Suspended user account reverted to normal state with ID: ", requests_ids[i-1]);
           }
         });
 
