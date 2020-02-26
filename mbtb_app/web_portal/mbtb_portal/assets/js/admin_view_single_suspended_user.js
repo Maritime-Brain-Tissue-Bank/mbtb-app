@@ -11,7 +11,7 @@ view_single_suspended_user.controller("view_single_suspended_user_controller", [
     if (confirm("This action will revert suspended user to normal state. Are you sure?")) {
       let url = '/revert_suspended_user/';
 
-      // DELETE request to sails controller
+      // POST request to sails controller
       $http({
         method: 'POST',
         url: url,
