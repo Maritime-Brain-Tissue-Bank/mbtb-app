@@ -278,4 +278,18 @@ module.exports.routes = {
     }
   },
 
+  'GET /view_current_users/:id': {
+    action: 'admin/view-single-current-user',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
+  'GET /view_suspended_users/:id': {
+    action: 'admin/view-single-suspended-user',
+    locals: {
+      layout: 'layouts/admin_layout'
+    }
+  },
+
 };
