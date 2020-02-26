@@ -59,7 +59,7 @@ module.exports = {
         });
 
     }
-    return exits.success("approved");
+    return exits.success("Success");
   }
 
 

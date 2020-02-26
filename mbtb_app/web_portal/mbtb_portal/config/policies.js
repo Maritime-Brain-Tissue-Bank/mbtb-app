@@ -31,6 +31,5 @@ module.exports.policies = {
   'user/login': true,
   'user/logout': true,
   'user/signup': true,
-  'user/user-tissue-requests': true,
 
 };
