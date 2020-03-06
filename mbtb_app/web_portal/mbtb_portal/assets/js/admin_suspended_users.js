@@ -5,7 +5,7 @@ $('#revert_suspended_user_btn').click(function(e){
 
   // patch request for sending request_ids to controller
   let post_request = $.post( "/revert_suspended_user", {requests_ids: requests_ids}, function(data, status) {
-    if (data === 'approved'){
+    if (data === 'Success'){
       // display alert on success and reload window
       alert("Your selected user accounts are reverted to normal state.");
       location.reload();
