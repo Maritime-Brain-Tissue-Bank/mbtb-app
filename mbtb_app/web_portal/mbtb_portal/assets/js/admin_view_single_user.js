@@ -1,6 +1,7 @@
 var view_single_current_user = angular.module("view_single_current_user_app", []);
 
-view_single_current_user.controller("view_single_current_user_controller", ['$scope', '$window', '$http', function ($scope, $window, $http) {
+view_single_current_user.controller("view_single_current_user_controller",
+  ['$scope', '$window', '$http', function ($scope, $window, $http) {
 
   // binding data to angular variable from ejs view
   $scope.details = $window.single_current_user;
@@ -10,7 +11,7 @@ view_single_current_user.controller("view_single_current_user_controller", ['$sc
     if (confirm("This action will suspend current user. Are you sure?")) {
       let url = '/suspend_single_user/';
 
-      // DELETE request to sails controller
+      // POST request to sails controller
       $http({
         method: 'POST',
         url: url,
