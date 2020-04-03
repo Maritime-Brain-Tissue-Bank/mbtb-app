@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 
 
-# Configure required libraries ...
+# Configure required libraries
 if(UNIX) # Darwin or Linux
 
     find_package(Boost REQUIRED COMPONENTS system thread log program_options chrono)
@@ -28,7 +28,7 @@ endif()
 
 
 
-# Configure compiler options ...
+# Configure compiler
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
     message("-- configuring clang options")
@@ -44,18 +44,22 @@ endif()
 
 
 
-# Project construction ...
-
-# source files ...
-add_executable(${PROJECT_NAME} ./src/CZIImage.cpp)
-
-
-
-# including header file
-set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
+# source files
+add_executable(${PROJECT_NAME}  ./src/CZIImage.cpp
+                                ./src/czi_image/czi_controller.cpp
+                                ./src/rest_base/basic_controller.cpp)
 
 
-# library search paths ...
+
+# include header files
+set(REST_INCLUDE_DIR "./src/rest_base/include/")
+message(REST " ${REST_INCLUDE_DIR}")
+set(CZI_IMAGE_INCLUDE_DIR "./src/czi_image/")
+message(CZI_IMAGE " ${CZI_IMAGE_INCLUDE_DIR}")
+set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR} ${REST_INCLUDE_DIR} ${CZI_IMAGE_INCLUDE_DIR})
+
+
+# library search
 if(APPLE)
     set(OPENSSL_LIBS "/usr/local/Cellar/openssl/${OPENSSL_VERSION}/lib/libssl.1.0.0.dylib;/usr/local/Cellar/openssl/${OPENSSL_VERSION}/lib/libcrypto.1.0.0.dylib")
     set(ZIP_LIBRARY "/usr/local/Cellar/zlib/1.2.11/lib/libz.dylib")
