@@ -10,9 +10,9 @@ This api uses following libraries: [libCZI](https://github.com/zeiss-microscopy/
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     ```
    
-2. Install git, cmake, boost, openssl with brew
+2. Install git, cmake, boost, zlib, cpprestsdk openssl with brew
     ```shell script
-    $ brew install cmake git openssl boost zlib
+    $ brew install cmake git openssl boost zlib cpprestsdk
     ```
 
 3. Inside the root directory of this api, excute following commands:

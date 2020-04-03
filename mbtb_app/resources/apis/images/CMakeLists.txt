@@ -1,6 +1,78 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.7)
 project(CZIImages)
-
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(CZIImages src/CZIImage.cpp)
+
+
+# Configure required libraries ...
+if(UNIX) # Darwin or Linux
+
+    find_package(Boost REQUIRED COMPONENTS system thread log program_options chrono)
+    find_package(Threads REQUIRED)
+
+    if(APPLE)
+        # Prefer a homebrew version of OpenSSL over the one in /usr/lib
+        file(GLOB OPENSSL_ROOT_DIR /usr/local/Cellar/openssl/*)
+        # Prefer the latest (make the latest one first)
+        list(REVERSE OPENSSL_ROOT_DIR)
+
+        find_package(OpenSSL 1.0.2 REQUIRED)
+        set(OPENSSL_VERSION "1.0.2t")
+
+        find_package(cpprestsdk REQUIRED)
+    endif()
+
+else()
+    message(FATAL_ERROR "-- Platform not supported :( ")
+endif()
+
+
+
+# Configure compiler options ...
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+
+    message("-- configuring clang options")
+    set(CMAKE_CXX_FLAGS "-arch x86_64 -std=c++11 -stdlib=libc++ -DBOOST_LOG_DYN_LINK -Wno-deprecated-declarations")
+
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+
+    message("-- configuring gcc options")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -DBOOST_LOG_DYN_LINK")
+
+endif()
+
+
+
+# Project construction ...
+
+# source files ...
+add_executable(${PROJECT_NAME} ./src/CZIImage.cpp)
+
+
+
+# including header file
+set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
+
+
+# library search paths ...
+if(APPLE)
+    set(OPENSSL_LIBS "/usr/local/Cellar/openssl/${OPENSSL_VERSION}/lib/libssl.1.0.0.dylib;/usr/local/Cellar/openssl/${OPENSSL_VERSION}/lib/libcrypto.1.0.0.dylib")
+    set(ZIP_LIBRARY "/usr/local/Cellar/zlib/1.2.11/lib/libz.dylib")
+    set(LIBRARIES_SEARCH_PATHS ${OPENSSL_LIBS} ${Boost_LIBRARIES} ${ZIP_LIBRARY})
+endif()
+
+message(BOOST_LIBS " ${Boost_LIBRARIES}")
+message(OPENSSL_LIBS " ${OPENSSL_LIBRARIES}")
+message(LIBRARIES_SEARCH_PATHS " ${LIBRARIES_SEARCH_PATHS}")
+
+
+include_directories(${HEADER_SEARCH_PATHS})
+
+if (APPLE)
+    target_link_libraries(${PROJECT_NAME} cpprestsdk::cpprest)
+    target_link_libraries(${PROJECT_NAME} "-framework CoreFoundation")
+    target_link_libraries(${PROJECT_NAME} "-framework Security")
+    target_link_libraries(${PROJECT_NAME} ${LIBRARIES_SEARCH_PATHS})
+    set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-W1, -F/Library/Frameworks")
+endif ()
