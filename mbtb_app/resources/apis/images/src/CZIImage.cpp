@@ -4,6 +4,9 @@
 #include <iostream>
 #include <user_interrupt_handler.h>
 #include "czi_controller.h"
+#include <mysqlx/xdevapi.h>
+
+using namespace mysqlx;
 
 using namespace web;
 using namespace rest;
