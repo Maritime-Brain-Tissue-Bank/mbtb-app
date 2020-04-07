@@ -45,10 +45,8 @@ endif()
 
 
 # source files
-add_executable(${PROJECT_NAME}  ./src/SampleDBConnect.cpp
-                                ./src/czi_image/czi_controller.cpp
-                                ./src/rest_base/basic_controller.cpp
-                                ./src/db/DBConnection.cpp
+add_executable(${PROJECT_NAME}  ./src/SampleDBConnect.cpp ./src/czi_image/CZIController.cpp
+                                ./src/rest_base/Controller.cpp ./src/db/DBConnection.cpp
         )
 
 

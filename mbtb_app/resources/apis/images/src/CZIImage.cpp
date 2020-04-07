@@ -2,8 +2,8 @@
 // Created by Nirav Jadeja on 2020-04-03.
 //
 #include <iostream>
-#include <user_interrupt_handler.h>
-#include "czi_controller.h"
+#include <UserInterruptHandler.h>
+#include "CZIController.h"
 #include <mysqlx/xdevapi.h>
 
 using namespace mysqlx;

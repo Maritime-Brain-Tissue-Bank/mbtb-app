@@ -2,7 +2,7 @@
 // Created by Nirav Jadeja on 2020-04-03.
 //
 
-#include "czi_controller.h"
+#include "CZIController.h"
 
 using namespace web;
 using namespace http;

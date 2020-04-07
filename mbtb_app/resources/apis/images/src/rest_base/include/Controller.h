@@ -7,20 +7,20 @@
 #include "string"
 #include "cpprest/http_listener.h"
 #include "pplx/pplxtasks.h"
-#include "rest_controller.h"
+#include "RestController.h"
 
 using namespace web;
 using namespace http::experimental::listener;
 
 namespace rest{
 
-    class BasicController{
+    class Controller{
 
     protected:
-        http_listener _listener; // main network endpoint for service
+        http_listener listener_; // main network endpoint for service
 
     public:
-        BasicController();
+        Controller();
 
         void setEndpoint(const std::string &value);
         std::string endpoint() const;

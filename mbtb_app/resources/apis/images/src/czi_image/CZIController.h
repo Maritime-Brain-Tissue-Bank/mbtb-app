@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include <basic_controller.h>
+#include <Controller.h>
 
 using namespace rest;
 
-class CZIController : public BasicController, RestController {
+class CZIController : public Controller, RestController {
 
 public:
 
-    CZIController() : BasicController() {}
+    CZIController() : Controller() {}
 
     void handleGet(http_request message) override;
     void handlePut(http_request message) override;
