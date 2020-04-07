@@ -8,11 +8,11 @@ using namespace web;
 using namespace http;
 
 void CZIController::initRestOpHandlers() {
-    _listener.support(methods::GET, std::bind(&CZIController::handleGet, this, std::placeholders::_1));
-    _listener.support(methods::PUT, std::bind(&CZIController::handlePut, this, std::placeholders::_1));
-    _listener.support(methods::POST, std::bind(&CZIController::handlePost, this, std::placeholders::_1));
-    _listener.support(methods::DEL, std::bind(&CZIController::handleDelete, this, std::placeholders::_1));
-    _listener.support(methods::PATCH, std::bind(&CZIController::handlePatch, this, std::placeholders::_1));
+    listener_.support(methods::GET, std::bind(&CZIController::handleGet, this, std::placeholders::_1));
+    listener_.support(methods::PUT, std::bind(&CZIController::handlePut, this, std::placeholders::_1));
+    listener_.support(methods::POST, std::bind(&CZIController::handlePost, this, std::placeholders::_1));
+    listener_.support(methods::DEL, std::bind(&CZIController::handleDelete, this, std::placeholders::_1));
+    listener_.support(methods::PATCH, std::bind(&CZIController::handlePatch, this, std::placeholders::_1));
 }
 
 void CZIController::handleGet(http_request message) {
