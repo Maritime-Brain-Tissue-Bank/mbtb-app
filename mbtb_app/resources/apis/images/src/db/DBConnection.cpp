@@ -7,29 +7,26 @@
 
 namespace DBConnect{
 
-    DBConnection::DBConnection(std::string url, int port, std::string username, std::string password):
-                    _dburl(std::move(url)), _port(port), _username(std::move(username)), _password(std::move(password))
-                {
-                }
+    DBConnection::DBConnection(const char* hostName, int port, const char* schemaName, const char* username, const char* password):
+                hostName_(hostName), port_(port), schemaName_(schemaName), username_(username), password_(password)
+    {
 
+    }
 
-    void DBConnection::get_data(const std::string & schema_name) {
-        cout << "Creating SQL Connection...\n";
+    Schema DBConnection::getConnection() {
+        cout << "Creating new DB connection to schema: " << this->schemaName_ << endl;
+        session_ = new Session(this->hostName_, this->port_, this->username_, this->password_);
+        Schema schema_ = session_->getSchema(this->schemaName_);
+        return schema_;
+    }
 
-        Session session(_dburl, _port, _username, _password);
+    void DBConnection::closeConnection(){
+        cout << "Closing DB Connection" << endl;
+        this->session_->close();  // Closing session with DB
+        delete session_;  // Deleting session instance, freeing memory
+    }
 
-        Schema schema = session.getSchema(schema_name);
-
-        Table table = schema.getTable("users");
-
-        RowResult rowResult = table.select("id", "email", "first_name", "last_name").
-                where("email like: email").
-                bind("email", "temp@mbtb.ca").execute();
-
-        Row row = rowResult.fetchOne();
-
-        cout << " id: " << row[0] << "\n" << " email: " << row[1] << " \n"
-             << " first_name: " << row[2] << "\n" << " last_name: " << row[3] << endl;
+    DBConnection::~DBConnection() {
     }
 
 }

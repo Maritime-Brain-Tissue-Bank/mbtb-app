@@ -15,16 +15,19 @@ namespace DBConnect{
     class DBConnection{
 
     private:
-        int _port;
-        std::string _dburl;
-        std::string _username;
-        std::string _password;
+        const char* hostName_;
+        const char* schemaName_;
+        const char* username_;
+        const char* password_;
+        int port_;
+        Session * session_;
 
     public:
-        DBConnection(std::string url, int port, std::string username, std::string password);
+        DBConnection(const char* hostName, int port, const char* schemaName, const char* username, const char* password);
+        ~DBConnection();
 
-        void get_data(const std::string & schema_name);
-
+        Schema getConnection();
+        void closeConnection();
 
     };
 }
