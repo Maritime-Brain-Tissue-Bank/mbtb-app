@@ -1,5 +1,5 @@
 //
-// Created by Nirav Jadeja on 2020-04-03.
+// Created by Nirav Jadeja on 2020-04-07.
 //
 
 #pragma once
@@ -8,12 +8,14 @@
 
 using namespace web;
 
-class CZIController{
+class TempController{
 
 public:
-    CZIController();
-    ~CZIController();
+    TempController();
+    ~TempController();
 
     static void run(http_request * message);
 
 };
+
+

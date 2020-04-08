@@ -28,9 +28,9 @@ namespace rest{
         pplx::task<void> accept();
         pplx::task<void> shutdown();
 
-        virtual void initRestOpHandlers(){
-            /* have to be implemented by the child class */
-        }
+        virtual void initRestOpHandlers(){}
+
+        static std::vector<utility::string_t> requestPath(const http_request & message);
 
     };
 }

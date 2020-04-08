@@ -3,8 +3,7 @@
 //
 #include <iostream>
 #include <UserInterruptHandler.h>
-#include "CZIController.h"
-
+#include <Router.h>
 
 using namespace web;
 using namespace rest;
@@ -13,16 +12,16 @@ using namespace std;
 int main(int argc, const char * argv[]) {
     InterruptHandler::hookSIGINT();
 
-    CZIController server;
-    server.setEndpoint("http://127.0.0.1:7000/czi_image");
+    Router router;
+    router.setEndpoint("http://127.0.0.1:7000/");  // setting server endpoint or base url here
 
     try {
-        server.accept().wait();
-        cout << "CZI Image server started at: " << server.endpoint() << '\n';
+        router.accept().wait();
+        cout << "CZI Image server started at: " << router.endpoint() << '\n';
 
         InterruptHandler::waitForUserInterrupt();
 
-        server.shutdown().wait();
+        router.shutdown().wait();
     }
     catch(exception & e) {
 

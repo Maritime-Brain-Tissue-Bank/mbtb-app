@@ -33,4 +33,9 @@ namespace rest {
         return listener_.close();
     }
 
+    std::vector<utility::string_t> Controller::requestPath(const http_request & message) {
+        auto relativePath = uri::decode(message.relative_uri().path());
+        return uri::split_path(relativePath);
+    }
+
 }

@@ -47,6 +47,7 @@ endif()
 # source files
 add_executable(${PROJECT_NAME}  ./src/CZIImage.cpp ./src/czi_image/CZIController.cpp
                                 ./src/rest_base/Controller.cpp ./src/db/DBConnection.cpp
+                                ./src/rest_base/Router.cpp ./src/czi_image/TempController.cpp
         )
 
 
