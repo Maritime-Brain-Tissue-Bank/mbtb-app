@@ -20,14 +20,13 @@ namespace DBConnect{
         const char* username_;
         const char* password_;
         int port_;
-        Session * session_;
 
     public:
         DBConnection(const char* hostName, int port, const char* schemaName, const char* username, const char* password);
         ~DBConnection();
 
-        Schema getConnection();
-        void closeConnection();
+        Session getConnection();
+        void closeConnection(Session * session_);
 
     };
 }

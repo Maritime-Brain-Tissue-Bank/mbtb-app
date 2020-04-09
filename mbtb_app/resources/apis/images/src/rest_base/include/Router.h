@@ -7,7 +7,7 @@
 #include <Controller.h>
 #include <RestController.h>
 #include <CZIController.h>
-#include <TempController.h>
+#include <TissueMetaData.h>
 
 namespace rest{
 

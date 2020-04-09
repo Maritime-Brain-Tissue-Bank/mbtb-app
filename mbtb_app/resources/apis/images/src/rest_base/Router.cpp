@@ -22,8 +22,8 @@ namespace rest{
         if (!path.empty() && path[0] == "czi_image"){ //  route: {base}/czi_image
             CZIController::run(&message);
         }
-        if (!path.empty() && path[0] == "temp"){  // route: {base}/temp
-            TempController::run(&message);
+        if (!path.empty() && path[0] == "tissue_meta_data" && !path[1].empty()){  // route: {base}/tissue_meta_data
+            TissueMetaData::getTissueMetaData(&message, path[1]);
 
         }
         else{  //  route: {base}/

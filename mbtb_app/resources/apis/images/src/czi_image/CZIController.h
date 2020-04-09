@@ -6,14 +6,12 @@
 
 #include <Controller.h>
 
-using namespace web;
-
 class CZIController{
 
 public:
     CZIController();
     ~CZIController();
 
-    static void run(http_request * message);
+    static void run(http::http_request * message);
 
 };
