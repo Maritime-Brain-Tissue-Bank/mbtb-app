@@ -12,10 +12,18 @@ using namespace DBConnect;
 class DBTissueMetaData{
 
 private:
+    // for converting fetched row
+    struct singleTissueMetaData{
+        int primeDetailsID_;
+        std::string filename_;
+        std::string nRegionName;
+        std::string stainName;
+    };
+    std::vector<singleTissueMetaData> tissueMetaDataList;
 
 public:
     DBTissueMetaData();
     ~DBTissueMetaData();
 
-    static void getData(int prime_details_id);
+    std::vector<DBTissueMetaData::singleTissueMetaData> getData(int prime_details_id);
 };

@@ -26,7 +26,7 @@ namespace DBConnect{
         ~DBConnection();
 
         Session getConnection();
-        void closeConnection(Session * session_);
+        static void closeConnection(Session * session_);
 
     };
 }

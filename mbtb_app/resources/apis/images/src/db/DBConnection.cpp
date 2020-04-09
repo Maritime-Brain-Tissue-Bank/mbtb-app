@@ -22,7 +22,6 @@ namespace DBConnect{
     void DBConnection::closeConnection(Session * session_){
         std::cout << "Closing DB Connection" << endl;
         session_->close();  // Closing session with DB
-        delete session_;  // Deleting session instance, freeing memory
     }
 
     DBConnection::~DBConnection() = default;
