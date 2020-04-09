@@ -23,7 +23,10 @@ namespace rest{
             CZIController::run(&message);
         }
         if (!path.empty() && path[0] == "tissue_meta_data" && !path[1].empty()){  // route: {base}/tissue_meta_data
-            TissueMetaData::getTissueMetaData(&message, path[1]);
+            std::string primeDetailsID_ = path[1];
+            pplx::create_task([&message, primeDetailsID_](){
+                TissueMetaData::getTissueMetaData(&message, primeDetailsID_);
+            });
 
         }
         else{  //  route: {base}/

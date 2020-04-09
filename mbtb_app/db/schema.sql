@@ -204,7 +204,7 @@ INSERT INTO n_regions(region_code, region_name) VALUES
     ('N6', 'Posterior Hippocampus'),
     ('N7', 'Inferior Posterior Parietal Lobe'),
     ('N8', 'Occipital Cortex'),
-    ('N9', 'Corpus Striatum');
+    ('N9', 'Corpus Striatum'),
     ('N10', 'Hypothalamus'),
     ('N11', 'Thalamus'),
     ('N12', 'Midbrain');
