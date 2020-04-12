@@ -1,6 +1,6 @@
 # CZI Images
 
-CZI Images is a rest api in C++, through which one can read CZI images, extract subblocks, region of interest (ROI), save it as png. 
+CZI Images is a rest api in C++ 14, through which one can read CZI images, extract subblocks, region of interest (ROI), save it as png. 
 This api uses following libraries: [libCZI](https://github.com/zeiss-microscopy/libCZI), [cpprestsdk](https://github.com/microsoft/cpprestsdk).
 
 ## How to Build (Mac OS)
