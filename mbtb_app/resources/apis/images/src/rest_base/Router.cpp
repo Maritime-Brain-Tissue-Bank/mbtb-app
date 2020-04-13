@@ -26,7 +26,7 @@ namespace rest{
             std::string primeDetailsID_ = path[1];
             pplx::create_task([&message, primeDetailsID_](){
                 TissueMetaData::getTissueMetaData(&message, primeDetailsID_);
-            });
+            }).wait();
 
         }
         else{  //  route: {base}/
