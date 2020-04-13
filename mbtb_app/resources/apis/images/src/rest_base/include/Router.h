@@ -8,6 +8,7 @@
 #include <RestController.h>
 #include <CZIController.h>
 #include <TissueMetaData.h>
+#include <AdminAuthentication.h>
 
 namespace rest{
 

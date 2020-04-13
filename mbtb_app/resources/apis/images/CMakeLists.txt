@@ -49,18 +49,21 @@ add_executable(${PROJECT_NAME}  ./src/CZIImage.cpp
                                 ./src/czi_image/CZIController.cpp ./src/czi_image/TissueMetaData.cpp
                                 ./src/rest_base/Controller.cpp ./src/rest_base/Router.cpp
                                 ./src/db/DBConnection.cpp ./src/db/DBTissueMetaData.cpp
+                                ./src/auth/AdminAuthentication.cpp
         )
 
 
 
 # include header files
 set(REST_INCLUDE_DIR "./src/rest_base/include/")  # REST Base dir
-set(CZI_IMAGE_INCLUDE_DIR "./src/czi_image/")  # CZI Image dir
+set(CZI_IMAGE_INCLUDE_DIR "./src/czi_image/include/")  # CZI Image dir
 set(DB_INCLUDE_DIR "./src/db/include/")  # DB dir
+set (AUTH_INCLUDE_DIR "./src/auth/include/")  # AUTH dir
 set(MYSQLCONN_INCLUDE_DIR "/usr/local/Cellar/mysql-connector-c++/8.0.19/include/")  # mysqlx connector
 set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR}
                         ${REST_INCLUDE_DIR} ${CZI_IMAGE_INCLUDE_DIR}
                         ${MYSQLCONN_INCLUDE_DIR} ${DB_INCLUDE_DIR}
+                        ${AUTH_INCLUDE_DIR}
         )
 
 # display msg: header file path
