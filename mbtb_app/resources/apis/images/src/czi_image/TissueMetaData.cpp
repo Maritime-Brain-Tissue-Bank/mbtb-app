@@ -14,6 +14,13 @@ void TissueMetaData::getTissueMetaData(http::http_request * message, const std::
     DBTissueMetaData dbTissueMetaData;
     auto data = dbTissueMetaData.getData(std::stoi(prime_details_id));
     auto response = json::value::object();
+
+    // validation: if data vector empty return 404.
+    if (data.empty()){
+        response["Error"] = json::value::string("Data not found.");
+        message->reply(status_codes::NotFound, response);
+    }
+
     int id_count = 0;
     response["Controller"] = json::value::string("TempController");
     for (auto & i : data){
