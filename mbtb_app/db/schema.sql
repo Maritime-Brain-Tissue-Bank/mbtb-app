@@ -115,14 +115,22 @@ CREATE TABLE image_repository(
     description text DEFAULT NULL,
     file_type varchar(255) NOT NULL,
     file_size int(20) NOT NULL,
-    category enum('gross', 'raw', 'cleaned'), -- To Do: Yet to be defined
     notes text DEFAULT NULL,
     date_taken date DEFAULT NULL,
     date_inserted timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    inserted_by varchar(255) NOT NULL,
+    region_id int unsigned NOT NULL,
+    stain_id int unsigned NOT NULL,
     PRIMARY KEY (image_id),
     FOREIGN KEY (prime_details_id)
         REFERENCES prime_details(prime_details_id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (region_id)
+        REFERENCES n_regions(region_id)
+        ON DELETE no action,
+    FOREIGN KEY (stain_id)
+        REFERENCES stains(stain_id)
+        ON DELETE no action
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
@@ -176,4 +184,35 @@ CREATE TABLE tissue_requests(
     reverted_date date DEFAULT NULL,
     tissue_request_number varchar(255) DEFAULT NULL,
     PRIMARY KEY (tissue_requests_id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE n_regions(
+    region_id int unsigned NOT NULL AUTO_INCREMENT,
+    region_code varchar (255) NOT NULL,
+    region_name varchar (255) NOT NULL,
+    description text DEFAULT NULL,
+    notes text DEFAULT NULL,
+    PRIMARY KEY (region_id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+INSERT INTO n_regions(region_code, region_name) VALUES
+    ('N1', 'Middle Frontal Gyrus'),
+    ('N2', 'Anterior Cingulate Gyrus'),
+    ('N3', 'Superior and Middle Temporal Gyrus'),
+    ('N4', 'Amygdala'),
+    ('N5', 'Anterior Hippocampus'),
+    ('N6', 'Posterior Hippocampus'),
+    ('N7', 'Inferior Posterior Parietal Lobe'),
+    ('N8', 'Occipital Cortex'),
+    ('N9', 'Corpus Striatum'),
+    ('N10', 'Hypothalamus'),
+    ('N11', 'Thalamus'),
+    ('N12', 'Midbrain');
+
+CREATE TABLE stains(
+    stain_id int unsigned NOT NULL AUTO_INCREMENT,
+    stain_name varchar (255) NOT NULL,
+    description text DEFAULT NULL,
+    notes text DEFAULT NULL,
+    PRIMARY KEY (stain_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
