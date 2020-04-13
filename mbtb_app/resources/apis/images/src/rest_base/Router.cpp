@@ -24,19 +24,24 @@ namespace rest{
         }
         if (!path.empty() && path[0] == "tissue_meta_data" && !path[1].empty()){  // route: {base}/tissue_meta_data
             std::string primeDetailsID_ = path[1];
-            pplx::create_task([message]() -> bool{
+            pplx::create_task([message]() -> std::tuple<bool, std::string>{
+
                 // authenticating request
                 const auto& messageHeaders_ = message.headers();
                 AdminAuthentication adminAuthentication;
                 auto response_ = adminAuthentication.authenticate(messageHeaders_);
                 return response_;
-            }).then([&message, primeDetailsID_](bool result_){
-                if (!result_){
+
+            }).then([&message, primeDetailsID_](const pplx::task<std::tuple<bool, std::string>>& taskResult_){
+
+                auto result_ = taskResult_.get();
+                if (std::get<0>(result_) == false){
                     auto response_ = json::value::object();
-                    response_["error"] = json::value::string("Wrong authentication credentials");
+                    response_["error"] = json::value::string(std::get<1>(result_));
                     message.reply(status_codes::Unauthorized, response_);
                 }
                 else{
+
                     TissueMetaData::getTissueMetaData(&message, primeDetailsID_);
                 }
 

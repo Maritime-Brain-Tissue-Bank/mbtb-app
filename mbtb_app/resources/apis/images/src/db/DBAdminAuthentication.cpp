@@ -7,7 +7,7 @@ DBAdminAuthentication::DBAdminAuthentication() = default;
 
 DBAdminAuthentication::~DBAdminAuthentication() = default;
 
-bool DBAdminAuthentication::adminTokenAuth(int adminID_, const std::string& adminEmail_) {
+std::tuple<bool, std::string> DBAdminAuthentication::adminTokenAuth(int adminID_, const std::string& adminEmail_) {
     DBConnection dbConnection("localhost", 33060, "mbtb_prod", "test", "test@123");
     auto sql_session = dbConnection.getConnection();
     sql_session.sql("SET @p_admin_auth_id = ?, @p_admin_auth_email = ?;").bind(adminID_, adminEmail_).execute();
@@ -20,8 +20,8 @@ bool DBAdminAuthentication::adminTokenAuth(int adminID_, const std::string& admi
 
     // ToDo: Need a proper validation here based on cpp standards.
     if (sizeof(adminAuth.adminAuthID_) == 0 || adminAuth.adminAuthEmail_ == ""){
-        return false;
+        return std::make_tuple(false, "Admin Token Auth: Admin not found.");
     }
-    return true;
+    return std::make_tuple(true, "None");
 
 }

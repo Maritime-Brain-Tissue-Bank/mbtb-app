@@ -8,16 +8,18 @@ AdminAuthentication::AdminAuthentication() = default;
 
 AdminAuthentication::~AdminAuthentication() = default;
 
-bool AdminAuthentication::authenticate(http::http_headers messageHeaders) {
+std::tuple<bool, std::string> AdminAuthentication::authenticate(http::http_headers messageHeaders) {
     if(messageHeaders.find("Authorization") == messageHeaders.end()){
-        return false;
+        this->errorMsg_ = "Invalid token header. No credentials provided.";
+        return std::make_tuple(false, this->errorMsg_);
     }
 
     auto authHeader_ = messageHeaders[header_names::authorization];
     std::string tokenName_ = authHeader_.substr(0, 5);
 
     if (tokenName_ != "Token"){
-        return false;
+        this->errorMsg_ = "Invalid input. Only `Token` tag is allowed.";
+        return std::make_tuple(false, this->errorMsg_);
     }
     auto tokenValue_ = authHeader_.substr(6, authHeader_.size());
 
@@ -28,18 +30,24 @@ bool AdminAuthentication::authenticate(http::http_headers messageHeaders) {
         auto db_response = dbAdminAuthentication.adminTokenAuth(payload_["id"], payload_["email"]);
         return db_response;
 
+    } catch (const std::exception& e){
+        this->errorMsg_ = "Admin Token Auth: " + std::string(e.what());
+        std::cerr << this->errorMsg_ << std::endl;
+        return std::make_tuple(false, this->errorMsg_);
+
     } catch(const jwt::DecodeError& e){
-        std::cerr << "Admin Token Auth: Decode Error - " << e.what() << std::endl;
+        this->errorMsg_ = "Admin Token Auth: can't decode the token.";
+        std::cerr << this->errorMsg_ << " - " << e.what() << std::endl;
+        return std::make_tuple(false, this->errorMsg_);
 
     }catch (const jwt::VerificationError& e) {
-        std::cerr << "Admin Token Auth: Verification Error - " << e.what() << std::endl;
+        this->errorMsg_ = "Admin Token Auth: can't verify the token.";
+        std::cerr << this->errorMsg_ << " - " << e.what() << std::endl;
+        return std::make_tuple(false, this->errorMsg_);
 
     } catch (...) {
-        std::cerr << "Admin Token Auth: Caught unknown exception\n";
+        this->errorMsg_ = "Admin Token Auth: Caught unknown exception.";
+        std::cerr << this->errorMsg_ << std::endl;  // logging
+        return std::make_tuple(false, this->errorMsg_);
     }
-
-
-
-    // ToDo: authenticate tokenValue_ here with jwt and compare it with DB, return bool value
-    return false;
 }

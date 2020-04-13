@@ -14,12 +14,13 @@ class AdminAuthentication {
 private:
     std::string adminAuthSecret_ = "SECRET_KEY";
     std::string adminAuthAlgorithm_ = "HS256";
+    std::string errorMsg_ = "None";
 
 public:
     AdminAuthentication();
     ~AdminAuthentication();
 
-    bool authenticate(http::http_headers messageHeaders);
+    std::tuple<bool, std::string> authenticate(http::http_headers messageHeaders);
 
 };
 

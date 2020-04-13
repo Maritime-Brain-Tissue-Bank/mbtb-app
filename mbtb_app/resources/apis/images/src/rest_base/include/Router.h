@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <tuple>
 #include <Controller.h>
 #include <RestController.h>
 #include <CZIController.h>
