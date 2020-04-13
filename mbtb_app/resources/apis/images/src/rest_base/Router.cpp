@@ -27,7 +27,8 @@ namespace rest{
             pplx::create_task([message]() -> bool{
                 // authenticating request
                 const auto& messageHeaders_ = message.headers();
-                auto response_ = AdminAuthentication::authenticate(messageHeaders_);
+                AdminAuthentication adminAuthentication;
+                auto response_ = adminAuthentication.authenticate(messageHeaders_);
                 return response_;
             }).then([&message, primeDetailsID_](bool result_){
                 if (!result_){

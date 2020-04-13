@@ -5,7 +5,9 @@
 #pragma once
 
 #include <Controller.h>
+#include <jwt/jwt.hpp>
 
+using namespace jwt::params;
 
 class AdminAuthentication {
 
@@ -17,7 +19,7 @@ public:
     AdminAuthentication();
     ~AdminAuthentication();
 
-    static bool authenticate(http::http_headers messageHeaders);
+    bool authenticate(http::http_headers messageHeaders);
 
 };
 
