@@ -56,10 +56,7 @@ namespace rest{
     }
 
     void Router::handlePost(http_request message) {
-        auto response = json::value::object();
-        response["status"] = json::value::string("okay");
-        response["message"] = json::value::string("POST test");
-        message.reply(status_codes::OK, response);
+        message.reply(status_codes::NotImplemented, responseNotImpl(methods::POST));
     }
 
 
