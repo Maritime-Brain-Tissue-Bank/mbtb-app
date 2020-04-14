@@ -135,25 +135,28 @@
         </div>
 
 
-
+        <!-- side navigation to display list of regions and stains for a tissue dynamically-->
         <div class="col-md-3">
             <div class="row">
                 <div class="image_files_title">
                     <h4 class="heading_title">Neuropathology Slide Images</h4>
                 </div>
 
-                <% if (tissue_meta_data) { %>
+                <% if (typeof tissue_meta_data !== 'undefined') { %>
                     <div class="image_files_nav">
                         <% for(var tissue_key in tissue_meta_data) { %>
 
+                            <!-- displaying key name - here it is n_region name -->
                             <button class="dropdown-btn">
                                 <%= tissue_key %>
                                 <i class="fa fa-caret-down"></i>
                             </button>
 
+                            <!-- displaying stain names with respective url -->
                             <div class="dropdown-container">
+                                <% var base_url = "/view_tissue_image/"; %>
                             <% for(var j=0; j < tissue_meta_data[tissue_key].length; j++) { %>
-                                <a href="<%= tissue_meta_data[tissue_key][j].file_name%>">
+                                <a href="<%= base_url + tissue_meta_data[tissue_key][j].file_name%>">
                                     <%= tissue_meta_data[tissue_key][j].stain_name %>
                                 </a>
                             <% } %>
@@ -162,7 +165,9 @@
                     </div>
                 <% } else {%>
                     <div class="image_files_nav">
-                        Images are not uploaded yet.
+                        <div class="dropdown-btn">
+                            Images are not uploaded yet.
+                        </div>
                     </div>
                 <%}%>
 

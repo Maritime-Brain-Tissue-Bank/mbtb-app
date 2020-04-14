@@ -1,4 +1,5 @@
 const request = require('request');
+var EventEmitter = require('events');
 
 module.exports = {
 
@@ -57,24 +58,32 @@ module.exports = {
       ]
     };
 
+    var tissue_text_data = new EventEmitter();
+
     // get request to retrieve detailed mbtb data for single id from api with admin auth token
     let url = sails.config.custom.data_api_url + 'other_details/' + id + '/';
     request.get(url, {
         'headers': {
           'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
-        }},
+        }
+      },
       function optionalCallback(err, httpResponse, body) {
         if (err) {
           console.log({'error_msg': err}); // log error to server console
-        }
-        else {
-          var response = JSON.parse(body);
-
-          // return retrieved data to template in form of dictionary with key: `detailed_data`
-          return exits.success({detailed_data: response, tissue_meta_data: tissue_meta_data});
+        } else {
+          tissue_text_data.data = JSON.parse(body);
+          tissue_text_data.emit('update');
         }
       });
 
+    // waiting for tissue_text_data' state change to update
+    tissue_text_data.on('update', function () {
+
+      // return retrieved data to template in form of dictionary with key: `detailed_data`
+      return exits.success({detailed_data: tissue_text_data.data,
+                            tissue_meta_data: tissue_meta_data
+      });
+    })
 
   }
 
