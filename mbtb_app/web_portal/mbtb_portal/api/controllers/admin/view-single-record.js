@@ -1,5 +1,20 @@
-const request = require('request');
-var EventEmitter = require('events');
+const request = require('request-promise');
+
+// async function: get request with promise using `request-promise` return json response
+async function getRequestData(url, token) {
+  return request.get({
+    uri: url,
+    headers: {
+      Authorization: 'Token ' + token,
+    },
+    json: true,
+    resolveWithFullResponse: true
+
+  }).then(res => (
+    res.body
+    )
+  );
+}
 
 module.exports = {
 
@@ -7,7 +22,7 @@ module.exports = {
   friendlyName: 'View single record',
 
 
-  description: 'Retrieve detailed mbtb data from api i.e. for a single request',
+  description: 'Retrieve detailed mbtb data and image meta data (regions, stains) from apis i.e. for a single request',
 
 
   inputs: {
@@ -34,58 +49,28 @@ module.exports = {
   },
 
 
-  fn: async function ({id}, exits) {
+  fn: async function ({id}) {
 
-    // ToDo: write a logic to fetch meta data from image api, below is sample data
-    let tissue_meta_data = {
-      "one_region":[
-        {
-          "stain_name": "one - 111",
-          "file_name": "#bb00-002 #1 #1.czi"
-        },{
-          "stain_name": "one - 222",
-          "file_name": "#bb00-002 #1 #2.czi"
-        }
-      ],
-      "second_region":[
-        {
-          "stain_name": "sec - 999",
-          "file_name": "#bb00-002 #1 #1.czi"
-        },{
-          "stain_name": "sec - 888",
-          "file_name": "#bb00-002 #1 #2.czi"
-        }
-      ]
-    };
+    // urls for api: for fetching text data and meta data for tissue
+    let text_data_url = sails.config.custom.data_api_url + 'other_details/' + id + '/';
+    let meta_data_url = sails.config.custom.image_api_url + 'tissue_meta_data/' + id + '/';
+    let text_data, meta_data;
 
-    var tissue_text_data = new EventEmitter();
+    try {
 
-    // get request to retrieve detailed mbtb data for single id from api with admin auth token
-    let url = sails.config.custom.data_api_url + 'other_details/' + id + '/';
-    request.get(url, {
-        'headers': {
-          'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
-        }
-      },
-      function optionalCallback(err, httpResponse, body) {
-        if (err) {
-          console.log({'error_msg': err}); // log error to server console
-        } else {
-          tissue_text_data.data = JSON.parse(body);
-          tissue_text_data.emit('update');
-        }
-      });
+      // call to function and await for the response
+      text_data = await getRequestData(text_data_url, this.req.session.admin_auth_token_val);
+      meta_data = await getRequestData(meta_data_url, this.req.session.admin_auth_token_val);
 
-    // waiting for tissue_text_data' state change to update
-    tissue_text_data.on('update', function () {
+      return {detailed_data: text_data, tissue_meta_data: meta_data};
 
-      // return retrieved data to template in form of dictionary with key: `detailed_data`
-      return exits.success({detailed_data: tissue_text_data.data,
-                            tissue_meta_data: tissue_meta_data
-      });
-    })
+    } catch (e) {
 
-  }
+      console.log({'error_msg': e}); // log error to server console
+      return {detailed_data: {}, tissue_meta_data: {}};
+    }
+
+  },
 
 
 };
