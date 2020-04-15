@@ -142,7 +142,7 @@
                     <h4 class="heading_title">Neuropathology Slide Images</h4>
                 </div>
 
-                <% if (tissue_meta_data !== null) { %>
+                <% if (typeof (tissue_meta_data) !== 'string') { %>
                     <div class="image_files_nav">
                         <% for(var tissue_key in tissue_meta_data) { %>
 
@@ -164,9 +164,10 @@
                         <% } %>
                     </div>
                 <% } else {%>
+                    <!-- display error msg if image meta data not found -->
                     <div class="image_files_nav">
                         <div class="dropdown-btn">
-                            Images are not uploaded yet.
+                            <%= tissue_meta_data %>
                         </div>
                     </div>
                 <%}%>

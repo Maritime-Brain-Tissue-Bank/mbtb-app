@@ -8,6 +8,7 @@ async function getRequestData(url, token) {
       Authorization: 'Token ' + token,
     },
     json: true,
+    simple: false,
     resolveWithFullResponse: true
 
   }).then(res => ({
@@ -66,13 +67,13 @@ module.exports = {
     text_data = await getRequestData(text_data_url, this.req.session.admin_auth_token_val);
     meta_data = await getRequestData(meta_data_url, this.req.session.admin_auth_token_val);
 
-    // error validation return empty in case of error from api i.e. 404, 500
-    if (!text_data){
-      text_data = {data: null};
+    // error validation return error msg in case of error from api i.e. 404, 500
+    if (text_data.statusCode != 200){
+      // ToDo: need to redict to ejs view to display message i.e. data not found.
     }
 
-    if (!meta_data) {
-      meta_data = {data: null};
+    if (meta_data.statusCode != 200) {
+      meta_data.data = meta_data.data["Error"];
     }
 
     return {detailed_data: text_data.data, tissue_meta_data: meta_data.data};
