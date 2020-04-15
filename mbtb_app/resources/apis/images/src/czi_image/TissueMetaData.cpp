@@ -22,7 +22,6 @@ void TissueMetaData::getTissueMetaData(http::http_request * message, const std::
     }
 
     int id_count = 0;
-    response["Controller"] = json::value::string("TempController");
     for (auto & i : data){
         response["meta_data"][id_count]["prime_details_id"] = i.primeDetailsID_;
         response["meta_data"][id_count]["file_name"] = json::value::string(i.filename_);

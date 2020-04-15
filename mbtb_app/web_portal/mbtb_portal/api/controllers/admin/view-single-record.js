@@ -10,10 +10,16 @@ async function getRequestData(url, token) {
     json: true,
     resolveWithFullResponse: true
 
-  }).then(res => (
-    res.body
+  }).then(res => ({
+    statusCode: res.statusCode,
+    data: res.body
+  }
     )
-  );
+  ).catch(function (err) {
+    console.log("************************************\n")
+    console.log("Controller: admin/view-single-record\n");
+    console.log(err);
+    });
 }
 
 module.exports = {
@@ -56,19 +62,20 @@ module.exports = {
     let meta_data_url = sails.config.custom.image_api_url + 'tissue_meta_data/' + id + '/';
     let text_data, meta_data;
 
-    try {
+    // call to function and await for the response
+    text_data = await getRequestData(text_data_url, this.req.session.admin_auth_token_val);
+    meta_data = await getRequestData(meta_data_url, this.req.session.admin_auth_token_val);
 
-      // call to function and await for the response
-      text_data = await getRequestData(text_data_url, this.req.session.admin_auth_token_val);
-      meta_data = await getRequestData(meta_data_url, this.req.session.admin_auth_token_val);
-
-      return {detailed_data: text_data, tissue_meta_data: meta_data};
-
-    } catch (e) {
-
-      console.log({'error_msg': e}); // log error to server console
-      return {detailed_data: {}, tissue_meta_data: {}};
+    // error validation return empty in case of error from api i.e. 404, 500
+    if (!text_data){
+      text_data = {data: null};
     }
+
+    if (!meta_data) {
+      meta_data = {data: null};
+    }
+
+    return {detailed_data: text_data.data, tissue_meta_data: meta_data.data};
 
   },
 
