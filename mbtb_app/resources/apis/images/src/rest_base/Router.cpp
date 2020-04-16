@@ -41,8 +41,8 @@ namespace rest{
                     message.reply(status_codes::Unauthorized, response_);
                 }
                 else{
-
-                    TissueMetaData::getTissueMetaData(&message, primeDetailsID_);
+                    TissueMetaData tissueMetaData;
+                    tissueMetaData.getTissueMetaData(&message, primeDetailsID_);
                 }
 
             }).wait();
