@@ -21,6 +21,8 @@ class Users(models.Model):
     pending_approval = models.CharField(max_length=1, default='Y')
     active_since = models.DateField(auto_now_add=True)
     suspend = models.CharField(max_length=1, default='N')
+    suspend_reason = models.TextField(blank=True)
+    revert_reason = models.TextField(blank=True)
 
     class Meta:
         #managed = False

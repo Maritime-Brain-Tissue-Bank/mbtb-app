@@ -3,10 +3,10 @@ const request = require('request');
 module.exports = {
 
 
-  friendlyName: 'Suspend users',
+  friendlyName: 'Revert users',
 
 
-  description: `It suspends users from given list, Even controller's name say to suspend a single user but it can supends multiple users at once.`,
+  description: `It reverts users to normal state with reason.`,
 
 
   inputs: {
@@ -15,6 +15,11 @@ module.exports = {
       required: true,
       description: 'Receives selected ids from admin for patch request'
     },
+    revert_reason:{
+      type:'string',
+      required:true,
+      description:'Receive revert reason'
+    }
 
   },
 
@@ -26,15 +31,29 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     let requests_ids = inputs.requests_ids;
+    let revert_reason = inputs.revert_reason;
     let payload = {
-      suspend: "Y",
+      suspend: "N",
+      revert_reason: revert_reason,
     };
 
-    // looping through received ids for tissue requests
+   /* for (i = 0; i < requests_ids.length; i++) {
+      requests_ids = JSON.parse("[" + requests_ids[i] + "]");
+    }*/
+
+    requests_ids = JSON.parse("[" + requests_ids + "]");
+
+    console.log("\n\n  **************   \n\n");
+    console.log(inputs.revert_reason);
+    console.log(requests_ids);
+
+    // looping through received ids
     for (i=0; i<requests_ids.length; i++){
+      //console.log("\n >>>>>>>"+requests_ids[i]+"\n");
+      //console.log("\n >>>>>>>" + typeof(requests_ids[i]) + "\n");
 
       // url for API
-      let url = sails.config.custom.user_api_url + 'current_users/' + requests_ids[i] + '/';
+      let url = sails.config.custom.user_api_url + 'suspended_users/' + requests_ids[i] + '/';
 
       // patch request for updating following fields: `suspend`
       // along with admin auth token
@@ -47,14 +66,15 @@ module.exports = {
         function optionalCallback(err, httpResponse, body) {
           if (err) {
             console.log({
-              'error_controller': 'admin/suspend-single',
+              'error_controller': 'admin/revert-user-with-reason',
               'error_msg': err
             }); // log error to server console
             return exits.error_response({'msg_title': 'Error', 'msg_body': sails.config.custom.api_down_error_msg});
           }
           else {
             // log approved request IDs
-            console.log("User suspended with ID: ", requests_ids[i-1]);
+              console.log("Suspended user account reverted to normal state with ID: ", requests_ids[i-1]);
+
           }
         });
 

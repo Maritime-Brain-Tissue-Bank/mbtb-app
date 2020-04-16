@@ -1,0 +1,18 @@
+<div ng-app="revert_user_with_reason_app" ng-controller="revert_user_with_reason_controller">
+    <h2>Revert User Form</h2>
+    <form>
+        <div class="form-group">
+            <label for="reason">Revert Reason</label>
+            <textarea id="reason" class="form-control" ng-model="revert_reason"></textarea>
+        </div>
+    </form>
+    <script>
+        // binding data received from sails controller to JS variable to pass it to angular
+        var requests_ids_ = <%- JSON.stringify(requests_ids) %>;
+
+    </script>
+    <button class="btn btn-primary" ng-click="confirmClick()">Confirm</button>
+    <a href="/view_suspended_users" class="btn btn_space">Cancel</a>
+
+
+</div>

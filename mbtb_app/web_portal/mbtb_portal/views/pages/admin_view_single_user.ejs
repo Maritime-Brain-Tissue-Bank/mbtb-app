@@ -1,5 +1,7 @@
 <title>Admin - View Current User</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 
@@ -17,108 +19,121 @@
     <div class="row">
 
         <div class="col-md-8">
-            <table class="table table-bordered">
-                <thead>
-                <tr class="detailed_data_header">
-                    <th>Parameter</th>
-                    <th>Detail</th>
-                </tr>
-                </thead>
 
-                <tbody >
-                <tr>
-                    <td scope="row" class="col-md-3">Title</td>
-                    <td>{{details.title}}</td>
-                </tr>
+            <form id="single_user_form" action="/suspend_user_form" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="requests_ids" name="requests_ids" value="{{details.id}}">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="detailed_data_header">
+                        <th>Parameter</th>
+                        <th>Detail</th>
+                    </tr>
+                    </thead>
 
-                <tr>
-                    <td scope="row">First Name</td>
-                    <td>{{details.first_name}}</td>
-                </tr>
+                    <tbody >
+                    <tr>
+                        <td scope="row" class="col-md-3">Title</td>
+                        <td>{{details.title}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Middle Name</td>
-                    <td>{{details.middle_name}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">First Name</td>
+                        <td>{{details.first_name}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Last Name</td>
-                    <td>{{details.last_name}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Middle Name</td>
+                        <td>{{details.middle_name}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Email</td>
-                    <td>{{details.email}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Last Name</td>
+                        <td>{{details.last_name}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Institution</td>
-                    <td>{{details.institution}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Email</td>
+                        <td>{{details.email}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Department</td>
-                    <td>{{details.department_name}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Institution</td>
+                        <td>{{details.institution}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Position</td>
-                    <td>{{details.position_title}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Department</td>
+                        <td>{{details.department_name}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Address Line 1</td>
-                    <td>{{details.address_line_1}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Position</td>
+                        <td>{{details.position_title}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Address Line 2</td>
-                    <td>{{details.address_line_2}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Address Line 1</td>
+                        <td>{{details.address_line_1}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">City</td>
-                    <td>{{details.city}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Address Line 2</td>
+                        <td>{{details.address_line_2}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Province</td>
-                    <td>{{details.province}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">City</td>
+                        <td>{{details.city}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Country</td>
-                    <td>{{details.country}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Province</td>
+                        <td>{{details.province}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Postal/Zip Code</td>
-                    <td>{{details.postal_code}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Country</td>
+                        <td>{{details.country}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Comments</td>
-                    <td>{{details.comments}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Postal/Zip Code</td>
+                        <td>{{details.postal_code}}</td>
+                    </tr>
 
-                <tr>
-                    <td scope="row">Active Since</td>
-                    <td>{{details.active_since}}</td>
-                </tr>
+                    <tr>
+                        <td scope="row">Comments</td>
+                        <td>{{details.comments}}</td>
+                    </tr>
 
-            </table>
+                    <tr>
+                        <td scope="row">Active Since</td>
+                        <td>{{details.active_since}}</td>
+                    </tr>
+
+                    <tr>
+                        <td scope="row">Revert Reason</td>
+                        <td>{{details.revert_reason}}</td>
+                    </tr>
+
+
+                </table>
+                <br>
+                <br>
+
+                <div class="form-group button_holder">
+                    <div class="col" id="cancel_btn">
+                        <button type="submit" class="btn btn-primary" id="suspend_single_user">Suspend</button>
+                        <a href="/view_current_users" class="btn btn_space">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
         </div>
 
     </div>
 
-    <br>
-    <br>
-    <div class="form-group button_holder">
-        <div class="col" id="cancel_btn">
-            <button ng-click="suspend_single_user()" class="btn btn-primary" id="suspend_single_user">Suspend</button>
-            <a href="/view_current_users" class="btn btn_space">Cancel</a>
-        </div>
-    </div>
+
 
 </div>
 

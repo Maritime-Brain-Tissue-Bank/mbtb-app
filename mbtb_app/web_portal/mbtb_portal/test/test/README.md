@@ -10,6 +10,11 @@ using [protractor](https://www.protractortest.org/#/) for angular testing
 npm install -g protractor
 ```
 
+#### Update webdriver-manager
+```
+webdriver-manager update
+```
+
 #### Start server
 
 ```

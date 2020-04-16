@@ -292,4 +292,33 @@ module.exports.routes = {
     }
   },
 
+  'POST /suspend_user_form':{
+    action:'admin/suspend-user-form',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+  'POST /suspend_user_with_reason':{
+    action:'admin/suspend-user-with-reason',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+  'POST /revert_user_form':{
+    action:'admin/revert-user-form',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+  'POST /revert_user_with_reason':{
+    action:'admin/revert-user-with-reason',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+
 };
