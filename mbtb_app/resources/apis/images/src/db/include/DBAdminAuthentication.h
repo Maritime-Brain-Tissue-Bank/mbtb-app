@@ -19,5 +19,5 @@ public:
     DBAdminAuthentication();
     ~DBAdminAuthentication();
 
-    std::tuple<bool, std::string> adminTokenAuth(int adminID_, const std::string& adminEmail_);
+    bool isAdmin(int adminID_, const std::string& adminEmail_);
 };

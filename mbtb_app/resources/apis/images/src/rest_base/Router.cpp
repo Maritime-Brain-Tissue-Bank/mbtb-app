@@ -28,8 +28,8 @@ namespace rest{
 
                 // authenticating request
                 const auto& messageHeaders_ = message.headers();
-                AdminAuthentication adminAuthentication;
-                auto response_ = adminAuthentication.authenticate(messageHeaders_);
+                Authentication authentication;
+                auto response_ = authentication.authenticate(messageHeaders_);
                 return response_;
 
             }).then([&message, primeDetailsID_](const pplx::task<std::tuple<bool, std::string>>& taskResult_){

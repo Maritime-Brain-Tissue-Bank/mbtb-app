@@ -1,5 +1,5 @@
 //
-// Created by Nirav Jadeja on 2020-04-12.
+// Created by Nirav Jadeja on 2020-04-17.
 //
 
 #pragma once
@@ -9,18 +9,16 @@
 
 using namespace jwt::params;
 
-class AdminAuthentication {
+class Authentication{
 
 private:
-    std::string adminAuthSecret_ = "SECRET_KEY";
-    std::string adminAuthAlgorithm_ = "HS256";
+    std::string authSecretkey_ = "SECRET_KEY";
+    std::string jwtAlgorithm_ = "HS256";
     std::string errorMsg_ = "None";
 
 public:
-    AdminAuthentication();
-    ~AdminAuthentication();
+    Authentication();
+    ~Authentication();
 
     std::tuple<bool, std::string> authenticate(http::http_headers messageHeaders);
-
 };
-
