@@ -30,3 +30,50 @@
   margin-top: 25px;
   transform: scale(1.2); /* 120% zoom*/
 }
+
+.image_files_title{
+  padding: 6px 8px 6px 30px;
+}
+
+/* Style the sidenav links and the dropdown button */
+.image_files_nav a, .dropdown-btn {
+  padding: 6px 8px 6px 30px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #818181;
+  display: block;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+/* On mouse-over */
+.image_files_nav a:hover, .dropdown-btn:hover {
+  color: #034F53;
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+  color: #034F53;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+  display: none;
+  padding-left: 20px;
+}
+
+/* Optional: Style the caret down icon */
+.fa-caret-down {
+  float: right;
+  padding-right: 8px;
+}
+
+/* Some media queries for responsiveness */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}

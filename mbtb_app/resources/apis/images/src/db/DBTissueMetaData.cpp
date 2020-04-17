@@ -17,10 +17,9 @@ std::vector<DBTissueMetaData::singleTissueMetaData> DBTissueMetaData::getData(in
     auto sql_result = sql_session.sql("CALL selectTissueMetaData(@p_prime_details_id)").execute();
     DBConnection::closeConnection(&sql_session);
     for (Row row: sql_result.fetchAll()){
-        tissueMetaData.primeDetailsID_ = row[0];
-        tissueMetaData.filename_ = row[1].get<std::string>();
-        tissueMetaData.nRegionName = row[2].get<std::string>();
-        tissueMetaData.stainName = row[3].get<std::string>();
+        tissueMetaData.filename_ = row[0].get<std::string>();
+        tissueMetaData.nRegionName = row[1].get<std::string>();
+        tissueMetaData.stainName = row[2].get<std::string>();
         tissueMetaDataList.push_back(tissueMetaData);
     }
     return tissueMetaDataList;

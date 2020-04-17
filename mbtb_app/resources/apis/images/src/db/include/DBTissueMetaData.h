@@ -14,7 +14,6 @@ class DBTissueMetaData{
 private:
     // for converting fetched row
     struct singleTissueMetaData{
-        int primeDetailsID_;
         std::string filename_;
         std::string nRegionName;
         std::string stainName;
