@@ -1,9 +1,11 @@
-<div ng-app="suspend_user_with_reason_app" ng-controller="suspend_user_with_reason_controller">
-    <h2>Suspend User Form</h2>
+<div ng-app="suspend_user_with_reason_app" ng-controller="suspend_user_with_reason_controller"
+     class="container-fluid suspend_reason_container">
+    <h2 class="heading_title">Suspend User Form</h2>
+    <br>
     <form>
         <div class="form-group">
             <label for="reason">Suspend Reason</label>
-            <textarea id="reason" class="form-control" ng-model="suspend_reason"></textarea>
+            <textarea id="reason" name="reason" class="form-control" ng-model="suspend_reason"></textarea>
         </div>
     </form>
     <script>
@@ -11,9 +13,14 @@
         var requests_ids_ = <%- JSON.stringify(requests_ids) %>;
 
     </script>
-    <button class="btn btn-primary" ng-click="confirmClick()">Confirm</button>
-    <a href="/view_current_users" class="btn btn_space">Cancel</a>
 
+    <div class="form-group button_holder">
+        <div class="col" id="cancel_btn">
+            <button class="btn btn-primary" ng-click="confirmClick()" id="suspend_confirm">Confirm</button>
+            <a href="/view_current_users" class="btn btn_space">Cancel</a>
+        </div>
+    </div>
 
 </div>
+
 

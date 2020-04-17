@@ -37,20 +37,11 @@ module.exports = {
       revert_reason: revert_reason,
     };
 
-   /* for (i = 0; i < requests_ids.length; i++) {
-      requests_ids = JSON.parse("[" + requests_ids[i] + "]");
-    }*/
-
+    //convert requests_ids string to array
     requests_ids = JSON.parse("[" + requests_ids + "]");
-
-    console.log("\n\n  **************   \n\n");
-    console.log(inputs.revert_reason);
-    console.log(requests_ids);
 
     // looping through received ids
     for (i=0; i<requests_ids.length; i++){
-      //console.log("\n >>>>>>>"+requests_ids[i]+"\n");
-      //console.log("\n >>>>>>>" + typeof(requests_ids[i]) + "\n");
 
       // url for API
       let url = sails.config.custom.user_api_url + 'suspended_users/' + requests_ids[i] + '/';

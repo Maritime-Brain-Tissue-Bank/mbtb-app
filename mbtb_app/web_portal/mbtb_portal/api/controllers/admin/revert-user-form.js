@@ -29,9 +29,6 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    console.log("\n\n  **************   \n\n");
-    console.log(inputs.requests_ids + " :inside controller \n");
-
     return exits.success({requests_ids: inputs.requests_ids});
 
   }

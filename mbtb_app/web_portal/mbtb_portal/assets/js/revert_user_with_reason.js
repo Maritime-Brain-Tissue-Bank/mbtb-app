@@ -23,7 +23,7 @@ revert_user_with_reason.controller("revert_user_with_reason_controller",
         }).then(function successCallback(response) {
           if (response.data === 'Success') {
             alert("The selected user account is reverted to normal state.");
-            $window.location.href = '/view_current_users';
+            $window.location.href = '/view_suspended_users';
           } else {
             alert("Something went wrong, Please try again.");
           }

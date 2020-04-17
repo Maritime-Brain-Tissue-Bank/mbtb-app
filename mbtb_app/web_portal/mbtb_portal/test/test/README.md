@@ -21,6 +21,15 @@ webdriver-manager update
 webdriver-manager start
 ```
 
+#### Configuring browsers
+```
+browser setup is within capabilities object in config file. The default browser used for the test is Chrome.
+```
+
+#### Using other browsers
+```
+To use browsers other than Chrome, change the browser name in capabilities object in config file.
+```
 #### Run the test (admin)
 
 ```

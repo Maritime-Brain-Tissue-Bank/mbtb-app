@@ -23,7 +23,7 @@ suspend_user_with_reason.controller("suspend_user_with_reason_controller",
         }).then(function successCallback(response) {
           if (response.data === 'Success') {
             alert("The selected user account is suspended.");
-            $window.location.href = '/view_suspended_users';
+            $window.location.href = '/view_current_users';
           } else {
             alert("Something went wrong, Please try again.");
           }
