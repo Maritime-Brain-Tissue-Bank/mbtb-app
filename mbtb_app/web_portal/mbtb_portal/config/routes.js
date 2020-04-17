@@ -292,4 +292,8 @@ module.exports.routes = {
     }
   },
 
+  'GET /view_tissue_image/*': {
+    action: 'common/view-czi-images'
+  }
+
 };

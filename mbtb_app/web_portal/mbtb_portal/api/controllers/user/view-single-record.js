@@ -48,12 +48,17 @@ module.exports = {
     success: {
       viewTemplatePath: 'pages/view_single_record',
       description: 'On sucess, return to `view_single_record` template'
+    },
+
+    not_found: {
+      viewTemplatePath: 'pages/message',
+      description: 'return to this view when text data is not found, load "message" template',
     }
 
   },
 
 
-  fn: async function ({id}) {
+  fn: async function ({id}, exits) {
 
     // urls for api: for fetching text data and meta data for tissue
     let text_data_url = sails.config.custom.data_api_url + 'other_details/' + id + '/';
@@ -65,15 +70,16 @@ module.exports = {
     meta_data = await getRequestData(meta_data_url, this.req.session.auth_token);
 
     // error validation return error msg in case of error from api i.e. 404, 500
-    if (text_data.statusCode != 200){
-      // ToDo: need to redict to ejs view to display message i.e. data not found.
+    if (text_data.statusCode !== 200) {
+      let msg_body = "Data not found for the requested tissue.";
+      return exits.not_found({'msg_title': "Data Error", 'msg_body': msg_body});
     }
 
-    if (meta_data.statusCode != 200) {
+    if (meta_data.statusCode !== 200) {
       meta_data.data = meta_data.data["Error"];
     }
 
-    return {detailed_data: text_data.data, tissue_meta_data: meta_data.data};
+    return exits.success({detailed_data: text_data.data, tissue_meta_data: meta_data.data});
 
   }
 };
