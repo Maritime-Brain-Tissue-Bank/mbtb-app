@@ -37,7 +37,7 @@ void TissueMetaData::getTissueMetaData(http::http_request * message, const std::
         else{
             response[this->currentNode_][this->idCount_]["file_name"] = json::value::string(i.filename_);
             response[this->currentNode_][this->idCount_]["stain_name"] = json::value::string(i.stainName);
-            //cout << this->currentNode_ << " : " << i.stainName << " //\n";
+
             this->idCount_++;
         }
     }
