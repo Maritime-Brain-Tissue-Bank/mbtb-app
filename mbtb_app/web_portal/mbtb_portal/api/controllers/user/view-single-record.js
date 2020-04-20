@@ -1,4 +1,27 @@
-const request = require('request');
+const request = require('request-promise');
+
+// async function: get request with promise using `request-promise` return json response
+async function getRequestData(url, token) {
+  return request.get({
+    uri: url,
+    headers: {
+      Authorization: 'Token ' + token,
+    },
+    json: true,
+    simple: false,
+    resolveWithFullResponse: true
+
+  }).then(res => ({
+        statusCode: res.statusCode,
+        data: res.body
+      }
+    )
+  ).catch(function (err) {
+    console.log("************************************\n")
+    console.log("Controller: user/view-single-record\n");
+    console.log(err);
+  });
+}
 
 module.exports = {
 
@@ -25,6 +48,11 @@ module.exports = {
     success: {
       viewTemplatePath: 'pages/view_single_record',
       description: 'On sucess, return to `view_single_record` template'
+    },
+
+    not_found: {
+      viewTemplatePath: 'pages/message',
+      description: 'return to this view when text data is not found, load "message" template',
     }
 
   },
@@ -32,24 +60,26 @@ module.exports = {
 
   fn: async function ({id}, exits) {
 
-    // get request to retrieve detailed mbtb data for single id from api with user auth token
-    let url = sails.config.custom.data_api_url + 'other_details/' + id + '/';
-    request.get(url, {
-        'headers': {
-          'Authorization': 'Token ' + this.req.session.auth_token,
-        }},
-      function optionalCallback(err, httpResponse, body) {
-        if (err) {
-          console.log({'error_msg': err}); // log error to server console
-        }
-        else {
-          var response = JSON.parse(body);
+    // urls for api: for fetching text data and meta data for tissue
+    let text_data_url = sails.config.custom.data_api_url + 'other_details/' + id + '/';
+    let meta_data_url = sails.config.custom.image_api_url + 'tissue_meta_data/' + id + '/';
+    let text_data, meta_data;
 
-          // return retrieved data to template in form of dictionary with key: `detailed_data`
-          return exits.success({detailed_data: response});
-        }
-      });
+    // call to function and await for the response
+    text_data = await getRequestData(text_data_url, this.req.session.auth_token);
+    meta_data = await getRequestData(meta_data_url, this.req.session.auth_token);
 
+    // error validation return error msg in case of error from api i.e. 404, 500
+    if (text_data.statusCode !== 200) {
+      let msg_body = "Data not found for the requested tissue.";
+      return exits.not_found({'msg_title': "Data Error", 'msg_body': msg_body});
+    }
+
+    if (meta_data.statusCode !== 200) {
+      meta_data.data = meta_data.data["Error"];
+    }
+
+    return exits.success({detailed_data: text_data.data, tissue_meta_data: meta_data.data});
 
   }
 };

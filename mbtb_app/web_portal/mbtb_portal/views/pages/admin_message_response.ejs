@@ -5,7 +5,7 @@
 
     <p>
         <%= msg_body %>
-        <% if(view_data_url){%>
+        <% if(typeof (view_data_url) != 'undefined'){%>
             You can view it here: <a href="../<%= view_data_url%>">Link</a>
         <% }%>
     </p>

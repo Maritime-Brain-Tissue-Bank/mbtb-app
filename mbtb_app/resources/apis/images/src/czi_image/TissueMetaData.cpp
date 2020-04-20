@@ -5,7 +5,9 @@
 #include <DBTissueMetaData.h>
 #include <TissueMetaData.h>
 
-TissueMetaData::TissueMetaData() = default;
+TissueMetaData::TissueMetaData(){
+    this->idCount_ = 0;
+};
 
 TissueMetaData::~TissueMetaData() = default;
 
@@ -14,14 +16,30 @@ void TissueMetaData::getTissueMetaData(http::http_request * message, const std::
     DBTissueMetaData dbTissueMetaData;
     auto data = dbTissueMetaData.getData(std::stoi(prime_details_id));
     auto response = json::value::object();
-    int id_count = 0;
-    response["Controller"] = json::value::string("TempController");
+
+    // validation: if data vector empty return 404.
+    if (data.empty()){
+        response["Error"] = json::value::string("Data not found.");
+        message->reply(status_codes::NotFound, response);
+    }
+
+
     for (auto & i : data){
-        response["meta_data"][id_count]["prime_details_id"] = i.primeDetailsID_;
-        response["meta_data"][id_count]["file_name"] = json::value::string(i.filename_);
-        response["meta_data"][id_count]["n_region_name"] = json::value::string(i.nRegionName);
-        response["meta_data"][id_count]["stain_name"] = json::value::string(i.stainName);
-        id_count++;
+
+        this->currentNode_ = i.nRegionName;
+        if (this->currentNode_ != this->previousNode_){
+            this->idCount_ = 0;
+            response[this->currentNode_][this->idCount_]["file_name"] = json::value::string(i.filename_);
+            response[this->currentNode_][this->idCount_]["stain_name"] = json::value::string(i.stainName);
+            this->previousNode_ = this->currentNode_;
+            this->idCount_++;
+        }
+        else{
+            response[this->currentNode_][this->idCount_]["file_name"] = json::value::string(i.filename_);
+            response[this->currentNode_][this->idCount_]["stain_name"] = json::value::string(i.stainName);
+
+            this->idCount_++;
+        }
     }
     message->reply(status_codes::OK, response);
 }

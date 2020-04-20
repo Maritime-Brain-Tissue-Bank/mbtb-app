@@ -10,11 +10,16 @@
 
 class TissueMetaData{
 
+private:
+    std::string currentNode_;
+    std::string previousNode_;
+    int idCount_;
+
 public:
     TissueMetaData();
     ~TissueMetaData();
 
-    static void getTissueMetaData(http::http_request * message, const std::string& prime_details_id);
+    void getTissueMetaData(http::http_request * message, const std::string& prime_details_id);
 
 };
 

@@ -24,20 +24,25 @@ namespace rest{
         }
         if (!path.empty() && path[0] == "tissue_meta_data" && !path[1].empty()){  // route: {base}/tissue_meta_data
             std::string primeDetailsID_ = path[1];
-            pplx::create_task([message]() -> bool{
+            pplx::create_task([message]() -> std::tuple<bool, std::string>{
+
                 // authenticating request
                 const auto& messageHeaders_ = message.headers();
-                AdminAuthentication adminAuthentication;
-                auto response_ = adminAuthentication.authenticate(messageHeaders_);
+                Authentication authentication;
+                auto response_ = authentication.authenticate(messageHeaders_);
                 return response_;
-            }).then([&message, primeDetailsID_](bool result_){
-                if (!result_){
+
+            }).then([&message, primeDetailsID_](const pplx::task<std::tuple<bool, std::string>>& taskResult_){
+
+                auto result_ = taskResult_.get();
+                if (std::get<0>(result_) == false){
                     auto response_ = json::value::object();
-                    response_["error"] = json::value::string("Wrong authentication credentials");
+                    response_["Error"] = json::value::string(std::get<1>(result_));
                     message.reply(status_codes::Unauthorized, response_);
                 }
                 else{
-                    TissueMetaData::getTissueMetaData(&message, primeDetailsID_);
+                    TissueMetaData tissueMetaData;
+                    tissueMetaData.getTissueMetaData(&message, primeDetailsID_);
                 }
 
             }).wait();
@@ -51,10 +56,7 @@ namespace rest{
     }
 
     void Router::handlePost(http_request message) {
-        auto response = json::value::object();
-        response["status"] = json::value::string("okay");
-        response["message"] = json::value::string("POST test");
-        message.reply(status_codes::OK, response);
+        message.reply(status_codes::NotImplemented, responseNotImpl(methods::POST));
     }
 
 

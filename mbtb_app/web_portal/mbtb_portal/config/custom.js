@@ -21,6 +21,7 @@ module.exports.custom = {
   // …
 
   baseUrl: 'http://localhost:1337',
+  image_api_url: 'http://127.0.0.1:7000/',  // image api url
   user_api_url: 'http://127.0.0.1:8000/', // user api url i.e. for user, admin login, register
   data_api_url: 'http://127.0.0.1:9000/', // data api url
   api_down_error_msg: 'Servers are down, please contact site admin for the help.', // apis are down error message
