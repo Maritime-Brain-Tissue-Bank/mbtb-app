@@ -2,10 +2,11 @@
      class="container-fluid suspend_reason_container">
     <h2 class="heading_title">Suspend User Form</h2>
     <br>
-    <form>
+    <form id="suspend_user_form">
         <div class="form-group">
             <label for="reason">Suspend Reason</label>
             <textarea id="reason" name="reason" class="form-control" ng-model="suspend_reason"></textarea>
+            <span ng-show="!suspend_reason">This field is required.</span>
         </div>
     </form>
     <script>
@@ -14,9 +15,14 @@
 
     </script>
 
+    <br>
+    <br>
+
     <div class="form-group button_holder">
         <div class="col" id="cancel_btn">
-            <button class="btn btn-primary" ng-click="confirmClick()" id="suspend_confirm">Confirm</button>
+            <button class="btn btn-primary" ng-click="confirmClick()" id="suspend_confirm"
+                    ng-disabled="!suspend_reason">Confirm
+            </button>
             <a href="/view_current_users" class="btn btn_space">Cancel</a>
         </div>
     </div>

@@ -3,7 +3,7 @@ var suspend_user_with_reason = angular.module("suspend_user_with_reason_app", []
 suspend_user_with_reason.controller("suspend_user_with_reason_controller",
   ['$scope', '$window', '$http', function ($scope, $window, $http) {
 
-  //binding data to angular variable from ejs view
+    //binding data to angular variable from ejs view
     $scope.requests_ids_ = $window.requests_ids_;
     $scope.suspend_reason = "";
 
