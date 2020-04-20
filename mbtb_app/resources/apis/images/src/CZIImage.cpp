@@ -17,7 +17,8 @@ int main(int argc, const char * argv[]) {
 
     try {
         router.accept().wait();
-        cout << "CZI Image server started at: " << router.endpoint() << '\n';
+        cout << "*********" << endl;
+        cout << "CZI Image server started at: " << router.endpoint() << endl;
 
         InterruptHandler::waitForUserInterrupt();
 

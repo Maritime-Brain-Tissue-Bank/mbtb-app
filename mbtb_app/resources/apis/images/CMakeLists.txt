@@ -20,6 +20,7 @@ if(UNIX) # Darwin or Linux
         endif()
 
         find_package(cpprestsdk REQUIRED)
+        find_package(PNG)
     endif()
 
 else()
@@ -44,8 +45,12 @@ endif()
 
 
 
+
+# sub directories
+add_subdirectory(libs)
+
 # source files
-add_executable(${PROJECT_NAME}  ./src/CZIImage.cpp
+add_executable(${PROJECT_NAME}  ./src/SampleLibCZI.cpp
                                 ./src/czi_image/CZIController.cpp ./src/czi_image/TissueMetaData.cpp
                                 ./src/rest_base/Controller.cpp ./src/rest_base/Router.cpp
                                 ./src/db/DBConnection.cpp ./src/db/DBTissueMetaData.cpp ./src/db/DBAdminAuthentication.cpp ./src/db/DBUserAuthentication.cpp
@@ -60,16 +65,24 @@ set(CZI_IMAGE_INCLUDE_DIR "./src/czi_image/include/")  # CZI Image dir
 set(DB_INCLUDE_DIR "./src/db/include/")  # DB dir
 set (AUTH_INCLUDE_DIR "./src/auth/include/")  # AUTH dir
 set(MYSQLCONN_INCLUDE_DIR "/usr/local/Cellar/mysql-connector-c++/8.0.19/include/")  # mysqlx connector
-set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR}
+set(ADDITIONAL_LIBS_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs")
+set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR} ${ADDITIONAL_LIBS_INCLUDE_DIR}
                         ${REST_INCLUDE_DIR} ${CZI_IMAGE_INCLUDE_DIR}
-                        ${MYSQLCONN_INCLUDE_DIR} ${DB_INCLUDE_DIR}
-                        ${AUTH_INCLUDE_DIR}
+                        ${MYSQLCONN_INCLUDE_DIR} ${PNG_INCLUDE_DIR}
+                        ${DB_INCLUDE_DIR} ${AUTH_INCLUDE_DIR}
         )
 
 # display msg: header file path
-message(CZI_IMAGE " ${CZI_IMAGE_INCLUDE_DIR}")
-message(REST " ${REST_INCLUDE_DIR}")
-message(MYSQLCONN " ${MYSQLCONN_INCLUDE_DIR}")
+message("\n")
+message("-- INCLUDE DIR PATHS --")
+message("-- PNG_INCLUDE: " "${PNG_INCLUDE_DIR}")
+message("-- ADDITIONAL_LIBS_INCLUDE_DIR: " "${ADDITIONAL_LIBS_INCLUDE_DIR}")
+message("-- MYSQLCONN_INCLUDE: " "${MYSQLCONN_INCLUDE_DIR}")
+message("-- CZI_IMAGE_INCLUDE: " "${CZI_IMAGE_INCLUDE_DIR}")
+message("-- REST_INCLUDE: " "${REST_INCLUDE_DIR}")
+message("-- MYSQLCONN_INCLUDE: " "${MYSQLCONN_INCLUDE_DIR}")
+message("-- DB_INCLUDE: " "${DB_INCLUDE_DIR}")
+message("-- AUTH_INCLUDE: " "${AUTH_INCLUDE_DIR}")
 
 
 
@@ -77,19 +90,21 @@ message(MYSQLCONN " ${MYSQLCONN_INCLUDE_DIR}")
 if(APPLE)
     set(ZIP_LIBRARY "/usr/local/Cellar/zlib/1.2.11/lib/libz.dylib")
     set(MYSQLCONN_LIBS "/usr/local/Cellar/mysql-connector-c++/8.0.19/lib/libmysqlcppconn8.2.dylib")
-    set(LIBRARIES_SEARCH_PATHS ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${ZIP_LIBRARY} ${MYSQLCONN_LIBS})
+    set(LIBRARIES_SEARCH_PATHS ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${ZIP_LIBRARY} ${MYSQLCONN_LIBS} ${PNG_LIBRARIES})
 endif()
 
 # display msg: libraries path
-message(BOOST_LIBS " ${Boost_LIBRARIES}")
-message(MYSQLCONN_LIBS " ${MYSQLCONN_LIBS}")
-message(LIBRARIES_SEARCH_PATHS " ${LIBRARIES_SEARCH_PATHS}")
+message("\n")
+message("-- LIBS DIR PATHS --")
+message("-- BOOST_LIBS: " "${Boost_LIBRARIES}")
+message("-- MYSQLCONN_LIBS: " "${MYSQLCONN_LIBS}")
+message("-- LIBRARIES_SEARCH_PATHS: " "${LIBRARIES_SEARCH_PATHS}")
 
 
 include_directories(${HEADER_SEARCH_PATHS})
 
 if (APPLE)
-    target_link_libraries(${PROJECT_NAME} cpprestsdk::cpprest)
+    target_link_libraries(${PROJECT_NAME} cpprestsdk::cpprest libCZI)
     target_link_libraries(${PROJECT_NAME} "-framework CoreFoundation")
     target_link_libraries(${PROJECT_NAME} "-framework Security")
     target_link_libraries(${PROJECT_NAME} ${LIBRARIES_SEARCH_PATHS})
