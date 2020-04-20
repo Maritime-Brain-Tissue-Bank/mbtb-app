@@ -257,22 +257,8 @@ module.exports.routes = {
     }
   },
 
-  'POST /suspend_single_user': {
-    action: 'admin/suspend-single-user',
-    locals: {
-      layout: 'layouts/admin_layout'
-    }
-  },
-
   'GET /view_suspended_users': {
     action: 'admin/suspended-users',
-    locals: {
-      layout: 'layouts/admin_layout'
-    }
-  },
-
-  'POST /revert_suspended_user': {
-    action: 'admin/revert-suspended-user',
     locals: {
       layout: 'layouts/admin_layout'
     }
@@ -291,6 +277,35 @@ module.exports.routes = {
       layout: 'layouts/admin_layout'
     }
   },
+
+  'POST /suspend_user_form':{
+    action:'admin/suspend-user-form',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+  'POST /suspend_user_with_reason':{
+    action:'admin/suspend-user-with-reason',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+  'POST /revert_user_form':{
+    action:'admin/revert-user-form',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+  'POST /revert_user_with_reason':{
+    action:'admin/revert-user-with-reason',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
 
   'GET /view_tissue_image/*': {
     action: 'common/view-czi-images'

@@ -5,8 +5,9 @@
     <div class="col-md-12">
         <h2 class="heading_title">Suspended Users</h2>
         <br>
-        <form id="suspended_users_form" >
+        <form id="suspended_users_form" action="/revert_user_form" method="post" enctype="multipart/form-data">
             <input type="hidden" id="data_length" value="<%= data.length %>">
+            <input type="hidden" id="requests_ids" name="requests_ids" value="">
             <script>
                 // binding data recieved from sails controller to JS variable to pass it to angular
                 var mbtb_data = <%- JSON.stringify(data) %>;
@@ -32,6 +33,7 @@
                     <th>Postal/Zip Code</th>
                     <th>Comments</th>
                     <th>Active Since</th>
+                    <th>Suspend Reason</th>
                 </tr>
                 </thead>
 
@@ -58,19 +60,19 @@
                         <td><%= data[i].postal_code %></td>
                         <td><%= data[i].comments %></td>
                         <td><%= data[i].active_since %></td>
+                        <td><%= data[i].suspend_reason %></td>
                     </tr>
                 <% } %>
             </table>
-        </form>
-
-        <br>
-        <br>
-        <div class="form-group button_holder">
-            <div class="col" id="cancel_btn">
-                <button class="btn btn-primary" id="revert_suspended_user_btn">Revert</button>
-                <a href="/admin" class="btn btn_space">Cancel</a>
+            <br>
+            <br>
+            <div class="form-group button_holder">
+                <div class="col" id="cancel_btn">
+                    <button type="submit" class="btn btn-primary" id="revert_suspended_user_btn">Revert</button>
+                    <a href="/admin" class="btn btn_space">Cancel</a>
+                </div>
             </div>
-        </div>
+        </form>
 
         <div id="temp_msg"></div>
 

@@ -18,6 +18,9 @@ CREATE TABLE users(
     comments text DEFAULT NULL,
     active_since date DEFAULT NULL,
     pending_approval enum('Y','N') DEFAULT 'Y',
+    suspend enum('Y',"N") DEFAULT 'N',
+    suspend_reason text DEFAULT NULL,
+    revert_reason text DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
