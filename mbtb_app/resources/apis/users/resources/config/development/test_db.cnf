@@ -1,7 +1,7 @@
 [client]
-database = qUlEjzANnW
-host = remotemysql.com
-user = qUlEjzANnW
-password = Z2MRu4xucH
+database = mbtb_prod
+host = localhost
+user = test
+password = test@123
 port = 3306
 default-character-set = utf8

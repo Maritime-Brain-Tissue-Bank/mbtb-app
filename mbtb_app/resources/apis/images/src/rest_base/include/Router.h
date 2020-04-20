@@ -4,11 +4,12 @@
 
 #pragma once
 
+#include <tuple>
 #include <Controller.h>
 #include <RestController.h>
 #include <CZIController.h>
 #include <TissueMetaData.h>
-#include <AdminAuthentication.h>
+#include <Authentication.h>
 
 namespace rest{
 

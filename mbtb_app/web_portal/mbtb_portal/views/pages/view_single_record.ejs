@@ -1,6 +1,5 @@
 <title>View Record</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://angular-data-grid.github.io/dist/JSONToCSVConvertor.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 
@@ -136,25 +135,45 @@
         </div>
 
 
-        <div>
-            <div class="col-md-4">
-                <h4 class="heading_title">Neuropathology Slide Images</h4>
-                <div class="thumbnail">
-                    <div class="zoom">
-                            <img src="/images/sample1.jpeg" alt="sample image 1">
-                            <div class="image_caption">Side View</div>
-                    </div>
+        <!-- side navigation to display list of regions and stains for a tissue dynamically-->
+        <div class="col-md-3">
+            <div class="row">
+                <div class="image_files_title">
+                    <h4 class="heading_title">Neuropathology Slide Images</h4>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="thumbnail">
-                    <div class="zoom">
-                            <img src="/images/sample2.jpg" alt="sample image 2">
-                            <div class="image_caption">Top View</div>
+
+                <% if (typeof (tissue_meta_data) !== 'string') { %>
+                    <div class="image_files_nav">
+                        <% for(var tissue_key in tissue_meta_data) { %>
+
+                            <!-- displaying key name - here it is n_region name -->
+                            <button class="dropdown-btn">
+                                <%= tissue_key %>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+
+                            <!-- displaying stain names with respective url -->
+                            <div class="dropdown-container">
+                                <% var base_url = "/view_tissue_image/"; %>
+                                <% for(var j=0; j < tissue_meta_data[tissue_key].length; j++) { %>
+                                    <a href="<%= base_url + tissue_meta_data[tissue_key][j].file_name%>">
+                                        <%= tissue_meta_data[tissue_key][j].stain_name %>
+                                    </a>
+                                <% } %>
+                            </div>
+                        <% } %>
                     </div>
-                </div>
+                <% } else {%>
+                    <!-- display error msg if image meta data not found -->
+                    <div class="image_files_nav">
+                        <div class="dropdown-btn">
+                            <%= tissue_meta_data %>
+                        </div>
+                    </div>
+                <%}%>
             </div>
         </div>
+
     </div>
 
     <br>
