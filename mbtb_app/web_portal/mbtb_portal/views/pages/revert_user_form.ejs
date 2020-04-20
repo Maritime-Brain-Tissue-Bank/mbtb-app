@@ -19,7 +19,9 @@
 
     <div class="form-group button_holder">
         <div class="col" id="cancel_btn">
-            <button class="btn btn-primary" ng-click="confirmClick()" id="revert_confirm">Confirm</button>
+            <button class="btn btn-primary" ng-click="confirmClick()" id="revert_confirm" ng-disabled="!revert_reason">
+                Confirm
+            </button>
             <a href="/view_suspended_users" class="btn btn_space">Cancel</a>
         </div>
     </div>
