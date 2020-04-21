@@ -20,6 +20,8 @@ if(UNIX) # Darwin or Linux
         endif()
 
         find_package(cpprestsdk REQUIRED)
+
+        set( PNG_ROOT_DIR "/usr/local/opt/libpng/")
         find_package(PNG)
     endif()
 
@@ -55,6 +57,7 @@ add_executable(${PROJECT_NAME}  ./src/SampleLibCZI.cpp
                                 ./src/rest_base/Controller.cpp ./src/rest_base/Router.cpp
                                 ./src/db/DBConnection.cpp ./src/db/DBTissueMetaData.cpp ./src/db/DBAdminAuthentication.cpp ./src/db/DBUserAuthentication.cpp
                                 ./src/auth/Authentication.cpp
+                                ./libs/libCZI/Src/CZICmd/SaveBitmap.cpp ./libs/libCZI/Src/CZICmd/utils.cpp
         )
 
 
@@ -65,10 +68,10 @@ set(CZI_IMAGE_INCLUDE_DIR "./src/czi_image/include/")  # CZI Image dir
 set(DB_INCLUDE_DIR "./src/db/include/")  # DB dir
 set (AUTH_INCLUDE_DIR "./src/auth/include/")  # AUTH dir
 set(MYSQLCONN_INCLUDE_DIR "/usr/local/Cellar/mysql-connector-c++/8.0.19/include/")  # mysqlx connector
-set(ADDITIONAL_LIBS_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs")
-set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR} ${ADDITIONAL_LIBS_INCLUDE_DIR}
+set( PNG_INCLDE_DIR "usr/local/opt/libpng/include/")
+set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR}
                         ${REST_INCLUDE_DIR} ${CZI_IMAGE_INCLUDE_DIR}
-                        ${MYSQLCONN_INCLUDE_DIR} ${PNG_INCLUDE_DIR}
+                        ${MYSQLCONN_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${PNG_INCLDE_DIR}
                         ${DB_INCLUDE_DIR} ${AUTH_INCLUDE_DIR}
         )
 
@@ -90,7 +93,8 @@ message("-- AUTH_INCLUDE: " "${AUTH_INCLUDE_DIR}")
 if(APPLE)
     set(ZIP_LIBRARY "/usr/local/Cellar/zlib/1.2.11/lib/libz.dylib")
     set(MYSQLCONN_LIBS "/usr/local/Cellar/mysql-connector-c++/8.0.19/lib/libmysqlcppconn8.2.dylib")
-    set(LIBRARIES_SEARCH_PATHS ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${ZIP_LIBRARY} ${MYSQLCONN_LIBS} ${PNG_LIBRARIES})
+    set( PNG_LIB "/usr/local/opt/libpng/lib/libpng.dylib")
+    set(LIBRARIES_SEARCH_PATHS ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${ZIP_LIBRARY} ${MYSQLCONN_LIBS} ${PNG_LIB})
 endif()
 
 # display msg: libraries path
