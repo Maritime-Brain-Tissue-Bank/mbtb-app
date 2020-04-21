@@ -21,6 +21,7 @@ if(UNIX) # Darwin or Linux
 
         find_package(cpprestsdk REQUIRED)
 
+        # Using homebrew library (sym links) instead of xcode, also cahnge include dir and libs path below
         set( PNG_ROOT_DIR "/usr/local/opt/libpng/")
         find_package(PNG)
     endif()

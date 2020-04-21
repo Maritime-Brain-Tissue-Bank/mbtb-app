@@ -10,7 +10,6 @@ using namespace libCZI;
 
 int main(){
 
-    cout << "\n\n";
     CZIController cziController;
     cziController.getImage("3.czi");
 }
