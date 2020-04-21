@@ -11,5 +11,5 @@ using namespace libCZI;
 int main(){
 
     CZIController cziController;
-    cziController.getImage("3.czi");
+    cziController.getImage("#bb00-003 #n10 #cod.czi");
 }

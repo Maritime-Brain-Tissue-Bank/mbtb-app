@@ -14,11 +14,13 @@ class CZIController{
 
 private:
     std::string baseDir_ = "/Users/niravjadeja/Downloads/mbtb-app/mbtb_app/resources/apis/images/src/images/";
-    std::string outputPath_ = "";
+    std::string fileName_;
+    std::string imageDir_;
+    std::vector<std::string> tissueDetails_;
 
-
-    void processImage(const std::string& filename_);
+    void processImage();
     void findImage();
+    void  getTissueDetails();
 
 public:
     CZIController();

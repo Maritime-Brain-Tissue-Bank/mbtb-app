@@ -15,8 +15,8 @@ void CZIController::run(http::http_request * message) {
     message->reply(status_codes::OK, response);
 }
 
-void CZIController::processImage(const std::string& filename_) {
-    std::string fileURL_ = this->baseDir_ + "samples/" + filename_;
+void CZIController::processImage() {
+    std::string fileURL_ = this->baseDir_ + "samples/" + this->fileName_;
     std::wstring wFileURL_ = std::wstring(fileURL_.begin(), fileURL_.end());
 
     auto stream = libCZI::CreateStreamFromFile(wFileURL_.c_str());
@@ -34,7 +34,6 @@ void CZIController::processImage(const std::string& filename_) {
     auto y = statistics.boundingBox.y ;
     auto width = statistics.boundingBox.w;
     auto height = statistics.boundingBox.h;
-
     libCZI::IntRect roi{x, y, width, height}; // setting region of interest
 
     // get the tile-composite for all channels (which are marked 'active' in the display-settings)
@@ -65,19 +64,36 @@ void CZIController::processImage(const std::string& filename_) {
             dsplHlp.GetChannelInfosArray());
 
     // setting file and converting it to wstring
-    std::string outputFile_ = this->baseDir_ + "cache/3.png";
-    std::wstring wOutputFile_ = std::wstring(outputFile_.begin(), outputFile_.end());
-
+    std::string outputFileURL_ = this->baseDir_ + "cache/" + this->imageDir_ + this->tissueDetails_[2] + ".png";
+    std::wstring wOutputFile_ = std::wstring(outputFileURL_.begin(), outputFileURL_.end());
 
     CSaveData cSaveData(wOutputFile_, SaveDataFormat::PNG);
     cSaveData.Save(mcComposite.get());
 }
 
-void CZIController::getImage(const std::string& filename_) {
-    processImage(filename_);
+void CZIController::getImage(const std::string& filename) {
+    this->fileName_ = filename;
+    getTissueDetails();
+
+    // ToDo : need a private method here to check or create directories for unix system
+    processImage();
 }
 
-// this method find image from cache
+// this method is to find image from cache
 void CZIController::findImage() {
 
+}
+
+// This methods splits recieved filename string and store mbtb_code, region and stain name in the vector tissueDetails_
+void CZIController::getTissueDetails(){
+    std::stringstream ss(this->fileName_);
+    std::string item;
+    char delim = ' ';  // delimeter to split string i.e. single white space here.
+    while(std::getline(ss, item, delim)) {
+        this->tissueDetails_.push_back(item.substr(1, item.size()));
+    }
+
+    // removing .czi file extension from last element of vector tissueDetails_.
+    this->tissueDetails_[2] = this->tissueDetails_[2].substr(0, this->tissueDetails_[2].find(".czi"));
+    this->imageDir_ = this->tissueDetails_[0] + "/" + this->tissueDetails_[1] + "/";
 }
