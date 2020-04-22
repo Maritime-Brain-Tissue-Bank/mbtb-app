@@ -19,13 +19,26 @@ namespace rest{
 
     void Router::handleGet(http_request message) {
         auto path = requestPath(message);
+
         if (!path.empty() && path[0] == "czi_image"){ //  route: {base}/czi_image
-            CZIController cziController;
 
-            // ToDo: need a way to parse image name from uri.
-            auto image_ = cziController.getImage("#bb00-003 #n10 #cod.czi");
+            // ToDo: need exception handling here for file not found, etc
 
-            concurrency::streams::fstream::open_istream(image_, std::ios::in)
+            // Fetching filename from json body from request and then pass to CZIController to get image name.
+            auto image_ = message.
+                            extract_json().
+                                then([=](const pplx::task<json::value>& requestTask){
+                                    auto request = requestTask.get();
+                                    auto fileName_ = request.at("filename").as_string();
+                                    return fileName_;
+                                }).then([=](const std::string& fileName_){
+                                    CZIController cziController;
+                                    auto image_ = cziController.getImage(fileName_);
+                                    return image_;
+                                });
+
+            // opening filestream and sending image to request
+            concurrency::streams::fstream::open_istream(image_.get(), std::ios::in)
                     .then([=](const concurrency::streams::istream& is) {
                         // send the file when ready
                         message.reply(status_codes::OK, is, "image/png")
