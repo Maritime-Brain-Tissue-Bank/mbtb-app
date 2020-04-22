@@ -20,7 +20,7 @@ private:
 
     void processImage();
     bool isImageExist();
-    void  getTissueDetails();
+    void getTissueDetails();
     bool createOrCheckDirs();
 
 public:
@@ -28,6 +28,6 @@ public:
     ~CZIController();
 
     static void run(http::http_request * message);
-    void getImage(const std::string& filename_);
+    std::string getImage(const std::string& filename_);
 
 };

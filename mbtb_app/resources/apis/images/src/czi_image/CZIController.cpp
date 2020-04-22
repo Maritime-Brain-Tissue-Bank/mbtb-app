@@ -72,23 +72,29 @@ void CZIController::processImage() {
     cSaveData.Save(mcComposite.get());
 }
 
-void CZIController::getImage(const std::string& filename) {
+std::string CZIController::getImage(const std::string& filename) {
     this->fileName_ = filename;
     getTissueDetails();
 
     auto imageStatus_ = isImageExist();
+    std::string pngImage_ = this->baseDir_ + "cache/" +this->imageDir_ + this->tissueDetails_[2] +".png";
+
     // ToDo: write return views here based on response status (i.e. imageStatus_, status_)
     if (imageStatus_){
         std::cout << "Image is already there, return it from here" <<std::endl;
+        return pngImage_;
     } else{
 
         auto dirStatus_ = createOrCheckDirs();
         if (dirStatus_){
             std::cout << "status: true" << std::endl;
             processImage();
+            return pngImage_;
         }
         else{
             std::cout << "status: false" << std::endl;
+            return "none";
+            // ToDo: throw exception here
         }
     }
 

@@ -10,6 +10,8 @@
 #include <CZIController.h>
 #include <TissueMetaData.h>
 #include <Authentication.h>
+#include <cpprest/filestream.h>
+
 
 namespace rest{
 

@@ -20,7 +20,33 @@ namespace rest{
     void Router::handleGet(http_request message) {
         auto path = requestPath(message);
         if (!path.empty() && path[0] == "czi_image"){ //  route: {base}/czi_image
-            CZIController::run(&message);
+            CZIController cziController;
+
+            // ToDo: need a way to parse image name from uri.
+            auto image_ = cziController.getImage("#bb00-003 #n10 #cod.czi");
+
+            concurrency::streams::fstream::open_istream(image_, std::ios::in)
+                    .then([=](const concurrency::streams::istream& is) {
+                        // send the file when ready
+                        message.reply(status_codes::OK, is, "image/png")
+                                .then([image_](const pplx::task<void>& t) {
+                                    // handle error in sending
+                                    try { t.get();
+                                    }
+                                    catch(...) {
+                                        std::cout << "error in sending" << "\n";
+                                    } });
+                    })
+                    .then([=](const pplx::task<void>&t) {
+                        // handle error in loading
+                        try { t.get();
+                        }
+                        catch(...) {
+                            std::cout << "error in Loading ---" << "\n";
+                            message.reply(status_codes::InternalError);
+                        }})
+                    .wait();
+
         }
         if (!path.empty() && path[0] == "tissue_meta_data" && !path[1].empty()){  // route: {base}/tissue_meta_data
             std::string primeDetailsID_ = path[1];
