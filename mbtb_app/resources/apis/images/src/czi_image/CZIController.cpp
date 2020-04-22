@@ -15,6 +15,7 @@ void CZIController::run(http::http_request * message) {
     message->reply(status_codes::OK, response);
 }
 
+// This method is to process czi image and convert it to png format
 void CZIController::processImage() {
     std::string fileURL_ = this->baseDir_ + "samples/" + this->fileName_;
     std::wstring wFileURL_ = std::wstring(fileURL_.begin(), fileURL_.end());
@@ -75,21 +76,28 @@ void CZIController::getImage(const std::string& filename) {
     this->fileName_ = filename;
     getTissueDetails();
 
-    // ToDo : need a private method here to check or create directories for unix system
-    auto status_ = createOrCheckDirs();
-    if (status_){
-        std::cout << "status: true" << status_;
-        processImage();
-    }
-    else{
-        std::cout << "status: false" << status_;
+    auto imageStatus_ = isImageExist();
+    // ToDo: write return views here based on response status (i.e. imageStatus_, status_)
+    if (imageStatus_){
+        std::cout << "Image is already there, return it from here" <<std::endl;
+    } else{
+
+        auto dirStatus_ = createOrCheckDirs();
+        if (dirStatus_){
+            std::cout << "status: true" << std::endl;
+            processImage();
+        }
+        else{
+            std::cout << "status: false" << std::endl;
+        }
     }
 
 }
 
-// this method is to find image from cache
-void CZIController::findImage() {
-
+// This method checks if image already exists in the cache directory or not and return bool value.
+bool CZIController::isImageExist() {
+    std::string dir_ = this->baseDir_ + "cache/" + this->imageDir_ + "/" + this->tissueDetails_[2] + ".png";
+    return std::__fs::filesystem::exists(dir_);
 }
 
 // This methods splits recieved filename string and store mbtb_code, region and stain name in the vector tissueDetails_
@@ -107,7 +115,7 @@ void CZIController::getTissueDetails(){
 }
 
 
-// this method is to check if directories exist or not. If not then create it for png images for related region names and stains
+// This method is to check if directories exist or not. If not then create it for png images for related region names and stains
 // return boolean value accordingly.
 bool CZIController::createOrCheckDirs() {
     std::string dir_ = this->baseDir_ + "cache/" +this->imageDir_;

@@ -19,7 +19,7 @@ private:
     std::vector<std::string> tissueDetails_;
 
     void processImage();
-    void findImage();
+    bool isImageExist();
     void  getTissueDetails();
     bool createOrCheckDirs();
 
