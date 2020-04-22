@@ -76,7 +76,15 @@ void CZIController::getImage(const std::string& filename) {
     getTissueDetails();
 
     // ToDo : need a private method here to check or create directories for unix system
-    processImage();
+    auto status_ = createOrCheckDirs();
+    if (status_){
+        std::cout << "status: true" << status_;
+        processImage();
+    }
+    else{
+        std::cout << "status: false" << status_;
+    }
+
 }
 
 // this method is to find image from cache
@@ -96,4 +104,25 @@ void CZIController::getTissueDetails(){
     // removing .czi file extension from last element of vector tissueDetails_.
     this->tissueDetails_[2] = this->tissueDetails_[2].substr(0, this->tissueDetails_[2].find(".czi"));
     this->imageDir_ = this->tissueDetails_[0] + "/" + this->tissueDetails_[1] + "/";
+}
+
+
+// this method is to check if directories exist or not. If not then create it for png images for related region names and stains
+// return boolean value accordingly.
+bool CZIController::createOrCheckDirs() {
+    std::string dir_ = this->baseDir_ + "cache/" +this->imageDir_;
+    if (mkdir(dir_.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0)
+    {
+        // return true if dirs are created.
+        return true;
+    }
+    else{
+        // if dirs exist return true or throw runtime exception
+        if( errno == EEXIST ) {
+            return true;
+        } else {
+            std::cout << "Error: cannot create directories for " << this->imageDir_ << strerror(errno) << std::endl;
+            throw std::runtime_error( strerror(errno) );
+        }
+    }
 }

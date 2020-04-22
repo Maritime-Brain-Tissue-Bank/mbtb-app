@@ -21,6 +21,7 @@ private:
     void processImage();
     void findImage();
     void  getTissueDetails();
+    bool createOrCheckDirs();
 
 public:
     CZIController();
