@@ -307,8 +307,11 @@ module.exports.routes = {
   },
 
 
-  'GET /view_tissue_image/*': {
-    action: 'common/view-czi-images'
-  }
+  'GET /view_tissue_image/:filename?': {
+    action: 'admin/view-image',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
 
 };

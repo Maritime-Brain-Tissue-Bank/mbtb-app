@@ -124,7 +124,7 @@ void CZIController::getTissueDetails(){
 // This method is to check if directories exist or not. If not then create it for png images for related region names and stains
 // return boolean value accordingly.
 bool CZIController::createOrCheckDirs() {
-    std::string dir_ = this->baseDir_ + "cache/" +this->imageDir_;
+    std::string dir_ = this->baseDir_ + "cache/" + this->imageDir_;
     if (mkdir(dir_.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0)
     {
         // return true if dirs are created.
