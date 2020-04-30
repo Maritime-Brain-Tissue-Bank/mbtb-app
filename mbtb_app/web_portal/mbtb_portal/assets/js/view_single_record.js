@@ -43,3 +43,13 @@ for (i = 0; i < dropdown.length; i++) {
   });
 }
 
+
+function displayImage(image) {
+  var filename = image.getAttribute('data-file-name');
+  filename = '/images/' + encodeURIComponent(filename) + '.png';
+  let image_item = [{
+    src: filename
+  }];
+  let image_options = {index: 0};
+  var viewer = new PhotoViewer(image_item, image_options);
+}

@@ -1,7 +1,8 @@
 <title>View Record</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
+<link  href="/dependencies/css/photoviewer.css" rel="stylesheet">
+<script src="/dependencies/js/photoviewer.js"></script>
 
 <div ng-app="view_single_record_app" ng-controller="view_single_record_controller"
      class="container-fluid single_record_container">
@@ -154,11 +155,10 @@
 
                             <!-- displaying stain names with respective url -->
                             <div class="dropdown-container">
-                                <% var base_url = "/view_tissue_image/"; %>
                             <% for(var j=0; j < tissue_meta_data[tissue_key].length; j++) { %>
-                                <a href="<%= base_url + tissue_meta_data[tissue_key][j].file_name%>">
-                                    <%= tissue_meta_data[tissue_key][j].stain_name %>
-                                </a>
+                                    <div data-file-name="<%= tissue_meta_data[tissue_key][j].file_name %>" onclick="displayImage(this)">
+                                        <%= tissue_meta_data[tissue_key][j].stain_name %>
+                                    </div>
                             <% } %>
                             </div>
                         <% } %>

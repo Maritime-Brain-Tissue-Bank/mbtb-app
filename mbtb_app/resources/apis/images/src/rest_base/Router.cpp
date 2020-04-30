@@ -19,8 +19,47 @@ namespace rest{
 
     void Router::handleGet(http_request message) {
         auto path = requestPath(message);
+
         if (!path.empty() && path[0] == "czi_image"){ //  route: {base}/czi_image
-            CZIController::run(&message);
+
+            // ToDo: need exception handling here for file not found, etc
+
+            // Fetching filename from json body from request and then pass to CZIController to get image name.
+            auto image_ = message.
+                            extract_json().
+                                then([=](const pplx::task<json::value>& requestTask){
+                                    auto request = requestTask.get();
+                                    auto fileName_ = request.at("filename").as_string();
+                                    return fileName_;
+                                }).then([=](const std::string& fileName_){
+                                    CZIController cziController;
+                                    auto image_ = cziController.getImage(fileName_);
+                                    return image_;
+                                });
+
+            // opening filestream and sending image to request
+            concurrency::streams::fstream::open_istream(image_.get(), std::ios::in)
+                    .then([=](const concurrency::streams::istream& is) {
+                        // send the file when ready
+                        message.reply(status_codes::OK, is, "image/png")
+                                .then([image_](const pplx::task<void>& t) {
+                                    // handle error in sending
+                                    try { t.get();
+                                    }
+                                    catch(...) {
+                                        std::cout << "error in sending" << "\n";
+                                    } });
+                    })
+                    .then([=](const pplx::task<void>&t) {
+                        // handle error in loading
+                        try { t.get();
+                        }
+                        catch(...) {
+                            std::cout << "error in Loading ---" << "\n";
+                            message.reply(status_codes::InternalError);
+                        }})
+                    .wait();
+
         }
         if (!path.empty() && path[0] == "tissue_meta_data" && !path[1].empty()){  // route: {base}/tissue_meta_data
             std::string primeDetailsID_ = path[1];
