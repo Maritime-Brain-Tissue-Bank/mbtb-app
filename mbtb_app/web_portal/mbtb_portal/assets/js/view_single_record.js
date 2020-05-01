@@ -43,13 +43,37 @@ for (i = 0; i < dropdown.length; i++) {
   });
 }
 
-
+// This method gets the file name from ejs view (data-file-name) attribute and send a request to sails controller for image url
 function displayImage(image) {
   var filename = image.getAttribute('data-file-name');
-  filename = '/images/' + encodeURIComponent(filename) + '.png';
-  let image_item = [{
-    src: filename
-  }];
-  let image_options = {index: 0};
-  var viewer = new PhotoViewer(image_item, image_options);
+
+  $.get({
+    url: '/get_image',
+    data: {filename: filename},
+    success: function(response){
+
+      // image source
+      let image_item = [{
+        src: response.file_url
+      }];
+
+      // options for image viewer - set toolbar buttons
+      let image_options = {
+        footToolbar: ['fullscreen', 'zoomIn','zoomOut', 'actualSize','rotateRight']
+      };
+
+      // wait period to fetch and load image to manage async task - otherwise will give 404 on first attempt
+      // even with async: false
+      setTimeout(function () {
+        var viewer = new PhotoViewer(image_item, image_options);
+      }, 2000);
+
+    },
+
+    })
+    .fail(function () {
+      alert("Something went wrong in rendering image, Please try again!");
+      location.reload();
+    });
+
 }
