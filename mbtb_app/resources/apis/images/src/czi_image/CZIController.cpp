@@ -17,7 +17,7 @@ void CZIController::run(http::http_request * message) {
 
 // This method is to process czi image and convert it to png format
 void CZIController::processImage() {
-    std::string fileURL_ = this->baseDir_ + "samples/" + this->fileName_;
+    std::string fileURL_ = this->baseDir_ + "samples/" + this->fileName_ + ".czi";
     std::wstring wFileURL_ = std::wstring(fileURL_.begin(), fileURL_.end());
 
     auto stream = libCZI::CreateStreamFromFile(wFileURL_.c_str());
@@ -87,12 +87,10 @@ std::string CZIController::getImage(const std::string& filename) {
 
         auto dirStatus_ = createOrCheckDirs();
         if (dirStatus_){
-            std::cout << "status: true" << std::endl;
             processImage();
             return pngImage_;
         }
         else{
-            std::cout << "status: false" << std::endl;
             return "none";
             // ToDo: throw exception here
         }
@@ -115,8 +113,7 @@ void CZIController::getTissueDetails(){
         this->tissueDetails_.push_back(item.substr(1, item.size()));
     }
 
-    // removing .czi file extension from last element of vector tissueDetails_.
-    this->tissueDetails_[2] = this->tissueDetails_[2].substr(0, this->tissueDetails_[2].find(".czi"));
+
     this->imageDir_ = this->tissueDetails_[0] + "/" + this->tissueDetails_[1] + "/";
 }
 
@@ -124,19 +121,26 @@ void CZIController::getTissueDetails(){
 // This method is to check if directories exist or not. If not then create it for png images for related region names and stains
 // return boolean value accordingly.
 bool CZIController::createOrCheckDirs() {
-    std::string dir_ = this->baseDir_ + "cache/" + this->imageDir_;
-    if (mkdir(dir_.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0)
-    {
-        // return true if dirs are created.
-        return true;
-    }
-    else{
-        // if dirs exist return true or throw runtime exception
-        if( errno == EEXIST ) {
-            return true;
-        } else {
-            std::cout << "Error: cannot create directories for " << this->imageDir_ << strerror(errno) << std::endl;
-            throw std::runtime_error( strerror(errno) );
+    std::string dir_ = this->baseDir_ + "cache/";
+    bool dirStatus_ = false;  // bool flag for operation in for loop
+
+    // creating dirs sequentially as mkdir don't create it at once with tissue name and region name
+    for (int i = 0; i < 2; i++) {
+        dir_.append(this->tissueDetails_[i]);
+        if (mkdir(dir_.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0)
+        {
+            dir_.append("/");  // appending '/' at the end for sub dir
+            dirStatus_ = true;
+        }
+        else{
+            if( errno == EEXIST ) {
+                dir_.append("/");  // appending '/' at the end for sub dir
+                dirStatus_ = true;
+            } else {
+                std::cout << "Error: cannot create directories for " << this->imageDir_ << strerror(errno) << std::endl;
+                throw std::runtime_error( strerror(errno) );
+            }
         }
     }
+    return dirStatus_;
 }
