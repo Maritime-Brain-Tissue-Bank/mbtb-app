@@ -77,3 +77,33 @@ function displayImage(image) {
     });
 
 }
+
+// disable context menu on this window
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
+
+// detect key press and disable developer tools, print, save via key press
+document.onkeydown = function(e) {
+  if(e.key === 'F12') {
+    return false;
+  }
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === ('i' || 'I')) {
+    return false;
+  }
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === ('c' || 'C')) {
+    return false;
+  }
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === ('j' || 'J')) {
+    return false;
+  }
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === ('u' || 'U')) {
+    return false;
+  }
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === ('p' || 'P')) {
+    return false;
+  }
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === ('s' || 'S')) {
+    return false;
+  }
+}
