@@ -1,10 +1,13 @@
+const request = require('request');
+const fs = require('fs');
+
 module.exports = {
 
 
   friendlyName: 'View image',
 
 
-  description: 'Display "Image" page.',
+  description: 'This controller receives filename from assets js and request and image from api and returns filename',
 
   inputs: {
     filename: {
@@ -16,35 +19,36 @@ module.exports = {
   },
 
   exits: {
-
-    success: {
-      viewTemplatePath: 'pages/admin_view_image',
-      description: 'On sucess, return to `view_single_record` template',
-      locals: {
-        layout: 'layouts/admin_layout'
-      }
-    },
-
-
   },
 
 
-  fn: async function (inputs, exits) {
+  fn: async function ({filename}, exits) {
 
-    var req = this.req;
-    let filename = req.param("filename");
-    let dir = "/images/" + encodeURIComponent(filename) + ".png";
-    let tissue_details = filename.split(" ");
+    // image url and payload
+    let image_url = sails.config.custom.image_api_url + 'czi_image/';
+    let payload = {
+      filename : filename
+    }
 
+    // request to image api
+    request.get({url: image_url, body: payload, json: true,
+      'headers': {
+        'content-type': 'application/json',
+        'Authorization': 'Token ' + this.req.session.admin_auth_token_val,
+      }})
+      .on('error', function (err) {
+        console.log({
+          'error_controller': 'admin/view-image',
+          'error_msg': err
+        });
+      })
+      .pipe(fs.createWriteStream(sails.config.appPath + '/assets/images/' + filename + '.png'))
 
-
-    return exits.success({image_url: dir,
-                          tissue_name: tissue_details[0].slice(1),
-                          region_name: tissue_details[1].slice(1),
-                          stain_name: tissue_details[2].slice(1)
-    });
-
-
+      // once writing file via writestream finish return value then to client
+      .on('finish', function (response) {
+        let file_url = '/images/' + encodeURIComponent(filename) + '.png';
+        return exits.success({file_url: file_url, statusCode: 200});
+      });
 
   },
 

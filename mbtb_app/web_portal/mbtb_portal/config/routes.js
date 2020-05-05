@@ -306,8 +306,7 @@ module.exports.routes = {
     }
   },
 
-
-  'GET /view_tissue_image/:filename?': {
+  'GET /get_image': {
     action: 'admin/view-image',
     locals:{
       layout:'layouts/admin_layout'
