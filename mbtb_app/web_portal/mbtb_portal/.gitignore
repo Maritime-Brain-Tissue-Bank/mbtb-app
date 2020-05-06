@@ -133,3 +133,6 @@ lib-cov
 *.out
 *.pid
 
+
+# czi images
+**/protected files/czi/*.png

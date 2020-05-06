@@ -313,4 +313,11 @@ module.exports.routes = {
     }
   },
 
+  'GET /images/czi/:filename?': {
+    action: 'admin/verify-image-access',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
 };

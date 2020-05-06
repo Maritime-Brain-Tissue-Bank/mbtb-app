@@ -62,11 +62,7 @@ function displayImage(image) {
         footToolbar: ['fullscreen', 'zoomIn','zoomOut', 'actualSize','rotateRight']
       };
 
-      // wait period to fetch and load image to manage async task - otherwise will give 404 on first attempt
-      // even with async: false
-      setTimeout(function () {
-        var viewer = new PhotoViewer(image_item, image_options);
-      }, 2000);
+      var viewer = new PhotoViewer(image_item, image_options);
 
     },
 

@@ -42,11 +42,11 @@ module.exports = {
           'error_msg': err
         });
       })
-      .pipe(fs.createWriteStream(sails.config.appPath + '/assets/images/' + filename + '.png'))
+      .pipe(fs.createWriteStream(sails.config.appPath + '/protected files/czi/' + filename + '.png'))
 
       // once writing file via writestream finish return value then to client
       .on('finish', function (response) {
-        let file_url = '/images/' + encodeURIComponent(filename) + '.png';
+        let file_url = '/images/czi/' + encodeURIComponent(filename) + '?';
         return exits.success({file_url: file_url, statusCode: 200});
       });
 
