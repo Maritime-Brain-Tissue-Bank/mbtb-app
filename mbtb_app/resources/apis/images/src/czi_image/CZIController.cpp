@@ -46,7 +46,9 @@ void CZIController::processImage() {
                                 [&](int chIdx)->bool
                                 {
                                     libCZI::CDimCoordinate planeCoord{ { libCZI::DimensionIndex::C, chIdx } };
-                                    actvChBms.emplace_back(accessor->Get(roi, &planeCoord, 0.05f, nullptr));
+
+                                    //  NOTE: zoom level controls image resolution here; its value is from 0 to 1; now it is set to 20%.
+                                    actvChBms.emplace_back(accessor->Get(roi, &planeCoord, 0.20f, nullptr));
                                     activeChNoToChIdx[chIdx] = index++;
                                     return true;
                                 });
