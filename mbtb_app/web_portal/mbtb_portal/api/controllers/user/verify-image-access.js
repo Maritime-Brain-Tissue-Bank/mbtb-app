@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
 
 
-  friendlyName: 'Admin - verify-image-access',
+  friendlyName: 'verify-image-access',
 
 
   description: 'This controller verify image access and render down the image to photo viewer js',
@@ -17,11 +17,8 @@ module.exports = {
 
   exits: {
     not_authorized: {
-      viewTemplatePath: 'pages/admin_message_response',
+      viewTemplatePath: 'pages/message',
       description: 'return to this view when user try to access image directly.',
-      locals: {
-        layout: 'layouts/admin_layout'
-      }
     }
   },
 
@@ -34,21 +31,21 @@ module.exports = {
     let filename = req.param('filename');
 
     // getting values from session variables - to prevent access when it is open in image viewer
-    let admin_filename = req.session.admin_filename;
-    let admin_file_access = req.session.admin_file_access;
+    let session_filename = req.session.filename;
+    let session_file_access = req.session.file_access;
 
     // remove filename and file_access session variables
-    delete req.session.admin_filename;
-    delete req.session.admin_file_access;
+    delete req.session.filename;
+    delete req.session.file_access;
 
     // Get the file path of the file on disk
     let file_path = path.resolve(sails.config.appPath, 'protected files', 'czi', filename + '.png');
 
-    if (req.session.admin_user && admin_file_access && admin_filename === filename){
+    if (req.session.user_type === 'user' && session_file_access && session_filename === filename){
 
       // changing variable state
-      admin_filename = null;
-      admin_file_access = false;
+      session_filename = null;
+      session_file_access = false;
 
       // pipe a read stream to the response.
       fs.createReadStream(file_path).pipe(res);
