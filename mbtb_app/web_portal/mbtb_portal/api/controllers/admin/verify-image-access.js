@@ -16,13 +16,17 @@ module.exports = {
 
 
   exits: {
-
+    not_authorized: {
+      viewTemplatePath: 'pages/admin_message_response',
+      description: 'return to this view when user try to access image directly.',
+      locals: {
+        layout: 'layouts/admin_layout'
+      }
+    }
   },
 
 
   fn: async function (inputs, exits) {
-
-    // ToDo: need a logic to authorize user here - maybe write a policy here
 
     var req = this.req;
     var res = this.res;
@@ -30,11 +34,25 @@ module.exports = {
     let filename = req.param('filename');
 
     // Get the file path of the file on disk
-    var filePath = path.resolve(sails.config.appPath, 'protected files', 'czi', filename + '.png');
+    let file_path = path.resolve(sails.config.appPath, 'protected files', 'czi', filename + '.png');
 
-    // ToDo: Should check that it exists here, but for demo purposes, assume it does
-    // pipe a read stream to the response.
-    fs.createReadStream(filePath).pipe(res);
+    if (req.session.admin_user && req.session.file_access && req.session.filename === filename){
+
+      // remove filename and file_access session variables
+      delete req.session.filename;
+      delete req.session.file_access;
+
+      // pipe a read stream to the response.
+      fs.createReadStream(file_path).pipe(res);
+    }
+    else {
+
+      // not authorized return view
+      let msg_body = "You are not authorized to view this image directly.";
+      return exits.not_authorized({'msg_title': "Authorization Error", 'msg_body': msg_body});
+
+    }
+
 
   }
 

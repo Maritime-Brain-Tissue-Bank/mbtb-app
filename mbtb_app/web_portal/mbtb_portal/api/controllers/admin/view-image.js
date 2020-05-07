@@ -24,6 +24,8 @@ module.exports = {
 
   fn: async function ({filename}, exits) {
 
+    var req = this.req;
+
     // image url and payload
     let image_url = sails.config.custom.image_api_url + 'czi_image/';
     let payload = {
@@ -46,6 +48,11 @@ module.exports = {
 
       // once writing file via writestream finish return value then to client
       .on('finish', function (response) {
+
+        // for image access - to allow rendering image via this controller and image viewer, not via browser
+        req.session.filename = filename;
+        req.session.file_access = true;
+
         let file_url = '/images/czi/' + encodeURIComponent(filename) + '?';
         return exits.success({file_url: file_url, statusCode: 200});
       });
