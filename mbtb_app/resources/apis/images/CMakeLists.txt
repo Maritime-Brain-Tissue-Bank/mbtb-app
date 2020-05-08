@@ -58,12 +58,14 @@ add_executable(${PROJECT_NAME}  ./src/CZIImage.cpp
                                 ./src/rest_base/Controller.cpp ./src/rest_base/Router.cpp
                                 ./src/db/DBConnection.cpp ./src/db/DBTissueMetaData.cpp ./src/db/DBAdminAuthentication.cpp ./src/db/DBUserAuthentication.cpp
                                 ./src/auth/Authentication.cpp
+                                ./src/config/Configuration.cpp
                                 ./libs/libCZI/Src/CZICmd/SaveBitmap.cpp ./libs/libCZI/Src/CZICmd/utils.cpp
         )
 
 
 
 # include header files
+set(CONFIG_INCLUDE_DIR "./src/config/include/")
 set(REST_INCLUDE_DIR "./src/rest_base/include/")  # REST Base dir
 set(CZI_IMAGE_INCLUDE_DIR "./src/czi_image/include/")  # CZI Image dir
 set(DB_INCLUDE_DIR "./src/db/include/")  # DB dir
@@ -71,7 +73,7 @@ set (AUTH_INCLUDE_DIR "./src/auth/include/")  # AUTH dir
 set(MYSQLCONN_INCLUDE_DIR "/usr/local/Cellar/mysql-connector-c++/8.0.19/include/")  # mysqlx connector
 set( PNG_INCLDE_DIR "usr/local/opt/libpng/include/")
 set(HEADER_SEARCH_PATHS ${Boost_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR}
-                        ${REST_INCLUDE_DIR} ${CZI_IMAGE_INCLUDE_DIR}
+                        ${CONFIG_INCLUDE_DIR} ${REST_INCLUDE_DIR} ${CZI_IMAGE_INCLUDE_DIR}
                         ${MYSQLCONN_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${PNG_INCLDE_DIR}
                         ${DB_INCLUDE_DIR} ${AUTH_INCLUDE_DIR}
         )
