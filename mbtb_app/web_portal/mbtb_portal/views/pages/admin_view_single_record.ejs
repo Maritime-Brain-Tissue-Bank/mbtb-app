@@ -144,6 +144,13 @@
                 </div>
 
                 <% if (typeof (tissue_meta_data) !== 'string') { %>
+
+                    <!-- loader for api call -->
+                    <div class="loader_wrapper" style="display:none">
+                        <div class="loader" style="display:none"></div>
+                        <div class="loader_text">Fetching Image...</div>
+                    </div>
+
                     <div class="image_files_nav">
                         <% for(var tissue_key in tissue_meta_data) { %>
 
@@ -154,7 +161,7 @@
                             </button>
 
                             <!-- displaying stain names with respective url -->
-                            <div class="dropdown-container">
+                            <div class="dropdown-container" style="display: none">
                             <% for(var j=0; j < tissue_meta_data[tissue_key].length; j++) { %>
                                     <div data-file-name="<%= tissue_meta_data[tissue_key][j].file_name %>" onclick="displayImage(this)">
                                         <%= tissue_meta_data[tissue_key][j].stain_name %>

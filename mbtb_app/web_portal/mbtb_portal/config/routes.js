@@ -34,6 +34,8 @@ module.exports.routes = {
   'GET /tissue_requests_terms': {action: 'user/tissue-requests-terms'},
   'GET /tissue_requests_form': { action: 'user/get-tissue-requests-form'},
   'POST /tissue_requests_form': { action: 'user/tissue-requests-form'},
+  'GET /get_image': { action: 'user/view-image'},
+  'GET /images/czi/:filename?': { action: 'user/verify-image-access'},
 
   // admin views
   'GET /admin': {
@@ -306,8 +308,15 @@ module.exports.routes = {
     }
   },
 
-  'GET /get_image': {
+  'GET /admin_get_image': {
     action: 'admin/view-image',
+    locals:{
+      layout:'layouts/admin_layout'
+    }
+  },
+
+  'GET /admin_images/czi/:filename?': {
+    action: 'admin/verify-image-access',
     locals:{
       layout:'layouts/admin_layout'
     }
