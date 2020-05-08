@@ -47,11 +47,18 @@ for (i = 0; i < dropdown.length; i++) {
 function displayImage(image) {
   var filename = image.getAttribute('data-file-name');
 
+  // show loader with trasperent background
+  $('.loader_wrapper').show();
+  $('.loader').show();
+
   $.get({
     url: '/admin_get_image',
     data: {filename: filename},
     success: function(response){
 
+      // hide the loader
+      $('.loader').hide();
+      $('.loader_wrapper').hide();
       openImageViewer(response.file_url);
 
     },
@@ -69,11 +76,18 @@ function displayImage(image) {
 function userDisplayImage(image) {
   var filename = image.getAttribute('data-file-name');
 
+  // show loader with trasperent background
+  $('.loader_wrapper').show();
+  $('.loader').show();
+
   $.get({
     url: '/get_image',
     data: {filename: filename},
     success: function(response){
 
+      // hide the loader
+      $('.loader').hide();
+      $('.loader_wrapper').hide();
       openImageViewer(response.file_url);
     },
 

@@ -144,6 +144,13 @@
                 </div>
 
                 <% if (typeof (tissue_meta_data) !== 'string') { %>
+
+                    <!-- loader for api call -->
+                    <div class="loader_wrapper" style="display:none">
+                        <div class="loader" style="display:none"></div>
+                        <div class="loader_text">Fetching Image...</div>
+                    </div>
+
                     <div class="image_files_nav">
                         <% for(var tissue_key in tissue_meta_data) { %>
 
