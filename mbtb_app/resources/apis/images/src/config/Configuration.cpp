@@ -15,4 +15,4 @@ const std::string Configuration::appDir = "/Users/niravjadeja/Downloads/mbtb-app
 const std::string Configuration::dbFile = appDir + "src/files/" + environment + "/db.cnf";
 
 // Zoom level for image resolution; values between 0 to 1; now set to 20%.
-const float Configuration::zoomLevel = 0.2f;
+const float Configuration::zoomLevel = 0.05f;

@@ -76,28 +76,20 @@ void CZIController::processImage() {
 
 std::string CZIController::getImage(const std::string& filename) {
     this->fileName_ = filename;
-    getTissueDetails();
+    return baseProcess();
+}
 
-    auto imageStatus_ = isImageExist();
-    std::string pngImage_ = this->baseDir_ + "cache/" +this->imageDir_ + this->tissueDetails_[2] +".png";
+std::string CZIController::getImage(const std::string& filename, web::json::object metaData) {
+    this->fileName_ = filename;
 
-    // ToDo: write return views here based on response status (i.e. imageStatus_, status_)
-    if (imageStatus_){
-        std::cout << "Image is already there, return it from here" <<std::endl;
-        return pngImage_;
-    } else{
+    this->metaData_.width = metaData["w"].as_integer();
+    this->metaData_.height = metaData["h"].as_integer();
+    this->metaData_.x = metaData["x"].as_integer();
+    this->metaData_.y = metaData["y"].as_integer();
 
-        auto dirStatus_ = createOrCheckDirs();
-        if (dirStatus_){
-            processImage();
-            return pngImage_;
-        }
-        else{
-            return "none";
-            // ToDo: throw exception here
-        }
-    }
+    this->hasMetaData = true;
 
+    return baseProcess();
 }
 
 // This method checks if image already exists in the cache directory or not and return bool value.
@@ -114,7 +106,6 @@ void CZIController::getTissueDetails(){
     while(std::getline(ss, item, delim)) {
         this->tissueDetails_.push_back(item.substr(1, item.size()));
     }
-
 
     this->imageDir_ = this->tissueDetails_[0] + "/" + this->tissueDetails_[1] + "/";
 }
@@ -145,4 +136,66 @@ bool CZIController::createOrCheckDirs() {
         }
     }
     return dirStatus_;
+}
+
+std::string CZIController::baseProcess() {
+    getTissueDetails();
+
+    auto imageStatus_ = isImageExist();
+    std::string pngImage_ = this->baseDir_ + "cache/" +this->imageDir_ + this->tissueDetails_[2] +".png";
+
+    // ToDo: write return views here based on response status (i.e. imageStatus_, status_)
+    if (imageStatus_ && !this->hasMetaData){
+        std::cout << "Fetching image:" << this->fileName_ << " from cache." <<std::endl;
+        return pngImage_;
+    } else{
+
+        auto dirStatus_ = createOrCheckDirs();
+        if (dirStatus_){
+            if (this->hasMetaData){
+                auto imageName_ = extractRoi();
+                this->hasMetaData = false;
+                return imageName_;
+            }
+
+            processImage();
+            return pngImage_;
+        }
+        else{
+            return "none";
+            // ToDo: throw exception here
+        }
+    }
+}
+
+std::string CZIController::extractRoi() {
+    std::string fileURL_ = this->baseDir_ + "samples/" + this->fileName_ + ".czi";
+    std::wstring wFileURL_ = std::wstring(fileURL_.begin(), fileURL_.end());
+
+    auto stream = libCZI::CreateStreamFromFile(wFileURL_.c_str());
+    auto cziReader = libCZI::CreateCZIReader();
+    cziReader->Open(stream);
+    auto statistics = cziReader->GetStatistics();
+    auto accessor = cziReader->CreateSingleChannelScalingTileAccessor();
+    libCZI::CDimCoordinate planeCoord{ { libCZI::DimensionIndex::C,0 } }; // the document only contains C-dimension, we choose channel#1
+    auto multiTileComposit = accessor->Get(
+            // ToDo: keep direct x, y, w, h without any multiplication factor or not. Need to figure out that.
+            libCZI::IntRect{
+                    this->metaData_.x + this->metaData_.width / 4,
+                    this->metaData_.y + this->metaData_.height / 4 ,
+                    (this->metaData_.width / 8) * 5,
+                    (this->metaData_.height / 8) * 5 },
+            &planeCoord,
+            Configuration::zoomLevel,
+            nullptr);
+
+    // setting file and converting it to wstring
+    std::string outputFileURL_ = this->baseDir_ + "cache/" + this->imageDir_ + this->tissueDetails_[2]
+            + "-" + std::to_string(this->metaData_.x) + "-" + std::to_string(this->metaData_.y)
+            + "-" + std::to_string(this->metaData_.width) + "-" + std::to_string(this->metaData_.height) + ".png";
+    std::wstring wOutputFile_ = std::wstring(outputFileURL_.begin(), outputFileURL_.end());
+
+    CSaveData cSaveData(wOutputFile_, SaveDataFormat::PNG);
+    cSaveData.Save(multiTileComposit.get());
+    return outputFileURL_;
 }

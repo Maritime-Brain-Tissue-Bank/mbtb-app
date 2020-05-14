@@ -18,11 +18,21 @@ private:
     std::string fileName_;
     std::string imageDir_;
     std::vector<std::string> tissueDetails_;
+    bool hasMetaData = false;
+
+    struct metaData{
+        int width;
+        int height;
+        int x;
+        int y;
+    } metaData_;
 
     void processImage();
     bool isImageExist();
     void getTissueDetails();
     bool createOrCheckDirs();
+    std::string baseProcess();
+    std::string extractRoi();
 
 public:
     CZIController();
@@ -30,5 +40,6 @@ public:
 
     static void run(http::http_request * message);
     std::string getImage(const std::string& filename_);
+    std::string getImage(const std::string& filename_, web::json::object);
 
 };
