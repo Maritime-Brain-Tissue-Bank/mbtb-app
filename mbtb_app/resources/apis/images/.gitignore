@@ -41,6 +41,7 @@
 .idea/
 .DS_Store
 **/libCZI/
+**/production/
 
 # Images
 *.png
